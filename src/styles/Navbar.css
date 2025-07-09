@@ -1,0 +1,42 @@
+:root {
+  --brand-primary: #9a38a5;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.navbar__logoArea {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar__logoArea img {
+  height: 44px;
+}
+
+.navbar__brand {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--brand-primary);
+}
+
+.navbar__menu {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+.navbar__menu a {
+  color: #3d3d3d;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.navbar__menu a:hover {
+  color: var(--brand-primary);
+}
