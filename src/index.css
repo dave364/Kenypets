@@ -5,7 +5,11 @@
   box-sizing: border-box;
 }
 
+:root {
+  --brand-font: 'Pacifico', cursive;
+}
+
 body {
   margin: 0;
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--brand-font);
 }
