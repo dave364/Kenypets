@@ -35,6 +35,7 @@
 
 .navbar__logo img {
   height: 100px;
+  margin-right: 60px;
 }
 
 .navbar__links {
@@ -74,8 +75,10 @@
 
 /* ----------- MOBILE MENU SIDEBAR ----------- */
 @media (max-width: 768px) {
-  .navbar__sidebar {
+
+    .navbar {
     display: flex;
+    align-items: center;
   }
 
   .navbar__links {
@@ -84,6 +87,7 @@
 
   .navbar__toggle {
     display: flex;
+    margin-left: 18px;
   }
 
   .navbar__sidebar {
@@ -108,8 +112,11 @@
   .navbar__sidebar-content {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    align-items: center;
+    gap: 1.2rem;
     text-align: center;
+    transform: translateY(-41%);
+    transition: transform 0.3s ease;
   }
 
   .navbar__sidebar-content a {
@@ -117,6 +124,7 @@
     font-size: 1.2rem;
     font-weight: 600;
     color: var(--text-dark);
+    padding: 0.6rem 0;
   }
 
   .navbar__sidebar-content a:hover {
@@ -126,11 +134,12 @@
   .sidebar__logo {
   display: flex;
   justify-content: center;
-  margin-bottom: 0rem;
+  padding: 0.6rem 0;
+
 }
 
 .sidebar__logo img {
-  height: 150px;
+  height: 100px;
 }
 
 
