@@ -1,0 +1,22 @@
+:root {
+  /* 🎨 Colores base */
+  --color-darkest: #190019;
+  --color-dark: #2B124C;
+  --color-purple: #522B5B;
+  --color-pink: #854F6C;
+  --color-beige: #DFB6B2;
+  --color-light: #FBE4D8;
+
+  /* 🧠 Variables semánticas (uso real) */
+  --brand-primary: var(--color-purple);
+  --brand-secondary: var(--color-pink);
+
+  --text-primary: var(--color-darkest);
+  --text-secondary: var(--color-dark);
+
+  --cta-bg: var(--color-beige);
+  --cta-text: var(--color-darkest);
+  --text-dark: var(--color-darkest);
+  --cta-accent: var(--color-pink);
+}
+

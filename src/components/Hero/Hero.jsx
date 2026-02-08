@@ -1,6 +1,5 @@
 import React from "react";
-import "../styles/Hero.css";
-import dogImg from "../assets/dog-hero.png";
+import dogImg from "../../assets/Image/dog-hero.png";
 
 const Hero = () => (
   <section className="hero" id="home">
