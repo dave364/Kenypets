@@ -1,0 +1,10 @@
+body {
+  margin: 0;
+  font-family: var(--brand-font);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}

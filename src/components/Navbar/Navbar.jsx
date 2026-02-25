@@ -32,10 +32,20 @@ const Navbar = () => {
       </div>
 
       {/* Sidebar */}
+    
       <div
         className={`navbar__sidebar ${menuOpen ? "open" : ""}`}
         onClick={() => setMenuOpen(false)}
       >
+          <button
+    className="navbar__close"
+    onClick={(e) => {
+      e.stopPropagation();
+      setMenuOpen(false);
+    }}
+  >
+    ✕
+  </button>
         <div
           className="navbar__sidebar-content"
           onClick={(e) => e.stopPropagation()}
