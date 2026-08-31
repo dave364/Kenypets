@@ -3,9 +3,11 @@
 .hero {
   position: relative;
   overflow: hidden;
+  padding-top: 110px;
 }
 
 .hero__content {
+  min-height: calc(100vh - 110px);
   display: flex;
   align-items: center;
   justify-content: space-between;

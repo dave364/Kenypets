@@ -1,0 +1,283 @@
+/* =============================================
+   ABOUT SECTION
+   ============================================= */
+
+.about {
+  background-color: #fff;
+  padding: 5rem 2rem;
+  overflow: visible; 
+}
+
+/* --- HISTORIA --- */
+.about__story {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  max-width: 1100px;
+  margin: 0 auto 5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 2.5rem;
+    margin-bottom: 3.5rem;
+  }
+}
+
+/* --- POLAROIDS --- */
+.about__story-img {
+  flex-shrink: 0;
+  position: relative;
+  width: 280px;
+  height: 300px;
+
+  @media (max-width: 768px) {
+    width: 240px;
+    height: 250px;    
+    margin-top: 30px; 
+  }
+}
+
+.about__polaroid {
+  position: absolute;
+  background: #fff;
+  padding: 0.75rem 0.75rem 2.5rem;
+  box-shadow: 0 8px 24px rgba(82, 43, 91, 0.15);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: 140px;
+  transition: transform 0.3s ease;
+
+  span {
+    font-family: sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    text-align: center;
+
+    em {
+      display: block;
+      font-style: normal;
+      font-size: 0.72rem;
+      color: var(--brand-secondary);
+    }
+  }
+
+  &:hover {
+    transform: scale(1.05) rotate(0deg) !important;
+    z-index: 2;
+  }
+
+  &--left {
+    top: 20px;
+    left: 0;
+    transform: rotate(-6deg);
+    z-index: 1;
+  }
+
+  &--right {
+    top: 40px;
+    right: 0;
+    transform: rotate(5deg);
+    z-index: 0;
+  }
+}
+
+.about__polaroid-img {
+  width: 100%;
+  height: 110px;
+  background: linear-gradient(135deg, var(--color-beige), var(--color-light));
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.5rem;
+
+  &--yose {
+    background: linear-gradient(135deg, var(--color-pink), var(--color-beige));
+  }
+}
+
+/* --- TEXTO --- */
+.about__story-text {
+  flex: 1;
+
+  small {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    color: var(--brand-secondary);
+    font-family: sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-size: 2rem;
+    color: var(--color-dark);
+    margin: 0.4rem 0 1.2rem;
+    font-family: var(--brand-font);
+    line-height: 1.2;
+
+    @media (max-width: 768px) {
+      font-size: 1.6rem;
+    }
+  }
+
+  p {
+    font-size: 0.95rem;
+    font-family: sans-serif;
+    color: var(--color-purple);
+    line-height: 1.75;
+    margin: 0 0 1rem;
+
+    strong {
+      color: var(--color-dark);
+    }
+  }
+}
+
+/* Botón Instagram */
+.about__ig-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0.5rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+  color: #fff;
+  font-family: sans-serif;
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    opacity: 0.88;
+    transform: translateY(-2px);
+  }
+}
+
+/* Stats */
+.about__stat-row {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.about__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.about__stat-num {
+  font-size: 1.7rem;
+  font-family: var(--brand-font);
+  color: var(--color-purple);
+  line-height: 1;
+}
+
+.about__stat-label {
+  font-size: 0.78rem;
+  font-family: sans-serif;
+  font-weight: 600;
+  color: var(--brand-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- POR QUÉ ELEGIRNOS --- */
+.about__values {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.about__values-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+
+  small {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    color: var(--brand-secondary);
+    font-family: sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    font-size: 1.9rem;
+    color: var(--color-dark);
+    margin: 0.4rem 0 0;
+    font-family: var(--brand-font);
+  }
+}
+
+.about__values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.about__value-card {
+  background: var(--color-light);
+  border-radius: 20px;
+  padding: 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1.5px solid transparent;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 28px rgba(82, 43, 91, 0.12);
+    border-color: var(--color-beige);
+  }
+}
+
+.about__value-emoji {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.about__value-card h3 {
+  font-size: 1rem;
+  font-family: var(--brand-font);
+  color: var(--color-dark);
+  margin: 0;
+}
+
+.about__value-card p {
+  font-size: 0.85rem;
+  font-family: sans-serif;
+  color: var(--color-purple);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 480px) {
+  .about {
+    padding: 3rem 1.25rem;
+  }
+
+  .about__values-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .about__polaroid {
+    width: 120px;
+
+    span { font-size: 0.72rem; }
+  }
+
+  .about__polaroid-img {
+    height: 90px;
+    font-size: 2.8rem;
+  }
+}
