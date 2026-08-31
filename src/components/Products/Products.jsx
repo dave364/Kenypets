@@ -3,6 +3,10 @@ import "./Products.scss";
 
 const WHATSAPP_NUMBER = "5491122531821"; // ← Reemplazá con el número real
 
+// Arma la URL absoluta de la imagen de un producto (funciona en dev y en producción)
+const getImageUrl = (filename) =>
+  `${window.location.origin}${import.meta.env.BASE_URL}products/${filename}`;
+
 const products = [
   // ACCESORIOS
   {
@@ -11,6 +15,7 @@ const products = [
     category: "Accesorios",
     price: 3500,
     emoji: "🐕",
+    image: "collar-ajustable-premium.jpg",
     description: "Collar resistente con broche de seguridad. Disponible en varios tamaños.",
     badge: "Más vendido",
   },
@@ -20,6 +25,7 @@ const products = [
     category: "Accesorios",
     price: 6200,
     emoji: "🦮",
+    image: "arnes-ergonomico.jpg",
     description: "Arnés acolchado ideal para paseos largos. No lastima el cuello.",
     badge: null,
   },
@@ -29,6 +35,7 @@ const products = [
     category: "Accesorios",
     price: 8900,
     emoji: "🛏️",
+    image: "cama-suave-xl.jpg",
     description: "Cama ultra confortable con relleno antialérgico. Funda lavable.",
     badge: "Nuevo",
   },
@@ -38,6 +45,7 @@ const products = [
     category: "Accesorios",
     price: 4100,
     emoji: "💧",
+    image: "bebedero-automatico.jpg",
     description: "Fuente de agua con filtro. Capacidad 1.5L, silenciosa y segura.",
     badge: null,
   },
@@ -48,6 +56,7 @@ const products = [
     category: "Juguetes",
     price: 2800,
     emoji: "⚽",
+    image: "pelota-interactiva.jpg",
     description: "Pelota de goma resistente con dispensador de premios. Horas de diversión.",
     badge: "Más vendido",
   },
@@ -57,6 +66,7 @@ const products = [
     category: "Juguetes",
     price: 1900,
     emoji: "🪢",
+    image: "mordedor-de-cuerda.jpg",
     description: "Cuerda de algodón natural, ideal para el juego y la limpieza dental.",
     badge: null,
   },
@@ -66,6 +76,7 @@ const products = [
     category: "Juguetes",
     price: 5400,
     emoji: "🐱",
+    image: "juguete-rascador-gato.jpg",
     description: "Torre rascadora con plumas y cascabeles. Resistente y estable.",
     badge: "Nuevo",
   },
@@ -75,6 +86,7 @@ const products = [
     category: "Juguetes",
     price: 3700,
     emoji: "🌀",
+    image: "tunel-de-exploracion.jpg",
     description: "Túnel plegable con ventanas de crinkle. Para gatos y perros pequeños.",
     badge: null,
   },
@@ -91,8 +103,9 @@ const Products = () => {
       : products.filter((p) => p.category === activeFilter);
 
   const handleWhatsApp = (product) => {
+    const imageUrl = getImageUrl(product.image);
     const message = encodeURIComponent(
-      `¡Hola Kenypets! 🐾 Me interesa el producto: *${product.name}* ($${product.price.toLocaleString("es-AR")}). ¿Tienen stock disponible?`
+      `¡Hola Kenypets! 🐾 Me interesa el producto: *${product.name}* ($${product.price.toLocaleString("es-AR")}). ¿Tienen stock disponible?\n\n${imageUrl}`
     );
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
   };
@@ -129,7 +142,14 @@ const Products = () => {
               <span className="product-card__badge">{product.badge}</span>
             )}
 
-            <div className="product-card__emoji">{product.emoji}</div>
+            <div className="product-card__image-wrap">
+              <img
+                className="product-card__image"
+                src={`${import.meta.env.BASE_URL}products/${product.image}`}
+                alt={product.name}
+                loading="lazy"
+              />
+            </div>
 
             <div className="product-card__info">
               <span className="product-card__category">{product.category}</span>
