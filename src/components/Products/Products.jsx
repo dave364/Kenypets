@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Products.scss";
 
-const WHATSAPP_NUMBER = "549115491133431393"; // ← Reemplazá con el número real
+const WHATSAPP_NUMBER = "549115491122531821"; // ← Reemplazá con el número real
 
 const products = [
   // ACCESORIOS
