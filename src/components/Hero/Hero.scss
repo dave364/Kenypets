@@ -60,6 +60,8 @@
 .hero__img img {
   width: 420px;
   max-width: 45vw;
+  height: auto;
+  aspect-ratio: 840 / 756;
   margin-right: 250px;
 }
 
@@ -118,6 +120,7 @@
 
   .hero__img img {
     width: 280px;
+    max-width: 80vw;
     margin-top: 2rem;
     margin-right: 0;
   }
@@ -128,3 +131,4 @@
     text-align: center;
   }
 }
+
