@@ -219,6 +219,35 @@
   }
 }
 
+/* --- ESTADOS DE CARGA Y ERROR --- */
+.products__estado {
+  text-align: center;
+  padding: 3rem 1rem;
+  font-family: sans-serif;
+  color: var(--color-purple);
+
+  p {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+  }
+}
+
+.products__estado--error p {
+  color: var(--color-dark);
+}
+
+/* --- PRODUCTO AGOTADO --- */
+.product-card__badge--agotado {
+  background: #9a9a9a;
+}
+
+.product-card__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
   .products {
