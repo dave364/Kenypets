@@ -1,5 +1,6 @@
 import React from "react";
-import dogImg from "../../assets/Image/dog-hero.png";
+import dogImg from "../../assets/Image/dog-hero.webp";
+import dogImgSmall from "../../assets/Image/dog-hero-560w.webp";
 
 const Hero = () => (
   <section className="hero" id="home">
@@ -12,7 +13,14 @@ const Hero = () => (
 Explora ahora</a>
       </div>
       <div className="hero__img">
-        <img src={dogImg} alt="Happy dog" />
+        <img
+          src={dogImg}
+          srcSet={dogImgSmall + " 560w, " + dogImg + " 840w"}
+          sizes="(max-width: 900px) 280px, 420px"
+          width="840"
+          height="756"
+          alt="Perro y gato felices"
+        />
       </div>
     </div>
 
