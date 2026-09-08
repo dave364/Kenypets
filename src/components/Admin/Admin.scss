@@ -1,0 +1,449 @@
+/* =============================================
+   PANEL DE ADMINISTRACION
+   ============================================= */
+
+.admin {
+  min-height: 100vh;
+  background: var(--color-light);
+  font-family: sans-serif;
+  color: var(--color-dark);
+  padding-bottom: 3rem;
+}
+
+/* --- LOGIN --- */
+.admin--login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.admin__login-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 380px;
+  box-shadow: 0 10px 40px rgba(82, 43, 91, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  h1 {
+    font-family: var(--brand-font);
+    color: var(--color-purple);
+    margin: 0;
+    text-align: center;
+    font-size: 2rem;
+  }
+}
+
+.admin__login-sub {
+  text-align: center;
+  margin: -0.75rem 0 0.5rem;
+  color: var(--brand-secondary);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.admin__volver {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-purple);
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+/* --- HEADER --- */
+.admin__header {
+  background: var(--color-purple);
+  color: var(--color-light);
+  padding: 1.25rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  h1 {
+    font-family: var(--brand-font);
+    margin: 0;
+    font-size: 1.6rem;
+  }
+}
+
+.admin__usuario {
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+.admin__header-acciones {
+  display: flex;
+  gap: 0.6rem;
+}
+
+/* --- TABS --- */
+.admin__tabs {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1.5rem 2rem 0;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.admin__tab {
+  padding: 0.6rem 1.5rem;
+  border: none;
+  background: transparent;
+  border-bottom: 3px solid transparent;
+  color: var(--color-purple);
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+
+  &.active {
+    border-bottom-color: var(--brand-secondary);
+    color: var(--color-dark);
+  }
+}
+
+.admin__contenido {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+}
+
+.admin__estado {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--color-purple);
+}
+
+.admin__error {
+  background: #fdecea;
+  color: #a1281c;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  margin: 0 0 1rem;
+}
+
+.admin__acciones {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+/* --- BOTONES --- */
+.admin__btn {
+  padding: 0.55rem 1.2rem;
+  border-radius: 999px;
+  border: 2px solid var(--color-purple);
+  background: transparent;
+  color: var(--color-purple);
+  font-family: sans-serif;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+
+  &:hover:not(:disabled) { background: var(--color-beige); }
+  &:disabled { opacity: 0.45; cursor: not-allowed; }
+}
+
+.admin__btn--primary {
+  background: var(--color-purple);
+  color: var(--color-light);
+
+  &:hover:not(:disabled) {
+    background: var(--color-dark);
+    border-color: var(--color-dark);
+  }
+}
+
+.admin__btn--ghost {
+  border-color: currentColor;
+  opacity: 0.9;
+}
+
+.admin__header .admin__btn--ghost {
+  color: var(--color-light);
+  &:hover { background: rgba(255, 255, 255, 0.15); }
+}
+
+.admin__btn--mini {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.78rem;
+  border-width: 1.5px;
+
+  &.active {
+    background: var(--color-purple);
+    color: var(--color-light);
+  }
+}
+
+.admin__btn--peligro {
+  border-color: #c0392b;
+  color: #c0392b;
+
+  &:hover:not(:disabled) { background: #fdecea; }
+}
+
+/* --- TABLA --- */
+.admin__tabla-wrap {
+  background: #fff;
+  border-radius: 16px;
+  overflow-x: auto;
+  box-shadow: 0 4px 20px rgba(82, 43, 91, 0.08);
+}
+
+.admin__tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  min-width: 620px;
+
+  th {
+    text-align: left;
+    padding: 0.9rem 1rem;
+    background: var(--color-beige);
+    color: var(--color-dark);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  td {
+    padding: 0.85rem 1rem;
+    border-top: 1px solid #f0e6e4;
+    vertical-align: middle;
+  }
+}
+
+.admin__fila--baja {
+  opacity: 0.5;
+}
+
+.admin__pill {
+  display: inline-block;
+  margin-left: 0.5rem;
+  background: var(--brand-secondary);
+  color: #fff;
+  font-size: 0.65rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.admin__stock--cero {
+  color: #c0392b;
+  font-weight: 700;
+}
+
+.admin__td-acciones {
+  display: flex;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+/* --- MODAL --- */
+.admin__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(25, 0, 25, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 999;
+}
+
+.admin__modal {
+  background: #fff;
+  border-radius: 20px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 520px;
+  max-height: 88vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+
+  h2 {
+    font-family: var(--brand-font);
+    color: var(--color-purple);
+    margin: 0 0 0.5rem;
+    font-size: 1.4rem;
+  }
+}
+
+.admin__fila-doble {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+}
+
+.admin__modal-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.admin__check {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.5rem !important;
+  font-size: 0.9rem !important;
+  color: var(--color-dark) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+
+  input { width: auto; }
+}
+
+/* --- CAMPOS --- */
+.admin label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-purple);
+}
+
+.admin input,
+.admin textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 1.5px solid var(--color-beige);
+  border-radius: 10px;
+  font-family: sans-serif;
+  font-size: 0.95rem;
+  color: var(--color-darkest);
+  background: #fff;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-purple);
+  }
+}
+
+.admin textarea { resize: vertical; }
+
+/* --- PEDIDOS --- */
+.admin__pedidos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.admin__pedido {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 20px rgba(82, 43, 91, 0.08);
+  overflow: hidden;
+}
+
+.admin__pedido-cab {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  &:hover { background: #fdf8f6; }
+}
+
+.admin__pedido-fecha {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-purple);
+  opacity: 0.75;
+  margin-top: 0.15rem;
+}
+
+.admin__pedido-derecha {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.admin__estado-pill {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  background: #eee;
+  color: #555;
+}
+
+.admin__estado-pill--pendiente  { background: #fff3cd; color: #7a5c00; }
+.admin__estado-pill--confirmado { background: #d7ecff; color: #1a5a8a; }
+.admin__estado-pill--entregado  { background: #d8f3dc; color: #1b6b3a; }
+.admin__estado-pill--cancelado  { background: #fdecea; color: #a1281c; }
+
+.admin__pedido-detalle {
+  padding: 0 1.25rem 1.25rem;
+  border-top: 1px solid #f0e6e4;
+  font-size: 0.88rem;
+
+  p { margin: 0.85rem 0; }
+}
+
+.admin__items {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem 0;
+    border-bottom: 1px dashed #f0e6e4;
+  }
+}
+
+.admin__descuento {
+  color: #1b6b3a;
+  font-weight: 700;
+}
+
+.admin__estados {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 600px) {
+  .admin__header,
+  .admin__tabs,
+  .admin__contenido {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .admin__fila-doble {
+    grid-template-columns: 1fr;
+  }
+
+  .admin__modal {
+    padding: 1.5rem;
+  }
+}
