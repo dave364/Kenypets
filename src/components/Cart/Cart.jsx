@@ -37,7 +37,17 @@ const Cart = () => {
     }
   };
 
-  const soloDigitos = (t) => t.replace(/\D/g, "");
+  // Normaliza a formato internacional argentino para WhatsApp.
+  // "11 2345 6789" y "+54 9 11 2345 6789" terminan igual: 5491123456789.
+  const soloDigitos = (t) => {
+    let d = t.replace(/\D/g, "");
+    if (d.startsWith("54")) d = d.slice(2);
+    if (d.startsWith("9")) d = d.slice(1);
+    if (d.startsWith("0")) d = d.slice(1);
+    // Los celulares argentinos se escriben con un 15 antes del numero local
+    if (d.length > 10 && d.slice(2, 4) === "15") d = d.slice(0, 2) + d.slice(4);
+    return "549" + d;
+  };
 
   const confirmar = async () => {
     setEnviando(true);
@@ -72,7 +82,7 @@ const Cart = () => {
       (i) => `• ${i.cantidad} × ${i.nombre || `Producto ${i.producto_id}`}`
     );
     const texto = encodeURIComponent(
-      `¡Hola Kenypets! 🐾 Acabo de hacer el pedido *#${pedido.id}*.\n\n` +
+      `¡Hola Kenypets! 🐾 Acabo de hacer el pedido *#${pedido.numero ?? pedido.id}*.\n\n` +
         `${lineas.join("\n")}\n\n` +
         `Total: ${plata(pedido.total)}\n` +
         `A nombre de: ${pedido.cliente_nombre}`
@@ -80,7 +90,7 @@ const Cart = () => {
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${texto}`, "_blank");
   };
 
-  const telefonoValido = soloDigitos(telefono).length >= 8;
+  const telefonoValido = telefono.replace(/\D/g, "").length >= 8;
   const nombreValido = nombre.trim().length >= 2;
 
   return (
@@ -259,7 +269,7 @@ const Cart = () => {
                 <div className="cart-listo__icono">🎉</div>
                 <p>
                   Tu pedido quedó registrado con el número{" "}
-                  <strong>#{pedido.id}</strong>.
+                  <strong>#{pedido.numero ?? pedido.id}</strong>.
                 </p>
                 <p className="cart-listo__total">
                   Total: <strong>{plata(pedido.total)}</strong>
