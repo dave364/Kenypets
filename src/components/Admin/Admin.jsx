@@ -470,8 +470,8 @@ const PanelPedidos = ({ token, onSesionVencida }) => {
     if (estado === "cancelado" || estado === "confirmado") {
       const ok = window.confirm(
         estado === "cancelado"
-          ? `Cancelar el pedido #${pedido.id}? Se devuelve el stock reservado.`
-          : `Confirmar el pedido #${pedido.id}?`
+          ? `Cancelar el pedido #${pedido.numero ?? pedido.id}? Se devuelve el stock reservado.`
+          : `Confirmar el pedido #${pedido.numero ?? pedido.id}?`
       );
       if (!ok) return;
     }
@@ -510,7 +510,7 @@ const PanelPedidos = ({ token, onSesionVencida }) => {
               onClick={() => setAbierto(abierto === p.id ? null : p.id)}
             >
               <div>
-                <strong>#{p.id}</strong> {p.cliente_nombre}
+                <strong>#{p.numero ?? p.id}</strong> {p.cliente_nombre}
                 <span className="admin__pedido-fecha">{fecha(p.creado_en)}</span>
               </div>
               <div className="admin__pedido-derecha">
@@ -520,8 +520,7 @@ const PanelPedidos = ({ token, onSesionVencida }) => {
                 <strong>{plata(p.total)}</strong>
               </div>
             </div>
-
-            {abierto === p.id && (
+Mostrar el numero de pedido en vez del id interno            {abierto === p.id && (
               <div className="admin__pedido-detalle">
                 <p>
                   Telefono: <strong>{p.cliente_telefono}</strong>
