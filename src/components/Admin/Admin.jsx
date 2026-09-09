@@ -532,7 +532,7 @@ const PanelPedidos = ({ token, onSesionVencida }) => {
                     {p.items.map((i, n) => (
                       <li key={n}>
                         {i.cantidad} × {i.nombre || `Producto ${i.producto_id}`}
-                        <span>{plata(i.precio * i.cantidad)}</span>
+                        <span>{plata((i.precio_unitario ?? i.precio) * i.cantidad)}</span>
                       </li>
                     ))}
                   </ul>
