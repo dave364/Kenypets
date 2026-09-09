@@ -4,6 +4,8 @@ import Hero from './components/Hero/Hero';
 import Products from './components/Products/Products';
 import About from './components/About/About';
 import Admin from './components/Admin/Admin';
+import Cart from './components/Cart/Cart';
+import { CartProvider } from './context/CartContext';
 
 function App() {
   // Ruteo minimo por hash: #admin muestra el panel, cualquier otra cosa
@@ -22,12 +24,13 @@ function App() {
   if (esAdmin) return <Admin />;
 
   return (
-    <>
+    <CartProvider>
       <Navbar />
       <Hero />
       <Products />
       <About />
-    </>
+      <Cart />
+    </CartProvider>
   );
 }
 
