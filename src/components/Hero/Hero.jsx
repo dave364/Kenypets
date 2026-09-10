@@ -29,7 +29,7 @@ Explora ahora</a>
       <div className="promo__text">
         <span className="paw">🐾</span>
         <div>
-          <h3>¡Obtén un 20% de DESCUENTO en tu primer pedido!</h3>
+          <h3>Registrate en Kenypets y obtené un 20% de DESCUENTO en tu primer pedido!</h3>
           <p>Calidad, cuidado y felicidad para tu mascota.</p>
         </div>
       </div>
