@@ -287,3 +287,91 @@
   .navbar__cuenta-btn { font-size: 0.72rem; padding: 0.4rem 0.8rem; }
   .auth-modal { padding: 1.75rem 1.25rem 1.25rem; }
 }
+
+
+/* =============================================
+   MOBIL: el logo va centrado y en position absolute,
+   asi que el espacio a los costados es minimo.
+   Los accesos a la cuenta se mudan al menu lateral.
+   ============================================= */
+@media (max-width: 768px) {
+  .navbar__cuenta { display: none; }
+
+  .navbar__sidebar-content .navbar__sesion {
+    width: 100%;
+    padding: 1.2rem 1.5rem;
+    font-family: inherit;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    text-align: left;
+    color: var(--text-dark);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+AuthModal.jsx
+AuthModal.scss
+Cart
+Hero
+Navbar
+Products
+context
+styles
+utils
+App.css
+App.jsx
+index.css
+main.jsx
+.gitignore
+README.md
+eslint.config.js
+index.html
+package-lock.json
+package.json
+vite.config.js
+wrangler.jsonc
+Kenypets/src/components/Auth
+/
+AuthModal.scss
+in
+main
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      color: var(--brand-secondary);
+      background: rgba(0, 0, 0, 0.03);
+    }
+  }
+
+  /* El registro es la accion que queremos empujar, asi que va marcado */
+  .navbar__sesion--destacado {
+    color: var(--color-purple);
+    font-weight: 700;
+  }
+
+  .navbar__sidebar-cuenta {
+    padding: 1.1rem 1.5rem 0.4rem;
+    margin: 0;
+    font-family: sans-serif;
+    font-size: 0.8rem;
+    color: var(--color-purple);
+    word-break: break-word;
+    line-height: 1.4;
+  }
+
+  .navbar__sidebar-cuenta strong {
+    display: block;
+    font-size: 0.95rem;
+    color: var(--color-dark);
+  }
+
+  .navbar__sidebar-badge {
+    display: inline-block;
+    margin-top: 0.35rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #1b6b3a;
+  }
+}
