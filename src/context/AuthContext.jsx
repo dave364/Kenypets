@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 
 const AuthContext = createContext(null);
 
@@ -59,6 +59,28 @@ export const AuthProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Vuelve a pedir el usuario al servidor. Se usa despues de comprar:
+  // el descuento se marca como usado del lado del backend, y si no
+  // refrescamos, el cartel de "20% disponible" sigue mintiendo.
+  const refrescarUsuario = useCallback(async () => {
+    if (!sesion?.token) return null;
+    try {
+      const res = await fetch(`${API_URL}/api/auth/me`, {
+        headers: { Authorization: `Bearer ${sesion.token}` },
+      });
+      if (res.status === 401) {
+        setSesion(null);
+        return null;
+      }
+      if (!res.ok) return null;
+      const data = await res.json();
+      setSesion((s) => (s ? { ...s, usuario: data.usuario } : s));
+      return data.usuario;
+    } catch {
+      return null;
+    }
+  }, [sesion?.token]);
+
   const pedir = async (ruta, cuerpo) => {
     const res = await fetch(`${API_URL}${ruta}`, {
       method: "POST",
@@ -102,6 +124,7 @@ export const AuthProvider = ({ children }) => {
         login,
         registro,
         logout,
+        refrescarUsuario,
         modal,
         abrirModal: (m = "registro") => setModal(m),
         cerrarModal: () => setModal(null),
