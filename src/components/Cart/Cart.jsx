@@ -21,7 +21,8 @@ const Cart = () => {
     setAbierto,
   } = useCart();
 
-  const { token, usuario, logueado, tieneDescuento, abrirModal } = useAuth();
+  const { token, usuario, logueado, tieneDescuento, abrirModal, refrescarUsuario } =
+    useAuth();
 
   const [paso, setPaso] = useState("carrito"); // carrito | datos | listo
   const [nombre, setNombre] = useState("");
@@ -76,6 +77,10 @@ const Cart = () => {
       setPedido(data);
       setPaso("listo");
       vaciar();
+            // El backend acaba de marcar el descuento como usado.
+      // Releemos el usuario para que el cartel del 20% desaparezca
+      // sin tener que recargar la pagina.
+      if (token) refrescarUsuario();
     } catch (err) {
       setError(err.message);
     } finally {
