@@ -8,6 +8,7 @@ import Cart from './components/Cart/Cart';
 import AuthModal from './components/Auth/AuthModal';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
+import { FavoritosProvider } from './context/FavoritosContext';
 
 function App() {
   // Ruteo minimo por hash: #admin muestra el panel, cualquier otra cosa
@@ -27,14 +28,16 @@ function App() {
 
   return (
     <AuthProvider>
-      <CartProvider>
-        <Navbar />
-        <Hero />
-        <Products />
-        <About />
-        <Cart />
-        <AuthModal />
-      </CartProvider>
+      <FavoritosProvider>
+        <CartProvider>
+          <Navbar />
+          <Hero />
+          <Products />
+          <About />
+          <Cart />
+          <AuthModal />
+        </CartProvider>
+      </FavoritosProvider>
     </AuthProvider>
   );
 }
