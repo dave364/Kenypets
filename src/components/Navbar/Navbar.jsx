@@ -141,6 +141,52 @@ const Navbar = () => {
           <a onClick={() => setMenuOpen(false)} href="#about">Quiénes Somos</a>
           <a onClick={() => setMenuOpen(false)} href="#contact">Contacto</a>
           <a onClick={() => setMenuOpen(false)} href="#politic">Políticas de devolución</a>
+
+          {/* Accesos a la cuenta: en mobil el navbar no tiene lugar,
+              asi que viven aca adentro. */}
+          {!logueado ? (
+            <>
+              <button
+                className="navbar__sesion navbar__sesion--destacado"
+                onClick={() => {
+                  setMenuOpen(false);
+                  abrirModal("registro");
+                }}
+              >
+                Registrate <span aria-hidden="true">🐾</span>
+              </button>
+              <button
+                className="navbar__sesion"
+                onClick={() => {
+                  setMenuOpen(false);
+                  abrirModal("login");
+                }}
+              >
+                Iniciar sesión
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="navbar__sidebar-cuenta">
+                <strong>{primerNombre}</strong>
+                {usuario?.email}
+                {tieneDescuento && (
+                  <span className="navbar__sidebar-badge">
+                    20% en tu primer pedido
+                  </span>
+                )}
+              </p>
+              <button
+                className="navbar__sesion"
+                onClick={() => {
+                  setMenuOpen(false);
+                  logout();
+                }}
+              >
+                Cerrar sesión
+              </button>
+            </>
+          )}
         </div>
       </div>
 
