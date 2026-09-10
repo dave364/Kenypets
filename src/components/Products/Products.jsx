@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useCart } from "../../context/CartContext";
+import { useFavoritos } from "../../context/FavoritosContext";
 import "./Products.scss";
 
 const WHATSAPP_NUMBER = "5491122531821";
@@ -14,6 +15,7 @@ const getImageUrl = (filename) =>
 
 const Products = () => {
   const { agregar, setAbierto } = useCart();
+  const { esFavorito, alternar, cantidad } = useFavoritos();
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
@@ -48,17 +50,25 @@ const Products = () => {
 
   // Las categorias salen de los productos que llegaron, no de una lista fija:
   // si mañana agregas "Alimentos" en la base, el filtro aparece solo.
-  const categorias = ["Todos", ...new Set(productos.map((p) => p.categoria))];
+  const categorias = [
+    "Todos",
+    ...new Set(productos.map((p) => p.categoria)),
+    // El chip de favoritos solo aparece si hay alguno marcado
+    ...(cantidad > 0 ? ["Favoritos"] : []),
+  ];
 
   const filtrados =
     activeFilter === "Todos"
       ? productos
+      : activeFilter === "Favoritos"
+      ? productos.filter((p) => esFavorito(p.id))
       : productos.filter((p) => p.categoria === activeFilter);
 
   const iconoCategoria = (cat) => {
     if (cat === "Todos") return "🐾 ";
     if (cat === "Accesorios") return "🎀 ";
     if (cat === "Juguetes") return "🧸 ";
+    if (cat === "Favoritos") return "❤️ ";
     return "";
   };
 
@@ -132,6 +142,19 @@ const Products = () => {
                       Agotado
                     </span>
                   )}
+
+                  <button
+                    className={`product-card__fav ${esFavorito(producto.id) ? "activo" : ""}`}
+                    onClick={() => alternar(producto)}
+                    aria-label={
+                      esFavorito(producto.id)
+                        ? `Quitar ${producto.nombre} de favoritos`
+                        : `Guardar ${producto.nombre} en favoritos`
+                    }
+                    title={esFavorito(producto.id) ? "Quitar de favoritos" : "Guardar en favoritos"}
+                  >
+                    {esFavorito(producto.id) ? "❤️" : "🤍"}
+                  </button>
 
                   <div className="product-card__image-wrap">
                     <img
