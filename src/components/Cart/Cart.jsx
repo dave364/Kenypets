@@ -85,7 +85,7 @@ const Cart = () => {
       `¡Hola Kenypets! 🐾 Acabo de hacer el pedido *#${pedido.numero ?? pedido.id}*.\n\n` +
         `${lineas.join("\n")}\n\n` +
         `Total: ${plata(pedido.total)}\n` +
-        `A nombre de: ${pedido.cliente_nombre}`
+        `A nombre de: ${pedido.cliente_nombre ?? nombre}`
     );
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${texto}`, "_blank");
   };
