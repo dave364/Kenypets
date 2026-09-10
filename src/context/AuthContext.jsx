@@ -18,6 +18,14 @@ export const AuthProvider = ({ children }) => {
   // Estado del modal: null = cerrado, "login" o "registro" = abierto en ese paso
   const [modal, setModal] = useState(null);
 
+  // El servidor concede el descuento si descuento_usado es falso Y ademas
+  // no hay un pedido vivo que ya lo haya consumido. La bandera de la tabla
+  // usuarios recien se marca al confirmar el pedido, asi que mirarla sola
+  // deja el cartel del 20% visible despues de comprar.
+  const [pedidoConDescuento, setPedidoConDescuento] = useState(false);
+
+  const token = sesion?.token ?? null;
+
   useEffect(() => {
     try {
       if (sesion) localStorage.setItem(CLAVE, JSON.stringify(sesion));
@@ -27,46 +35,32 @@ export const AuthProvider = ({ children }) => {
     }
   }, [sesion]);
 
-  // Al cargar la pagina revalidamos el token contra el servidor.
-  // Un token vencido o de un usuario borrado tiene que caducar solo,
-  // en vez de dejar la interfaz mostrando una sesion que ya no existe.
-  useEffect(() => {
-    if (!sesion?.token) return;
-    let vigente = true;
+  const revisarDescuento = useCallback(async () => {
+    if (!token) {
+      setPedidoConDescuento(false);
+      return;
+    }
+    try {
+      const res = await fetch(`${API_URL}/api/pedidos/mis`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) return;
+      const pedidos = await res.json();
+      setPedidoConDescuento(
+        pedidos.some((p) => Number(p.descuento) > 0 && p.estado !== "cancelado")
+      );
+    } catch {
+      // Sin conexion dejamos la bandera como esta.
+    }
+  }, [token]);
 
-    (async () => {
-      try {
-        const res = await fetch(`${API_URL}/api/auth/me`, {
-          headers: { Authorization: `Bearer ${sesion.token}` },
-        });
-        if (!vigente) return;
-        if (res.status === 401) {
-          setSesion(null);
-        } else if (res.ok) {
-          const data = await res.json();
-          setSesion((s) => (s ? { ...s, usuario: data.usuario } : s));
-        }
-      } catch {
-        // Sin conexion o API dormida: dejamos la sesion como esta.
-        // Si el token estuviera mal, la primera llamada real lo va a rechazar.
-      }
-    })();
-
-    return () => {
-      vigente = false;
-    };
-    // Solo al montar: no queremos revalidar en cada cambio de sesion.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Vuelve a pedir el usuario al servidor. Se usa despues de comprar:
-  // el descuento se marca como usado del lado del backend, y si no
-  // refrescamos, el cartel de "20% disponible" sigue mintiendo.
+  // Vuelve a pedir el usuario al servidor. Se usa despues de comprar,
+  // para que el cartel del 20% desaparezca sin recargar la pagina.
   const refrescarUsuario = useCallback(async () => {
-    if (!sesion?.token) return null;
+    if (!token) return null;
     try {
       const res = await fetch(`${API_URL}/api/auth/me`, {
-        headers: { Authorization: `Bearer ${sesion.token}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
       if (res.status === 401) {
         setSesion(null);
@@ -75,11 +69,22 @@ export const AuthProvider = ({ children }) => {
       if (!res.ok) return null;
       const data = await res.json();
       setSesion((s) => (s ? { ...s, usuario: data.usuario } : s));
+      revisarDescuento();
       return data.usuario;
     } catch {
       return null;
     }
-  }, [sesion?.token]);
+  }, [token, revisarDescuento]);
+
+  // Al cargar la pagina revalidamos contra el servidor: un token vencido
+  // tiene que caducar solo, en vez de dejar la interfaz mostrando una
+  // sesion que ya no existe.
+  useEffect(() => {
+    if (!token) return;
+    refrescarUsuario();
+    // Solo al montar o al cambiar el token.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   const pedir = async (ruta, cuerpo) => {
     const res = await fetch(`${API_URL}${ruta}`, {
@@ -109,22 +114,27 @@ export const AuthProvider = ({ children }) => {
     return data.usuario;
   };
 
-  const logout = () => setSesion(null);
+  const logout = () => {
+    setSesion(null);
+    setPedidoConDescuento(false);
+  };
 
   const usuario = sesion?.usuario ?? null;
 
   return (
     <AuthContext.Provider
       value={{
-        token: sesion?.token ?? null,
+        token,
         usuario,
-        logueado: !!sesion?.token,
-        // El descuento sigue disponible mientras no se haya usado
-        tieneDescuento: !!usuario && !usuario.descuento_usado,
+        logueado: !!token,
+        // La misma regla que aplica el servidor al crear el pedido
+        tieneDescuento:
+          !!usuario && !usuario.descuento_usado && !pedidoConDescuento,
         login,
         registro,
         logout,
         refrescarUsuario,
+        revisarDescuento,
         modal,
         abrirModal: (m = "registro") => setModal(m),
         cerrarModal: () => setModal(null),

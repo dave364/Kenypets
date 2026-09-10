@@ -21,8 +21,14 @@ const Cart = () => {
     setAbierto,
   } = useCart();
 
-  const { token, usuario, logueado, tieneDescuento, abrirModal, refrescarUsuario } =
-    useAuth();
+  const {
+    token,
+    usuario,
+    logueado,
+    tieneDescuento,
+    abrirModal,
+    refrescarUsuario,
+  } = useAuth();
 
   const [paso, setPaso] = useState("carrito"); // carrito | datos | listo
   const [nombre, setNombre] = useState("");
@@ -80,6 +86,8 @@ const Cart = () => {
             // El backend acaba de marcar el descuento como usado.
       // Releemos el usuario para que el cartel del 20% desaparezca
       // sin tener que recargar la pagina.
+      // El descuento pudo haberse consumido con este pedido.
+      // Releemos el usuario para que el cartel del 20% desaparezca solo.
       if (token) refrescarUsuario();
     } catch (err) {
       setError(err.message);
@@ -103,6 +111,10 @@ const Cart = () => {
 
   const telefonoValido = telefonoParece(telefono);
   const nombreValido = nombre.trim().length >= 2;
+
+  // Si tiene cuenta, sus datos ya vinieron del servidor: no lo hacemos
+  // pasar por un formulario para escribir lo mismo de nuevo.
+  const datosListos = logueado && nombreValido && telefonoValido;
 
   return (
     <>
@@ -194,14 +206,43 @@ const Cart = () => {
                       <span>Subtotal</span>
                       <strong>{plata(subtotal)}</strong>
                     </div>
+                    {datosListos && (
+                      <div className="cart-datos-guardados">
+                        <p>
+                          A nombre de <strong>{nombre}</strong>
+                          <br />
+                          WhatsApp <strong>{telefono}</strong>
+                        </p>
+                        <button onClick={() => setPaso("datos")}>Cambiar</button>
+                      </div>
+                    )}
+
+                    {logueado && tieneDescuento && (
+                      <div className="cart-aviso cart-aviso--ok">
+                        <span aria-hidden="true">🎉</span>
+                        <p>
+                          Tenés <strong>20% de descuento</strong> disponible. Se
+                          aplica al confirmar.
+                        </p>
+                      </div>
+                    )}
+
                     <p className="cart-nota">
                       El total final lo confirma Kenypets al procesar el pedido.
                     </p>
+
+                    {error && <p className="cart-error">{error}</p>}
+
                     <button
                       className="cart-btn cart-btn--principal"
-                      onClick={() => setPaso("datos")}
+                      onClick={datosListos ? confirmar : () => setPaso("datos")}
+                      disabled={enviando}
                     >
-                      Continuar
+                      {enviando
+                        ? "Enviando..."
+                        : datosListos
+                        ? "Confirmar pedido"
+                        : "Continuar"}
                     </button>
                   </footer>
                 )}
