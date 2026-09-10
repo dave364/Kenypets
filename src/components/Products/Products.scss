@@ -302,3 +302,43 @@
 
   &:hover:not(:disabled) { background: var(--color-dark); }
 }
+
+
+/* --- CORAZON DE FAVORITOS --- */
+.product-card__fav {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  z-index: 3;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.92);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(82, 43, 91, 0.18);
+  transition: transform 0.18s ease, background 0.18s ease;
+
+  &:hover { transform: scale(1.12); background: #fff; }
+  &:active { transform: scale(0.94); }
+}
+
+/* Un latido corto al marcarlo, para que el gesto se sienta acusado */
+.product-card__fav.activo {
+  animation: fav-latido 0.32s ease;
+}
+
+@keyframes fav-latido {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.28); }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-card__fav.activo { animation: none; }
+}
