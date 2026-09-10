@@ -520,7 +520,7 @@ const PanelPedidos = ({ token, onSesionVencida }) => {
                 <strong>{plata(p.total)}</strong>
               </div>
             </div>
-Mostrar el numero de pedido en vez del id interno            {abierto === p.id && (
+            {abierto === p.id && (
               <div className="admin__pedido-detalle">
                 <p>
                   Telefono: <strong>{p.cliente_telefono}</strong>
