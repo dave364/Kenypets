@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useCart } from "../../context/CartContext";
+import { useAuth } from "../../context/AuthContext";
+import { normalizarTelefono, telefonoParece } from "../../utils/telefono";
 import "./Cart.scss";
 
 const API_URL = import.meta.env.VITE_API_URL || "https://kenypets-api.onrender.com";
@@ -19,12 +21,22 @@ const Cart = () => {
     setAbierto,
   } = useCart();
 
+  const { token, usuario, logueado, tieneDescuento, abrirModal } = useAuth();
+
   const [paso, setPaso] = useState("carrito"); // carrito | datos | listo
   const [nombre, setNombre] = useState("");
   const [telefono, setTelefono] = useState("");
   const [enviando, setEnviando] = useState(false);
   const [error, setError] = useState(null);
   const [pedido, setPedido] = useState(null);
+
+  // Si ya tiene cuenta no le pedimos de nuevo lo que ya sabemos.
+  useEffect(() => {
+    if (usuario) {
+      setNombre((n) => n || usuario.nombre || "");
+      setTelefono((tel) => tel || usuario.telefono || "");
+    }
+  }, [usuario]);
 
   const cerrar = () => {
     setAbierto(false);
@@ -37,17 +49,6 @@ const Cart = () => {
     }
   };
 
-  // Normaliza a formato internacional argentino para WhatsApp.
-  // "11 2345 6789" y "+54 9 11 2345 6789" terminan igual: 5491123456789.
-  const soloDigitos = (t) => {
-    let d = t.replace(/\D/g, "");
-    if (d.startsWith("54")) d = d.slice(2);
-    if (d.startsWith("9")) d = d.slice(1);
-    if (d.startsWith("0")) d = d.slice(1);
-    // Los celulares argentinos se escriben con un 15 antes del numero local
-    if (d.length > 10 && d.slice(2, 4) === "15") d = d.slice(0, 2) + d.slice(4);
-    return "549" + d;
-  };
 
   const confirmar = async () => {
     setEnviando(true);
@@ -55,10 +56,15 @@ const Cart = () => {
     try {
       const res = await fetch(`${API_URL}/api/pedidos`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          // Con el token el servidor sabe quien compra y aplica el 20%.
+          // Sin el, el pedido entra como invitado y no hay descuento.
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           cliente_nombre: nombre.trim(),
-          cliente_telefono: soloDigitos(telefono),
+          cliente_telefono: normalizarTelefono(telefono),
           // Mandamos solo id y cantidad. El precio lo calcula el servidor.
           items: items.map((i) => ({ producto_id: i.id, cantidad: i.cantidad })),
         }),
@@ -90,7 +96,7 @@ const Cart = () => {
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${texto}`, "_blank");
   };
 
-  const telefonoValido = telefono.replace(/\D/g, "").length >= 8;
+  const telefonoValido = telefonoParece(telefono);
   const nombreValido = nombre.trim().length >= 2;
 
   return (
@@ -225,6 +231,29 @@ const Cart = () => {
                     </small>
                   </label>
 
+                  {!logueado && (
+                    <div className="cart-aviso">
+                      <span aria-hidden="true">🐾</span>
+                      <p>
+                        Creá tu cuenta y llevate un <strong>20% off</strong> en
+                        este pedido.{" "}
+                        <button onClick={() => abrirModal("registro")}>
+                          Registrarme
+                        </button>
+                      </p>
+                    </div>
+                  )}
+
+                  {logueado && tieneDescuento && (
+                    <div className="cart-aviso cart-aviso--ok">
+                      <span aria-hidden="true">🎉</span>
+                      <p>
+                        Tenés <strong>20% de descuento</strong> disponible. Se
+                        aplica al confirmar.
+                      </p>
+                    </div>
+                  )}
+
                   <div className="cart-resumen">
                     {items.map((i) => (
                       <div key={i.id}>
@@ -271,6 +300,11 @@ const Cart = () => {
                   Tu pedido quedó registrado con el número{" "}
                   <strong>#{pedido.numero ?? pedido.id}</strong>.
                 </p>
+                {Number(pedido.descuento) > 0 && (
+                  <p className="cart-listo__descuento">
+                    Descuento aplicado: −{plata(pedido.descuento)}
+                  </p>
+                )}
                 <p className="cart-listo__total">
                   Total: <strong>{plata(pedido.total)}</strong>
                 </p>
