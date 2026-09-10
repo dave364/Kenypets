@@ -11,7 +11,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4rem 2rem 6rem;
+  padding: 4rem 8rem 6rem;
   background: linear-gradient(
     135deg,
     var(--brand-primary) 0 40%,
@@ -58,11 +58,10 @@
 }
 
 .hero__img img {
-  width: 420px;
-  max-width: 45vw;
+  width: clamp(420px, 45vw, 820px);
   height: auto;
   aspect-ratio: 840 / 756;
-  margin-right: 250px;
+  margin-right: 50px;
 }
 
 /* PROMO */
