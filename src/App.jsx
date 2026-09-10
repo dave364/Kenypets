@@ -5,7 +5,9 @@ import Products from './components/Products/Products';
 import About from './components/About/About';
 import Admin from './components/Admin/Admin';
 import Cart from './components/Cart/Cart';
+import AuthModal from './components/Auth/AuthModal';
 import { CartProvider } from './context/CartContext';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   // Ruteo minimo por hash: #admin muestra el panel, cualquier otra cosa
@@ -24,13 +26,16 @@ function App() {
   if (esAdmin) return <Admin />;
 
   return (
-    <CartProvider>
-      <Navbar />
-      <Hero />
-      <Products />
-      <About />
-      <Cart />
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <Navbar />
+        <Hero />
+        <Products />
+        <About />
+        <Cart />
+        <AuthModal />
+      </CartProvider>
+    </AuthProvider>
   );
 }
 
