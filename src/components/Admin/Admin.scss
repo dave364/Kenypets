@@ -447,3 +447,43 @@
     padding: 1.5rem;
   }
 }
+
+/* --- TABLA DE CLIENTES --- */
+.admin__cliente-mail {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--color-purple);
+  opacity: 0.8;
+  margin-top: 0.15rem;
+  word-break: break-word;
+}
+
+.admin__cliente-wsp {
+  color: #1b6b3a;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover { text-decoration: underline; }
+}
+
+.admin__cliente-pend {
+  display: block;
+  font-size: 0.7rem;
+  color: #7a5c00;
+  font-weight: 700;
+}
+
+.admin__cliente-si {
+  color: #1b6b3a;
+  font-weight: 700;
+}
+
+.admin__cliente-no {
+  color: var(--color-purple);
+  opacity: 0.65;
+}
+
+.admin__cliente-nada {
+  opacity: 0.4;
+}
