@@ -13,6 +13,7 @@ export const FavoritosProvider = ({ children }) => {
   const [ids, setIds] = useState(() => new Set());
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(false);
+  const [panelAbierto, setPanelAbierto] = useState(false);
 
   const cargar = useCallback(async () => {
     if (!token) {
@@ -91,6 +92,14 @@ export const FavoritosProvider = ({ children }) => {
         esFavorito: (id) => ids.has(id),
         alternar,
         recargar: cargar,
+        panelAbierto,
+        abrirPanel: () => {
+          setPanelAbierto(true);
+          // Al abrirlo pedimos la lista fresca: pudo haber cambiado
+          // desde otro dispositivo o desde otra pestaña.
+          cargar();
+        },
+        cerrarPanel: () => setPanelAbierto(false),
       }}
     >
       {children}
