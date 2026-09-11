@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import logo from '../../assets/logo/logo.png';
 import { useAuth } from "../../context/AuthContext";
+import { useFavoritos } from "../../context/FavoritosContext";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -9,6 +10,7 @@ const Navbar = () => {
   const cuentaRef = useRef(null);
 
   const { logueado, usuario, tieneDescuento, abrirModal, logout } = useAuth();
+  const { abrirPanel, cantidad } = useFavoritos();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,7 +59,15 @@ const Navbar = () => {
         <a href="#home">Inicio</a>
         <a href="#products">Productos</a>
         <a href="#about">Quiénes Somos</a>
-        <a href="#contact">Contacto</a>
+        {/* Con sesion iniciada, Contacto deja su lugar a Favoritos */}
+        {!logueado ? (
+          <a href="#contact">Contacto</a>
+        ) : (
+          <button className="navbar__link-btn" onClick={abrirPanel}>
+            Favoritos
+            {cantidad > 0 && <span className="navbar__fav-num">{cantidad}</span>}
+          </button>
+        )}
         <a href="#politic">Políticas de devolución</a>
       </div>
 
@@ -139,7 +149,19 @@ const Navbar = () => {
           <a onClick={() => setMenuOpen(false)} href="#home">Inicio</a>
           <a onClick={() => setMenuOpen(false)} href="#products">Productos</a>
           <a onClick={() => setMenuOpen(false)} href="#about">Quiénes Somos</a>
-          <a onClick={() => setMenuOpen(false)} href="#contact">Contacto</a>
+          {!logueado ? (
+            <a onClick={() => setMenuOpen(false)} href="#contact">Contacto</a>
+          ) : (
+            <button
+              className="navbar__sesion"
+              onClick={() => {
+                setMenuOpen(false);
+                abrirPanel();
+              }}
+            >
+              Favoritos {cantidad > 0 && <span>({cantidad})</span>}
+            </button>
+          )}
           <a onClick={() => setMenuOpen(false)} href="#politic">Políticas de devolución</a>
 
           {/* Accesos a la cuenta: en mobil el navbar no tiene lugar,
