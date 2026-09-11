@@ -6,6 +6,7 @@ import About from './components/About/About';
 import Admin from './components/Admin/Admin';
 import Cart from './components/Cart/Cart';
 import AuthModal from './components/Auth/AuthModal';
+import FavoritosModal from './components/Favoritos/FavoritosModal';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { FavoritosProvider } from './context/FavoritosContext';
@@ -36,6 +37,7 @@ function App() {
           <About />
           <Cart />
           <AuthModal />
+          <FavoritosModal />
         </CartProvider>
       </FavoritosProvider>
     </AuthProvider>
