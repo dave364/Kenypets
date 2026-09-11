@@ -146,12 +146,22 @@ const Admin = () => {
         >
           Pedidos
         </button>
+        <button
+          className={`admin__tab ${seccion === "clientes" ? "active" : ""}`}
+          onClick={() => setSeccion("clientes")}
+        >
+          Clientes
+        </button>
       </nav>
 
-      {seccion === "productos" ? (
+      {seccion === "productos" && (
         <PanelProductos token={token} onSesionVencida={salir} />
-      ) : (
+      )}
+      {seccion === "pedidos" && (
         <PanelPedidos token={token} onSesionVencida={salir} />
+      )}
+      {seccion === "clientes" && (
+        <PanelClientes token={token} onSesionVencida={salir} />
       )}
     </div>
   );
@@ -560,6 +570,129 @@ const PanelPedidos = ({ token, onSesionVencida }) => {
           </div>
         ))}
       </div>
+    </div>
+  );
+};
+
+/* ============================================================
+   CLIENTES
+   ============================================================ */
+
+const PanelClientes = ({ token, onSesionVencida }) => {
+  const [clientes, setClientes] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
+  const [soloConDescuento, setSoloConDescuento] = useState(false);
+
+  const cargar = useCallback(async () => {
+    setCargando(true);
+    try {
+      const res = await fetch(`${API_URL}/api/usuarios`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.status === 401) {
+        onSesionVencida();
+        throw new Error("Tu sesion vencio. Volve a entrar.");
+      }
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
+      setClientes(data);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setCargando(false);
+    }
+  }, [token, onSesionVencida]);
+
+  useEffect(() => {
+    cargar();
+  }, [cargar]);
+
+  if (cargando) return <p className="admin__estado">Cargando clientes...</p>;
+
+  const visibles = soloConDescuento
+    ? clientes.filter((c) => c.descuento_disponible && c.rol !== "admin")
+    : clientes;
+
+  return (
+    <div className="admin__contenido">
+      {error && <p className="admin__error">{error}</p>}
+
+      <div className="admin__acciones">
+        <button
+          className={`admin__btn ${soloConDescuento ? "admin__btn--primary" : ""}`}
+          onClick={() => setSoloConDescuento((v) => !v)}
+        >
+          Solo con descuento sin usar
+        </button>
+        <button className="admin__btn admin__btn--ghost" onClick={cargar}>
+          Actualizar
+        </button>
+      </div>
+
+      {visibles.length === 0 && (
+        <p className="admin__estado">No hay clientes que mostrar.</p>
+      )}
+
+      {visibles.length > 0 && (
+        <div className="admin__tabla-wrap">
+          <table className="admin__tabla">
+            <thead>
+              <tr>
+                <th>Cliente</th>
+                <th>WhatsApp</th>
+                <th>Pedidos</th>
+                <th>Gastado</th>
+                <th>Descuento</th>
+                <th>Alta</th>
+              </tr>
+            </thead>
+            <tbody>
+              {visibles.map((c) => (
+                <tr key={c.id}>
+                  <td>
+                    <strong>{c.nombre}</strong>
+                    {c.rol === "admin" && (
+                      <span className="admin__pill">admin</span>
+                    )}
+                    <span className="admin__cliente-mail">{c.email}</span>
+                  </td>
+                  <td>
+                    <a
+                      className="admin__cliente-wsp"
+                      href={`https://wa.me/${c.telefono}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {c.telefono}
+                    </a>
+                  </td>
+                  <td>
+                    {c.pedidos}
+                    {c.pendientes > 0 && (
+                      <span className="admin__cliente-pend">
+                        {c.pendientes} pend.
+                      </span>
+                    )}
+                  </td>
+                  <td>{plata(c.gastado)}</td>
+                  <td>
+                    {c.rol === "admin" ? (
+                      <span className="admin__cliente-nada">—</span>
+                    ) : c.descuento_disponible ? (
+                      <span className="admin__cliente-si">Disponible</span>
+                    ) : (
+                      <span className="admin__cliente-no">Usado</span>
+                    )}
+                  </td>
+                  <td>{fecha(c.creado_en)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
