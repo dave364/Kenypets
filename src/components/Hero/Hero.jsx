@@ -31,9 +31,9 @@ Explora ahora</a>
     {/* PROMO BANNER */}
     <div className="promo">
       <div className="promo__text">
-        <span className="paw">🐾</span>
+        <span className="paw">&#128062;</span>
         <div>
-          <h3>Registrate en Kenypets y obtené un 20% de DESCUENTO en tu primer pedido!</h3>
+          <h3>Registrate en Kenypets y obtene un 20% de DESCUENTO en tu primer pedido!</h3>
           <p>Calidad, cuidado y felicidad para tu mascota.</p>
         </div>
       </div>
@@ -41,10 +41,7 @@ Explora ahora</a>
           tiene que llevar justamente ahi. Si ya tiene cuenta, no
           tiene sentido ofrecerle registrarse otra vez. */}
       {!logueado ? (
-        <button
-          className="promo__btn"
-          onClick={() => abrirModal("registro")}
-        >
+        <button className="promo__btn" onClick={() => abrirModal("registro")}>
           WOOF WOOF
         </button>
       ) : (
