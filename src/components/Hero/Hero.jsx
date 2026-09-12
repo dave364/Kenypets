@@ -1,8 +1,12 @@
 import React from "react";
+import { useAuth } from "../../context/AuthContext";
 import dogImg from "../../assets/Image/dog-hero.webp";
 import dogImgSmall from "../../assets/Image/dog-hero-560w.webp";
 
-const Hero = () => (
+const Hero = () => {
+  const { logueado, abrirModal } = useAuth();
+
+  return (
   <section className="hero" id="home">
     <div className="hero__content">
       <div className="hero__text">
@@ -33,9 +37,22 @@ Explora ahora</a>
           <p>Calidad, cuidado y felicidad para tu mascota.</p>
         </div>
       </div>
-      <a href="#products" className="promo__btn">WOOF WOOF</a>
+      {/* El banner promete un descuento por registrarse: el boton
+          tiene que llevar justamente ahi. Si ya tiene cuenta, no
+          tiene sentido ofrecerle registrarse otra vez. */}
+      {!logueado ? (
+        <button
+          className="promo__btn"
+          onClick={() => abrirModal("registro")}
+        >
+          WOOF WOOF
+        </button>
+      ) : (
+        <a href="#products" className="promo__btn">VER PRODUCTOS</a>
+      )}
     </div>
   </section>
-);
+  );
+};
 
 export default Hero;
