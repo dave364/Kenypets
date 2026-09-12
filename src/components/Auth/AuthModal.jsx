@@ -22,6 +22,7 @@ const AuthModal = () => {
   useEffect(() => {
     setError(null);
     setPassword("");
+    setEnviando(false);
   }, [modal]);
 
   if (!modal) return null;
@@ -42,6 +43,10 @@ const AuthModal = () => {
       }
     } catch (err) {
       setError(err.message);
+    } finally {
+      // Tiene que volver a false tambien cuando sale bien: si no, el
+      // boton queda deshabilitado para siempre y no se puede volver
+      // a entrar sin recargar la pagina.
       setEnviando(false);
     }
   };
@@ -95,6 +100,8 @@ const AuthModal = () => {
             onKeyDown={alPresionar}
             placeholder="ana@email.com"
             autoComplete="email"
+            autoCapitalize="none"
+            spellCheck={false}
           />
         </label>
 
