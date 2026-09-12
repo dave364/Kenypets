@@ -97,6 +97,14 @@
   font-weight: 700;
   transition: transform 0.2s;
   text-decoration: none;
+  /* Sin sesion el elemento es un <button>, que no hereda la tipografia
+     ni el tamano de la pagina: sin esto se veria con la fuente por
+     defecto del navegador en vez de la de la marca. */
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  border: none;
+  cursor: pointer;
 }
 
 .promo__btn:hover {
