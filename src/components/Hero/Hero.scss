@@ -117,13 +117,33 @@
     flex-direction: column;
     text-align: center;
     clip-path: none;
-    padding-bottom: 4rem;
-    
+    /* El padding lateral de 8rem del escritorio dejaba menos de 150px
+       utiles en un telefono: el titulo se partia en cinco renglones.
+       Y el min-height de pantalla completa estiraba todo de gusto. */
+    padding: 3rem 1.5rem 3.5rem;
+    min-height: auto;
   }
 
   .hero__text {
     width: 100%;
-}
+  }
+
+  .hero__text small {
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+  }
+
+  /* Crece con la pantalla pero sin pasarse: en 390px queda cerca de
+     35px, que entra en dos renglones en vez de cinco. */
+  .hero__text h1 {
+    font-size: clamp(2rem, 9vw, 3rem);
+    margin: 0.7rem 0 0.6rem;
+  }
+
+  .hero__text p {
+    font-size: 0.95rem;
+    margin-bottom: 1.6rem;
+  }
 
   .hero__img img {
     width: 280px;
