@@ -94,6 +94,18 @@
   align-items: center;
   justify-content: center;
   font-size: 3.5rem;
+  /* El degradado queda de fondo mientras la foto carga, y como
+     respaldo si alguna vez falta el archivo. */
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    /* cover recorta el sobrante en vez de deformar la cara */
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
 
   &--yose {
     background: linear-gradient(135deg, var(--color-pink), var(--color-beige));
