@@ -3,6 +3,8 @@ import { useAuth } from "../../context/AuthContext";
 import { normalizarTelefono, telefonoParece } from "../../utils/telefono";
 import "./AuthModal.scss";
 
+const API_URL = import.meta.env.VITE_API_URL || "https://kenypets-api.onrender.com";
+
 const AuthModal = () => {
   const { modal, cerrarModal, abrirModal, login, registro } = useAuth();
 
@@ -15,6 +17,26 @@ const AuthModal = () => {
   const [enviando, setEnviando] = useState(false);
 
   const esRegistro = modal === "registro";
+  const esRecuperar = modal === "recuperar";
+  const [enviadoReset, setEnviadoReset] = useState(false);
+
+  const pedirReset = async () => {
+    setEnviando(true);
+    setError(null);
+    try {
+      const res = await fetch(API_URL + "/api/auth/recuperar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+      if (!res.ok) throw new Error("No pudimos procesar el pedido.");
+      setEnviadoReset(true);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setEnviando(false);
+    }
+  };
 
   // Al cambiar de paso limpiamos el error, pero conservamos email y nombre:
   // si alguien intento registrarse y ya tenia cuenta, no queremos que
@@ -23,6 +45,7 @@ const AuthModal = () => {
     setError(null);
     setPassword("");
     setEnviando(false);
+    setEnviadoReset(false);
   }, [modal]);
 
   if (!modal) return null;
@@ -69,7 +92,7 @@ const AuthModal = () => {
           ✕
         </button>
 
-        <h2>{esRegistro ? "Crear cuenta" : "Iniciar sesión"}</h2>
+        <h2>{esRecuperar ? "Recuperar tu cuenta" : esRegistro ? "Crear cuenta" : "Iniciar sesión"}</h2>
 
         {esRegistro && (
           <p className="auth-modal__promo">
@@ -91,6 +114,28 @@ const AuthModal = () => {
           </label>
         )}
 
+        {esRecuperar && !enviadoReset && (
+          <p style={{ margin: "0 0 18px", lineHeight: 1.6, fontSize: "0.9rem" }}>
+            Escribi tu email y te mandamos un enlace para elegir una contraseña
+            nueva. Vence en una hora.
+          </p>
+        )}
+
+        {esRecuperar && enviadoReset ? (
+          <>
+            <p style={{ margin: "0 0 18px", lineHeight: 1.6 }}>
+              Listo. Si hay una cuenta con ese email, en unos minutos te llega
+              el enlace. Revisá también la carpeta de spam.
+            </p>
+            <button
+              className="auth-btn auth-btn--principal"
+              onClick={() => abrirModal("login")}
+            >
+              Volver a entrar
+            </button>
+          </>
+        ) : (
+        <>
         <label className="auth-campo">
           Email
           <input
@@ -120,6 +165,7 @@ const AuthModal = () => {
           </label>
         )}
 
+        {!esRecuperar && (
         <label className="auth-campo">
           Contraseña
           <div className="auth-campo__password">
@@ -140,31 +186,44 @@ const AuthModal = () => {
           </div>
           {esRegistro && <small>Mínimo 8 caracteres.</small>}
         </label>
+        )}
 
         {error && <p className="auth-error">{error}</p>}
 
         <button
           className="auth-btn auth-btn--principal"
-          onClick={enviar}
-          disabled={!listo || enviando}
+          onClick={esRecuperar ? pedirReset : enviar}
+          disabled={enviando || (esRecuperar ? !email.includes("@") : !listo)}
         >
           {enviando
             ? "Un momento..."
+            : esRecuperar
+            ? "Mandarme el enlace"
             : esRegistro
             ? "Crear mi cuenta"
             : "Entrar"}
         </button>
 
         <p className="auth-modal__cambiar">
-          {esRegistro ? "¿Ya tenés cuenta?" : "¿Todavía no tenés cuenta?"}{" "}
-          <button onClick={() => abrirModal(esRegistro ? "login" : "registro")}>
-            {esRegistro ? "Iniciar sesión" : "Registrate"}
-          </button>
+          {esRecuperar ? (
+            <button onClick={() => abrirModal("login")}>Volver a entrar</button>
+          ) : (
+            <>
+              {esRegistro ? "¿Ya tenés cuenta?" : "¿Todavía no tenés cuenta?"}{" "}
+              <button onClick={() => abrirModal(esRegistro ? "login" : "registro")}>
+                {esRegistro ? "Iniciar sesión" : "Registrate"}
+              </button>
+            </>
+          )}
         </p>
+        </>
+        )}
 
-        {!esRegistro && (
+        {!esRegistro && !esRecuperar && (
           <p className="auth-modal__ayuda">
-            ¿Olvidaste tu contraseña? Escribinos por WhatsApp y te ayudamos.
+            <button onClick={() => abrirModal("recuperar")}>
+              ¿Olvidaste tu contraseña?
+            </button>
           </p>
         )}
       </div>
