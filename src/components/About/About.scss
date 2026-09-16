@@ -293,3 +293,85 @@
     font-size: 2.8rem;
   }
 }
+
+/* --- CONTACTO --- */
+/* El navbar es fijo: sin este margen el titulo queda tapado
+   cuando se llega desde el enlace del menu. */
+.about__contacto {
+  scroll-margin-top: 130px;
+  max-width: 1100px;
+  margin: 4rem auto 0;
+  padding: 2.5rem 1.5rem;
+  background: var(--color-beige);
+  border-radius: 22px;
+  text-align: center;
+
+  small {
+    display: block;
+    font-family: sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: var(--brand-secondary);
+    margin-bottom: 0.5rem;
+  }
+
+  h2 {
+    font-family: var(--brand-font);
+    font-size: 2rem;
+    color: var(--color-purple);
+    margin: 0 0 0.75rem;
+  }
+
+  p {
+    font-family: sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-dark);
+    max-width: 520px;
+    margin: 0 auto 1.75rem;
+  }
+}
+
+.about__contacto-botones {
+  display: flex;
+  gap: 0.85rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.about__contacto-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 999px;
+  font-family: sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  color: #fff;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+
+  &:hover { transform: translateY(-2px); opacity: 0.92; }
+}
+
+.about__contacto-btn--wsp { background: #25d366; }
+
+.about__contacto-btn--ig {
+  background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);
+}
+
+@media (max-width: 600px) {
+  .about__contacto {
+    padding: 2rem 1.25rem;
+    margin-top: 3rem;
+  }
+
+  .about__contacto h2 { font-size: 1.6rem; }
+
+  /* Apilados y a lo ancho: en un telefono son mas faciles de tocar */
+  .about__contacto-botones { flex-direction: column; }
+
+  .about__contacto-btn { justify-content: center; }
+}
