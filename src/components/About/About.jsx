@@ -32,11 +32,23 @@ const About = () => (
       {/* Polaroids */}
       <div className="about__story-img">
         <div className="about__polaroid about__polaroid--left">
-          <div className="about__polaroid-img">🐱</div>
+          <div className="about__polaroid-img">
+            <img
+              src={`${import.meta.env.BASE_URL}kenobi.jpg`}
+              alt="Kenobi, el gato de Kenypets"
+              loading="lazy"
+            />
+          </div>
           <span>Kenobi <em>(El Jefe)</em></span>
         </div>
         <div className="about__polaroid about__polaroid--right">
-          <div className="about__polaroid-img about__polaroid-img--yose">👩‍🦰</div>
+          <div className="about__polaroid-img about__polaroid-img--yose">
+            <img
+              src={`${import.meta.env.BASE_URL}yoselin.jpg`}
+              alt="Yoselin, fundadora de Kenypets"
+              loading="lazy"
+            />
+          </div>
           <span>Yoselin</span>
         </div>
       </div>
