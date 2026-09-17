@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
-import { normalizarTelefono, telefonoParece } from "../../utils/telefono";
+import { normalizarTelefono, telefonoParece, digitosLocales } from "../../utils/telefono";
 import "./AuthModal.scss";
 
 const API_URL = import.meta.env.VITE_API_URL || "https://kenypets-api.onrender.com";
@@ -161,7 +161,17 @@ const AuthModal = () => {
               inputMode="numeric"
               autoComplete="tel"
             />
-            <small>Lo usamos para coordinar tus pedidos.</small>
+            {telefono.length > 0 && !telefonoParece(telefono) ? (
+              <small style={{ color: "#a1281c" }}>
+                Faltan digitos: van 10 contando el codigo de area, sin el 0 ni
+                el 15. Ejemplo: 11 2345 6789.
+              </small>
+            ) : (
+              <small>
+                Con el codigo de area, sin el 0 ni el 15. Lo usamos para
+                coordinar tus pedidos.
+              </small>
+            )}
           </label>
         )}
 
