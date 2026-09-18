@@ -609,6 +609,29 @@ const PanelClientes = ({ token, onSesionVencida }) => {
     cargar();
   }, [cargar]);
 
+  const cambiar = async (ruta, cuerpo, confirmacion) => {
+    if (confirmacion && !window.confirm(confirmacion)) return;
+    try {
+      const res = await fetch(`${API_URL}/api/usuarios${ruta}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: cuerpo ? JSON.stringify(cuerpo) : undefined,
+      });
+      if (res.status === 401) {
+        onSesionVencida();
+        return;
+      }
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
+      cargar();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
   if (cargando) return <p className="admin__estado">Cargando clientes...</p>;
 
   const visibles = soloConDescuento
@@ -646,11 +669,12 @@ const PanelClientes = ({ token, onSesionVencida }) => {
                 <th>Gastado</th>
                 <th>Descuento</th>
                 <th>Alta</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               {visibles.map((c) => (
-                <tr key={c.id}>
+                <tr key={c.id} className={c.activo === false ? "admin__fila--baja" : ""}>
                   <td>
                     <strong>{c.nombre}</strong>
                     {c.rol === "admin" && (
@@ -687,6 +711,42 @@ const PanelClientes = ({ token, onSesionVencida }) => {
                     )}
                   </td>
                   <td>{fecha(c.creado_en)}</td>
+                  <td className="admin__td-acciones">
+                    {c.rol !== "admin" && (
+                      <>
+                        {!c.descuento_disponible && (
+                          <button
+                            className="admin__btn admin__btn--mini"
+                            onClick={() =>
+                              cambiar(
+                                `/${c.id}/descuento`,
+                                null,
+                                `Devolverle el 20% de bienvenida a ${c.nombre}?`
+                              )
+                            }
+                          >
+                            Dar 20%
+                          </button>
+                        )}
+                        <button
+                          className={`admin__btn admin__btn--mini ${
+                            c.activo === false ? "" : "admin__btn--peligro"
+                          }`}
+                          onClick={() =>
+                            cambiar(
+                              `/${c.id}/activo`,
+                              { activo: c.activo === false },
+                              c.activo === false
+                                ? null
+                                : `Suspender la cuenta de ${c.nombre}? No va a poder entrar ni comprar.`
+                            )
+                          }
+                        >
+                          {c.activo === false ? "Reactivar" : "Suspender"}
+                        </button>
+                      </>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
