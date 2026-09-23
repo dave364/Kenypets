@@ -51,8 +51,12 @@ const Cart = () => {
     if (paso === "listo") {
       setPaso("carrito");
       setPedido(null);
-      setNombre("");
-      setTelefono("");
+      // Para un invitado dejamos el formulario limpio. Para alguien con
+      // cuenta volvemos a sus datos: si los borraramos, la segunda compra
+      // le pediria nombre y telefono de nuevo, porque el llenado
+      // automatico solo corre cuando cambia el usuario.
+      setNombre(usuario?.nombre || "");
+      setTelefono(usuario?.telefono || "");
     }
   };
 
