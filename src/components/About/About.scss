@@ -375,3 +375,67 @@
 
   .about__contacto-btn { justify-content: center; }
 }
+
+/* =============================================
+   CARTELITO DEL NOMBRE
+   Como en la pieza de Instagram: el nombre va en un recuadro
+   en vez de quedar suelto debajo de la foto.
+   ============================================= */
+.about__polaroid span {
+  background: var(--color-light);
+  border: 1.5px dashed var(--brand-secondary);
+  border-radius: 8px;
+  padding: 0.3rem 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* =============================================
+   POLAROIDS GRANDES EN MOBIL
+   En el telefono las fotos quedaban de 90px de alto: las dos polaroids
+   iban en posicion absoluta dentro de una caja fija de 240px.
+   Aca pasan a ocupar el ancho de la pantalla, lado a lado e
+   inclinadas, como en la pieza original.
+   Va al final del archivo para ganarle al bloque de 480px de arriba.
+   ============================================= */
+@media (max-width: 768px) {
+  .about__story-img {
+    width: 100%;
+    max-width: 440px;
+    height: auto;
+    margin: 10px auto 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .about__polaroid {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: 47%;
+    padding: 0.6rem 0.6rem 0.9rem;
+
+    span { font-size: 0.85rem; }
+  }
+
+  /* Se pisan un poco en el medio, como fotos sobre una mesa */
+  .about__polaroid--left {
+    transform: rotate(-5deg);
+    margin-right: -3%;
+    z-index: 1;
+  }
+
+  .about__polaroid--right {
+    transform: rotate(4deg);
+    margin-top: 22px;
+  }
+
+  /* La altura sale del ancho: asi la foto crece con la pantalla
+     en vez de quedar fija en unos pocos pixeles. */
+  .about__polaroid-img {
+    height: auto;
+    aspect-ratio: 1 / 1.1;
+  }
+}
