@@ -29,7 +29,12 @@ const AuthModal = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim() }),
       });
-      if (!res.ok) throw new Error("No pudimos procesar el pedido.");
+      if (!res.ok) {
+        // Mostramos lo que dice el servidor: si se alcanzo el limite de
+        // intentos, el cliente tiene que saber que espere, no que algo se rompio.
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "No pudimos procesar el pedido.");
+      }
       setEnviadoReset(true);
     } catch (err) {
       setError(err.message);
