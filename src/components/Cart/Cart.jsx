@@ -233,6 +233,7 @@ const Cart = () => {
 
                     <p className="cart-nota">
                       El total final lo confirma Kenypets al procesar el pedido.
+                      Te reservamos los productos por 3 días.
                     </p>
 
                     {error && <p className="cart-error">{error}</p>}
@@ -362,6 +363,15 @@ const Cart = () => {
                   Guardá ese número. Te vamos a escribir por WhatsApp para
                   coordinar el pago y la entrega.
                 </p>
+
+                <div className="cart-aviso cart-aviso--vence">
+                  <span aria-hidden="true">⏳</span>
+                  <p>
+                    Tenés <strong>3 días</strong> para coordinar el pago. Si
+                    pasa ese tiempo, el pedido se cancela solo y los productos
+                    vuelven a la tienda.
+                  </p>
+                </div>
 
                 <button
                   className="cart-btn cart-btn--whatsapp"
