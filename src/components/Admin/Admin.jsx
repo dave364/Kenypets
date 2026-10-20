@@ -362,6 +362,9 @@ const PanelProductos = ({ token, onSesionVencida }) => {
 // Tope de Cloudinary en el plan gratis: 10 MB por foto
 const FOTO_MAX_MB = 8;
 
+// Tiene que coincidir con el limite de la API
+const DESCRIPCION_MAX = 2000;
+
 const ModalProducto = ({ producto, onCancelar, onGuardar, pedirFirma }) => {
   const [datos, setDatos] = useState(producto);
   const [guardando, setGuardando] = useState(false);
@@ -452,10 +455,14 @@ const ModalProducto = ({ producto, onCancelar, onGuardar, pedirFirma }) => {
         <label>
           Descripcion
           <textarea
-            rows="3"
+            rows="6"
+            maxLength={DESCRIPCION_MAX}
             value={datos.descripcion || ""}
             onChange={set("descripcion")}
           />
+          <small className="admin__contador">
+            {(datos.descripcion || "").length} / {DESCRIPCION_MAX}
+          </small>
         </label>
 
         <div className="admin__fila-doble">

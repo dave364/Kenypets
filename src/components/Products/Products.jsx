@@ -18,6 +18,16 @@ const Products = () => {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   const [activeFilter, setActiveFilter] = useState("Todos");
+  // Productos con la descripcion desplegada ("Ver mas")
+  const [abiertas, setAbiertas] = useState(() => new Set());
+
+  const alternarDescripcion = (id) =>
+    setAbiertas((prev) => {
+      const nuevo = new Set(prev);
+      if (nuevo.has(id)) nuevo.delete(id);
+      else nuevo.add(id);
+      return nuevo;
+    });
 
   useEffect(() => {
     // Si el componente se desmonta antes de que responda la API,
@@ -129,6 +139,9 @@ const Products = () => {
           <div className="products__grid">
             {filtrados.map((producto) => {
               const sinStock = producto.stock <= 0;
+              const desc = producto.descripcion || "";
+              const descLarga = desc.length > 110 || desc.includes("\n");
+              const descAbierta = abiertas.has(producto.id);
 
               return (
                 <div className="product-card" key={producto.id}>
@@ -168,7 +181,23 @@ const Products = () => {
                       {producto.categoria}
                     </span>
                     <h3 className="product-card__name">{producto.nombre}</h3>
-                    <p className="product-card__desc">{producto.descripcion}</p>
+                    <p
+                      className={`product-card__desc ${
+                        descLarga && !descAbierta ? "product-card__desc--corta" : ""
+                      }`}
+                    >
+                      {desc}
+                    </p>
+                    {descLarga && (
+                      <button
+                        type="button"
+                        className="product-card__ver-mas"
+                        onClick={() => alternarDescripcion(producto.id)}
+                        aria-expanded={descAbierta}
+                      >
+                        {descAbierta ? "Ver menos" : "Ver más"}
+                      </button>
+                    )}
                   </div>
 
                   <div className="product-card__footer">

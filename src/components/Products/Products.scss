@@ -175,6 +175,30 @@
   color: var(--color-purple);
   line-height: 1.5;
   margin: 0;
+  // Respeta los saltos de linea (listas con guiones, parrafos)
+  white-space: pre-line;
+}
+
+// Descripcion larga cerrada: solo las primeras 3 lineas
+.product-card__desc--corta {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.product-card__ver-mas {
+  align-self: flex-start;
+  border: none;
+  background: transparent;
+  padding: 0.2rem 0 0;
+  font-family: sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-purple);
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .product-card__footer {
