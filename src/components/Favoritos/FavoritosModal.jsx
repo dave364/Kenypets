@@ -1,6 +1,7 @@
 import React from "react";
 import { useFavoritos } from "../../context/FavoritosContext";
 import { useCart } from "../../context/CartContext";
+import { urlImagen } from "../../utils/imagen";
 import "./FavoritosModal.scss";
 
 const WHATSAPP_NUMBER = "5491122531821";
@@ -58,7 +59,7 @@ const FavoritosModal = () => {
             return (
               <div className="fav-item" key={p.id}>
                 <img
-                  src={`${import.meta.env.BASE_URL}products/${p.imagen}`}
+                  src={urlImagen(p.imagen, 200)}
                   alt={p.nombre}
                   loading="lazy"
                 />

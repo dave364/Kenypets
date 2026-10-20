@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useCart } from "../../context/CartContext";
 import { useAuth } from "../../context/AuthContext";
 import { normalizarTelefono, telefonoParece } from "../../utils/telefono";
+import { urlImagen } from "../../utils/imagen";
 import "./Cart.scss";
 
 const API_URL = import.meta.env.VITE_API_URL || "https://kenypets-api.onrender.com";
@@ -164,7 +165,7 @@ const Cart = () => {
                   {items.map((i) => (
                     <div className="cart-item" key={i.id}>
                       <img
-                        src={`${import.meta.env.BASE_URL}products/${i.imagen}`}
+                        src={urlImagen(i.imagen, 200)}
                         alt={i.nombre}
                         loading="lazy"
                       />

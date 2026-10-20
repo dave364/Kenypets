@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useCart } from "../../context/CartContext";
 import { useFavoritos } from "../../context/FavoritosContext";
+import { urlImagen, urlImagenAbsoluta } from "../../utils/imagen";
 import "./Products.scss";
 
 const WHATSAPP_NUMBER = "5491122531821";
@@ -9,9 +10,6 @@ const WHATSAPP_NUMBER = "5491122531821";
 // creando un archivo .env con VITE_API_URL=http://localhost:3000
 const API_URL = import.meta.env.VITE_API_URL || "https://kenypets-api.onrender.com";
 
-// Arma la URL absoluta de la imagen de un producto (funciona en dev y en produccion)
-const getImageUrl = (filename) =>
-  `${window.location.origin}${import.meta.env.BASE_URL}products/${filename}`;
 
 const Products = () => {
   const { agregar, setAbierto } = useCart();
@@ -78,7 +76,7 @@ const Products = () => {
   };
 
   const handleWhatsApp = (producto) => {
-    const imageUrl = getImageUrl(producto.imagen);
+    const imageUrl = urlImagenAbsoluta(producto.imagen);
     const message = encodeURIComponent(
       `¡Hola Kenypets! 🐾 Me interesa el producto: *${producto.nombre}* ($${producto.precio.toLocaleString("es-AR")}). ¿Tienen stock disponible?\n\n${imageUrl}`
     );
@@ -159,7 +157,7 @@ const Products = () => {
                   <div className="product-card__image-wrap">
                     <img
                       className="product-card__image"
-                      src={`${import.meta.env.BASE_URL}products/${producto.imagen}`}
+                      src={urlImagen(producto.imagen, 600)}
                       alt={producto.nombre}
                       loading="lazy"
                     />

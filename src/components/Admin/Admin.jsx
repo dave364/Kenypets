@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { urlImagen } from "../../utils/imagen";
 import "./Admin.scss";
 
 const API_URL = import.meta.env.VITE_API_URL || "https://kenypets-api.onrender.com";
@@ -283,8 +284,18 @@ const PanelProductos = ({ token, onSesionVencida }) => {
             {productos.map((p) => (
               <tr key={p.id} className={p.activo ? "" : "admin__fila--baja"}>
                 <td>
-                  <strong>{p.nombre}</strong>
-                  {p.badge && <span className="admin__pill">{p.badge}</span>}
+                  <div className="admin__producto-celda">
+                    <img
+                      className="admin__miniatura"
+                      src={urlImagen(p.imagen, 120)}
+                      alt=""
+                      loading="lazy"
+                    />
+                    <div>
+                      <strong>{p.nombre}</strong>
+                      {p.badge && <span className="admin__pill">{p.badge}</span>}
+                    </div>
+                  </div>
                 </td>
                 <td>{p.categoria}</td>
                 <td>{plata(p.precio)}</td>
@@ -321,16 +332,64 @@ const PanelProductos = ({ token, onSesionVencida }) => {
           producto={editando}
           onCancelar={() => setEditando(null)}
           onGuardar={guardar}
+          pedirFirma={() => pedir("/api/imagenes/firma", { method: "POST" })}
         />
       )}
     </div>
   );
 };
 
-const ModalProducto = ({ producto, onCancelar, onGuardar }) => {
+// Tope de Cloudinary en el plan gratis: 10 MB por foto
+const FOTO_MAX_MB = 8;
+
+const ModalProducto = ({ producto, onCancelar, onGuardar, pedirFirma }) => {
   const [datos, setDatos] = useState(producto);
   const [guardando, setGuardando] = useState(false);
+  const [subiendo, setSubiendo] = useState(false);
   const [error, setError] = useState(null);
+  const inputFoto = useRef(null);
+
+  // La API firma la subida y el navegador manda la foto directo a
+  // Cloudinary. Lo que vuelve es la URL definitiva de la foto.
+  const subirFoto = async (e) => {
+    const archivo = e.target.files?.[0];
+    e.target.value = "";
+    if (!archivo) return;
+    if (!archivo.type.startsWith("image/")) {
+      setError("El archivo tiene que ser una imagen.");
+      return;
+    }
+    if (archivo.size > FOTO_MAX_MB * 1024 * 1024) {
+      setError(`La foto pesa mas de ${FOTO_MAX_MB} MB. Proba con una mas liviana.`);
+      return;
+    }
+
+    setSubiendo(true);
+    setError(null);
+    try {
+      const firma = await pedirFirma();
+      const form = new FormData();
+      form.append("file", archivo);
+      form.append("api_key", firma.apiKey);
+      form.append("timestamp", firma.timestamp);
+      form.append("folder", firma.folder);
+      form.append("signature", firma.signature);
+
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${firma.cloudName}/image/upload`,
+        { method: "POST", body: form }
+      );
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.secure_url) {
+        throw new Error(data.error?.message || "No se pudo subir la foto.");
+      }
+      setDatos((d) => ({ ...d, imagen: data.secure_url }));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSubiendo(false);
+    }
+  };
 
   const set = (campo) => (e) => {
     const valor =
@@ -390,14 +449,40 @@ const ModalProducto = ({ producto, onCancelar, onGuardar }) => {
           </label>
         </div>
 
-        <label>
-          Imagen (nombre del archivo en public/products/)
-          <input
-            value={datos.imagen || ""}
-            onChange={set("imagen")}
-            placeholder="collar-ajustable-premium.jpg"
-          />
-        </label>
+        <div className="admin__foto">
+          <span className="admin__foto-titulo">Foto</span>
+          <div className="admin__foto-fila">
+            <div className="admin__foto-vista">
+              {datos.imagen ? (
+                <img src={urlImagen(datos.imagen, 300)} alt="Vista previa" />
+              ) : (
+                <span>Sin foto</span>
+              )}
+            </div>
+            <div className="admin__foto-acciones">
+              <button
+                type="button"
+                className="admin__btn admin__btn--mini"
+                onClick={() => inputFoto.current?.click()}
+                disabled={subiendo}
+              >
+                {subiendo
+                  ? "Subiendo..."
+                  : datos.imagen
+                  ? "Cambiar foto"
+                  : "Subir foto"}
+              </button>
+              <small>JPG, PNG o WEBP, hasta {FOTO_MAX_MB} MB.</small>
+              <input
+                ref={inputFoto}
+                type="file"
+                accept="image/*"
+                onChange={subirFoto}
+                hidden
+              />
+            </div>
+          </div>
+        </div>
 
         <label className="admin__check">
           <input
@@ -417,7 +502,7 @@ const ModalProducto = ({ producto, onCancelar, onGuardar }) => {
           <button
             className="admin__btn admin__btn--primary"
             onClick={enviar}
-            disabled={guardando || !datos.nombre || !datos.categoria}
+            disabled={guardando || subiendo || !datos.nombre || !datos.categoria}
           >
             {guardando ? "Guardando..." : "Guardar"}
           </button>
