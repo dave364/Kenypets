@@ -1,0 +1,233 @@
+/* =============================================
+   PAGINA DE UN PRODUCTO (/p/9-nombre)
+   ============================================= */
+
+.detalle {
+  // El navbar es fijo: arrancamos debajo de el
+  padding: calc(var(--navbar-height, 110px) + 1.5rem) 1.25rem 3rem;
+  max-width: 1080px;
+  margin: 0 auto;
+  min-height: 70vh;
+  font-family: sans-serif;
+  color: var(--color-dark);
+  box-sizing: border-box;
+}
+
+.detalle--estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem;
+  color: var(--color-purple);
+}
+
+.detalle__aviso {
+  font-size: 2.5rem;
+}
+
+.detalle__volver {
+  display: inline-block;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-purple);
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+.detalle__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+/* --- FOTO --- */
+.detalle__foto {
+  position: relative;
+  background: #fff;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(82, 43, 91, 0.1);
+  aspect-ratio: 1 / 1;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.detalle__badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+  background: var(--brand-secondary);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.detalle__badge--agotado {
+  background: #9a9a9a;
+}
+
+/* --- INFO --- */
+.detalle__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.detalle__categoria {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--brand-secondary);
+}
+
+.detalle__nombre {
+  margin: 0;
+  font-family: var(--brand-font);
+  font-weight: 400;
+  font-size: clamp(1.7rem, 6vw, 2.4rem);
+  line-height: 1.2;
+  color: var(--color-dark);
+}
+
+.detalle__precio {
+  margin: 0.25rem 0 0;
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.detalle__stock {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1b6b3a;
+}
+
+.detalle__stock--sin {
+  color: #c0392b;
+}
+
+/* --- BOTONES --- */
+.detalle__acciones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0.75rem 0 0.5rem;
+}
+
+.detalle__secundarias {
+  display: flex;
+  gap: 0.6rem;
+
+  .detalle__btn {
+    flex: 1;
+  }
+}
+
+.detalle__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.25rem;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  font-family: sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+
+  &:active { transform: scale(0.98); }
+}
+
+.detalle__btn--principal {
+  background: var(--color-purple);
+  color: var(--color-light);
+
+  &:hover { background: var(--color-dark); }
+}
+
+.detalle__btn--wsp {
+  background: #25d366;
+  color: #fff;
+
+  &:hover { background: #1ebe5a; }
+}
+
+.detalle__btn--borde {
+  background: transparent;
+  border-color: var(--color-purple);
+  color: var(--color-purple);
+
+  &:hover { background: var(--color-beige); }
+}
+
+.detalle__btn-icono {
+  flex: 0 0 auto;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--color-beige);
+  background: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+
+  &.activo { border-color: var(--brand-secondary); }
+}
+
+/* --- DESCRIPCION --- */
+.detalle__descripcion {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-beige);
+
+  h2 {
+    margin: 0 0 0.6rem;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--color-purple);
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-purple);
+    white-space: pre-line;
+  }
+}
+
+/* --- ESCRITORIO: foto a la izquierda, info a la derecha --- */
+@media (min-width: 820px) {
+  .detalle {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .detalle__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .detalle__foto {
+    position: sticky;
+    top: calc(var(--navbar-height, 110px) + 1.5rem);
+  }
+}

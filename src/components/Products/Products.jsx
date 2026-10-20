@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useCart } from "../../context/CartContext";
 import { useFavoritos } from "../../context/FavoritosContext";
-import { urlImagen, urlImagenAbsoluta } from "../../utils/imagen";
+import { urlImagen } from "../../utils/imagen";
+import { urlProducto, urlProductoAbsoluta, alClickLink } from "../../utils/rutas";
 import "./Products.scss";
 
 const WHATSAPP_NUMBER = "5491122531821";
@@ -86,9 +87,10 @@ const Products = () => {
   };
 
   const handleWhatsApp = (producto) => {
-    const imageUrl = urlImagenAbsoluta(producto.imagen);
+    // Va el link a la pagina del producto: en WhatsApp se ve con su foto
+    const link = urlProductoAbsoluta(producto);
     const message = encodeURIComponent(
-      `¡Hola Kenypets! 🐾 Me interesa el producto: *${producto.nombre}* ($${producto.precio.toLocaleString("es-AR")}). ¿Tienen stock disponible?\n\n${imageUrl}`
+      `¡Hola Kenypets! 🐾 Me interesa el producto: *${producto.nombre}* ($${producto.precio.toLocaleString("es-AR")}). ¿Tienen stock disponible?\n\n${link}`
     );
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, "_blank");
   };
@@ -167,20 +169,29 @@ const Products = () => {
                     {esFavorito(producto.id) ? "❤️" : "🤍"}
                   </button>
 
-                  <div className="product-card__image-wrap">
+                  <a
+                    className="product-card__image-wrap"
+                    href={urlProducto(producto)}
+                    onClick={alClickLink(urlProducto(producto))}
+                    aria-label={`Ver ${producto.nombre}`}
+                  >
                     <img
                       className="product-card__image"
                       src={urlImagen(producto.imagen, 600)}
                       alt={producto.nombre}
                       loading="lazy"
                     />
-                  </div>
+                  </a>
 
                   <div className="product-card__info">
                     <span className="product-card__category">
                       {producto.categoria}
                     </span>
-                    <h3 className="product-card__name">{producto.nombre}</h3>
+                    <h3 className="product-card__name">
+                      <a href={urlProducto(producto)} onClick={alClickLink(urlProducto(producto))}>
+                        {producto.nombre}
+                      </a>
+                    </h3>
                     <p
                       className={`product-card__desc ${
                         descLarga && !descAbierta ? "product-card__desc--corta" : ""
