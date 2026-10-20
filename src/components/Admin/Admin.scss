@@ -411,7 +411,8 @@
 }
 
 .admin input,
-.admin textarea {
+.admin textarea,
+.admin select {
   width: 100%;
   padding: 0.6rem 0.8rem;
   border: 1.5px solid var(--color-beige);
@@ -429,6 +430,28 @@
 }
 
 .admin textarea { resize: vertical; }
+
+.admin select {
+  cursor: pointer;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+/* Boton con pinta de enlace (ej. "Elegir una existente") */
+.admin__link {
+  align-self: flex-start;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-purple);
+  text-decoration: underline;
+  text-transform: none;
+  letter-spacing: 0;
+  cursor: pointer;
+}
 
 /* --- PEDIDOS --- */
 .admin__pedidos {

@@ -353,6 +353,7 @@ const PanelProductos = ({ token, onSesionVencida }) => {
           onCancelar={() => setEditando(null)}
           onGuardar={guardar}
           pedirFirma={() => pedir("/api/imagenes/firma", { method: "POST" })}
+          categorias={[...new Set(productos.map((p) => p.categoria).filter(Boolean))].sort()}
         />
       )}
     </div>
@@ -365,12 +366,35 @@ const FOTO_MAX_MB = 8;
 // Tiene que coincidir con el limite de la API
 const DESCRIPCION_MAX = 2000;
 
-const ModalProducto = ({ producto, onCancelar, onGuardar, pedirFirma }) => {
+// Valor especial del selector para escribir una categoria nueva
+const NUEVA_CATEGORIA = "__nueva__";
+
+const ModalProducto = ({ producto, onCancelar, onGuardar, pedirFirma, categorias = [] }) => {
   const [datos, setDatos] = useState(producto);
   const [guardando, setGuardando] = useState(false);
   const [subiendo, setSubiendo] = useState(false);
   const [error, setError] = useState(null);
   const inputFoto = useRef(null);
+  // Si no hay categorias todavia (o el producto tiene una que no esta en
+  // la lista), arranca directo en modo "nueva".
+  const [categoriaNueva, setCategoriaNueva] = useState(
+    categorias.length === 0 ||
+      (!!producto.categoria && !categorias.includes(producto.categoria))
+  );
+
+  const elegirCategoria = (e) => {
+    if (e.target.value === NUEVA_CATEGORIA) {
+      setCategoriaNueva(true);
+      setDatos((d) => ({ ...d, categoria: "" }));
+    } else {
+      setDatos((d) => ({ ...d, categoria: e.target.value }));
+    }
+  };
+
+  const volverALista = () => {
+    setCategoriaNueva(false);
+    setDatos((d) => ({ ...d, categoria: "" }));
+  };
 
   // La API firma la subida y el navegador manda la foto directo a
   // Cloudinary. Lo que vuelve es la URL definitiva de la foto.
@@ -424,7 +448,13 @@ const ModalProducto = ({ producto, onCancelar, onGuardar, pedirFirma }) => {
     setGuardando(true);
     setError(null);
     try {
-      await onGuardar(datos);
+      // Si escribio una categoria que ya existe con otras mayusculas o
+      // espacios ("accesorios "), usa la existente para no duplicarla.
+      const escrita = (datos.categoria || "").trim();
+      const existente = categorias.find(
+        (c) => c.toLowerCase() === escrita.toLowerCase()
+      );
+      await onGuardar({ ...datos, categoria: existente || escrita });
     } catch (err) {
       setError(err.message);
       setGuardando(false);
@@ -444,7 +474,37 @@ const ModalProducto = ({ producto, onCancelar, onGuardar, pedirFirma }) => {
         <div className="admin__fila-doble">
           <label>
             Categoria
-            <input value={datos.categoria} onChange={set("categoria")} />
+            {categoriaNueva ? (
+              <>
+                <input
+                  value={datos.categoria}
+                  onChange={set("categoria")}
+                  placeholder="Nombre de la categoria nueva"
+                  autoFocus
+                />
+                {categorias.length > 0 && (
+                  <button
+                    type="button"
+                    className="admin__link"
+                    onClick={volverALista}
+                  >
+                    Elegir una existente
+                  </button>
+                )}
+              </>
+            ) : (
+              <select value={datos.categoria} onChange={elegirCategoria}>
+                <option value="" disabled>
+                  Elegi una categoria
+                </option>
+                {categorias.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+                <option value={NUEVA_CATEGORIA}>+ Nueva categoria...</option>
+              </select>
+            )}
           </label>
           <label>
             Badge (opcional)
