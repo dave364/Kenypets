@@ -25,3 +25,10 @@ export function urlImagenAbsoluta(imagen) {
   const url = urlImagen(imagen, 800);
   return esUrl(url) ? url : window.location.origin + url;
 }
+
+// Todas las fotos de un producto, en orden (la primera es la principal).
+// Los productos de antes de la galeria tienen solo "imagen".
+export function fotosDe(producto) {
+  if (Array.isArray(producto?.imagenes) && producto.imagenes.length) return producto.imagenes;
+  return producto?.imagen ? [producto.imagen] : [];
+}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { urlImagen } from "../../utils/imagen";
+import { urlImagen, fotosDe } from "../../utils/imagen";
 import "./Admin.scss";
 
 const API_URL = import.meta.env.VITE_API_URL || "https://kenypets-api.onrender.com";
@@ -12,6 +12,7 @@ const PRODUCTO_VACIO = {
   descripcion: "",
   precio: 0,
   imagen: "",
+  imagenes: [],
   badge: "",
   stock: 0,
   activo: true,
@@ -27,6 +28,7 @@ const CAMPOS = {
   precio: "Precio",
   stock: "Stock",
   imagen: "Foto",
+  imagenes: "Fotos",
   badge: "Badge",
   activo: "Visible en la tienda",
 };
@@ -252,7 +254,9 @@ const PanelProductos = ({ token, onSesionVencida }) => {
       categoria: producto.categoria,
       descripcion: producto.descripcion || "",
       precio: Number(producto.precio),
-      imagen: producto.imagen || null,
+      // La primera foto de la galeria es la principal
+      imagenes: producto.imagenes,
+      imagen: producto.imagenes[0] || null,
       badge: producto.badge || null,
       stock: Number(producto.stock),
       activo: producto.activo,
@@ -373,6 +377,9 @@ const PanelProductos = ({ token, onSesionVencida }) => {
 const FOTO_MAX_MB = 8;
 
 // Tiene que coincidir con el limite de la API
+const MAX_FOTOS = 8;
+
+// Tiene que coincidir con el limite de la API
 const DESCRIPCION_MAX = 2000;
 
 // Valor especial del selector para escribir una opcion nueva
@@ -465,54 +472,84 @@ const ModalProducto = ({
   categorias = [],
   badges = [],
 }) => {
-  const [datos, setDatos] = useState(producto);
+  const [datos, setDatos] = useState(() => ({ ...producto, imagenes: fotosDe(producto) }));
   const [guardando, setGuardando] = useState(false);
-  const [subiendo, setSubiendo] = useState(false);
+  const [subiendo, setSubiendo] = useState(null); // null o "Subiendo 1 de 3..."
   const [error, setError] = useState(null);
   const inputFoto = useRef(null);
   const cambiar = (campo) => (valor) => setDatos((d) => ({ ...d, [campo]: valor }));
 
   // La API firma la subida y el navegador manda la foto directo a
   // Cloudinary. Lo que vuelve es la URL definitiva de la foto.
-  const subirFoto = async (e) => {
-    const archivo = e.target.files?.[0];
-    e.target.value = "";
-    if (!archivo) return;
-    if (!archivo.type.startsWith("image/")) {
-      setError("El archivo tiene que ser una imagen.");
-      return;
-    }
-    if (archivo.size > FOTO_MAX_MB * 1024 * 1024) {
-      setError(`La foto pesa mas de ${FOTO_MAX_MB} MB. Proba con una mas liviana.`);
-      return;
-    }
+  const subirUna = async (archivo) => {
+    const firma = await pedirFirma();
+    const form = new FormData();
+    form.append("file", archivo);
+    form.append("api_key", firma.apiKey);
+    form.append("timestamp", firma.timestamp);
+    form.append("folder", firma.folder);
+    form.append("signature", firma.signature);
 
-    setSubiendo(true);
-    setError(null);
-    try {
-      const firma = await pedirFirma();
-      const form = new FormData();
-      form.append("file", archivo);
-      form.append("api_key", firma.apiKey);
-      form.append("timestamp", firma.timestamp);
-      form.append("folder", firma.folder);
-      form.append("signature", firma.signature);
-
-      const res = await fetch(
-        `https://api.cloudinary.com/v1_1/${firma.cloudName}/image/upload`,
-        { method: "POST", body: form }
-      );
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.secure_url) {
-        throw new Error(data.error?.message || "No se pudo subir la foto.");
-      }
-      setDatos((d) => ({ ...d, imagen: data.secure_url }));
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setSubiendo(false);
+    const res = await fetch(
+      `https://api.cloudinary.com/v1_1/${firma.cloudName}/image/upload`,
+      { method: "POST", body: form }
+    );
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.secure_url) {
+      throw new Error(data.error?.message || "No se pudo subir la foto.");
     }
+    return data.secure_url;
   };
+
+  // Se pueden elegir varias a la vez. Se suben de a una y cada una se
+  // agrega a la galeria apenas termina, asi no se pierde nada si una falla.
+  const subirFotos = async (e) => {
+    const elegidos = [...(e.target.files || [])];
+    e.target.value = "";
+    if (elegidos.length === 0) return;
+
+    const lugar = MAX_FOTOS - datos.imagenes.length;
+    const problemas = [];
+    if (elegidos.length > lugar) {
+      problemas.push(`Entran hasta ${MAX_FOTOS} fotos: se subieron solo ${lugar}.`);
+    }
+    const validos = elegidos.slice(0, lugar).filter((a) => {
+      if (!a.type.startsWith("image/")) {
+        problemas.push(`"${a.name}" no es una imagen.`);
+        return false;
+      }
+      if (a.size > FOTO_MAX_MB * 1024 * 1024) {
+        problemas.push(`"${a.name}" pesa mas de ${FOTO_MAX_MB} MB.`);
+        return false;
+      }
+      return true;
+    });
+
+    setError(null);
+    for (let n = 0; n < validos.length; n++) {
+      setSubiendo(validos.length > 1 ? `Subiendo ${n + 1} de ${validos.length}...` : "Subiendo...");
+      try {
+        const url = await subirUna(validos[n]);
+        setDatos((d) => ({ ...d, imagenes: [...d.imagenes, url].slice(0, MAX_FOTOS) }));
+      } catch (err) {
+        problemas.push(`"${validos[n].name}": ${err.message}`);
+      }
+    }
+    setSubiendo(null);
+    if (problemas.length) setError(problemas.join(" "));
+  };
+
+  const moverFoto = (desde, hasta) =>
+    setDatos((d) => {
+      if (hasta < 0 || hasta >= d.imagenes.length) return d;
+      const lista = [...d.imagenes];
+      const [foto] = lista.splice(desde, 1);
+      lista.splice(hasta, 0, foto);
+      return { ...d, imagenes: lista };
+    });
+
+  const quitarFoto = (i) =>
+    setDatos((d) => ({ ...d, imagenes: d.imagenes.filter((_, k) => k !== i) }));
 
   const set = (campo) => (e) => {
     const valor =
@@ -591,38 +628,70 @@ const ModalProducto = ({
         </div>
 
         <div className="admin__foto">
-          <span className="admin__foto-titulo">Foto</span>
-          <div className="admin__foto-fila">
-            <div className="admin__foto-vista">
-              {datos.imagen ? (
-                <img src={urlImagen(datos.imagen, 300)} alt="Vista previa" />
-              ) : (
-                <span>Sin foto</span>
-              )}
-            </div>
-            <div className="admin__foto-acciones">
+          <span className="admin__foto-titulo">
+            Fotos ({datos.imagenes.length} de {MAX_FOTOS})
+          </span>
+          <div className="admin__galeria">
+            {datos.imagenes.map((foto, i) => (
+              <div className="admin__galeria-item" key={foto + i}>
+                <div className="admin__foto-vista">
+                  <img src={urlImagen(foto, 300)} alt={`Foto ${i + 1}`} />
+                  {i === 0 && <span className="admin__foto-principal">Principal</span>}
+                </div>
+                <div className="admin__galeria-botones">
+                  <button
+                    type="button"
+                    onClick={() => moverFoto(i, i - 1)}
+                    disabled={i === 0}
+                    aria-label="Mover a la izquierda"
+                    title="Mover a la izquierda"
+                  >
+                    ◀
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => quitarFoto(i)}
+                    aria-label="Quitar foto"
+                    title="Quitar foto"
+                  >
+                    ✕
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moverFoto(i, i + 1)}
+                    disabled={i === datos.imagenes.length - 1}
+                    aria-label="Mover a la derecha"
+                    title="Mover a la derecha"
+                  >
+                    ▶
+                  </button>
+                </div>
+              </div>
+            ))}
+
+            {datos.imagenes.length < MAX_FOTOS && (
               <button
                 type="button"
-                className="admin__btn admin__btn--mini"
+                className="admin__galeria-agregar"
                 onClick={() => inputFoto.current?.click()}
-                disabled={subiendo}
+                disabled={!!subiendo}
               >
-                {subiendo
-                  ? "Subiendo..."
-                  : datos.imagen
-                  ? "Cambiar foto"
-                  : "Subir foto"}
+                {subiendo || (datos.imagenes.length ? "+ Agregar fotos" : "+ Subir fotos")}
               </button>
-              <small>JPG, PNG o WEBP, hasta {FOTO_MAX_MB} MB.</small>
-              <input
-                ref={inputFoto}
-                type="file"
-                accept="image/*"
-                onChange={subirFoto}
-                hidden
-              />
-            </div>
+            )}
           </div>
+          <small className="admin__foto-ayuda">
+            La primera es la principal (la de la tarjeta). Podés elegir varias a
+            la vez. JPG, PNG o WEBP, hasta {FOTO_MAX_MB} MB cada una.
+          </small>
+          <input
+            ref={inputFoto}
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={subirFotos}
+            hidden
+          />
         </div>
 
         <label className="admin__check">
@@ -643,7 +712,7 @@ const ModalProducto = ({
           <button
             className="admin__btn admin__btn--primary"
             onClick={enviar}
-            disabled={guardando || subiendo || !datos.nombre || !datos.categoria}
+            disabled={guardando || !!subiendo || !datos.nombre || !datos.categoria}
           >
             {guardando ? "Guardando..." : "Guardar"}
           </button>

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useCart } from "../../context/CartContext";
 import { useFavoritos } from "../../context/FavoritosContext";
-import { urlImagen } from "../../utils/imagen";
+import { urlImagen, fotosDe } from "../../utils/imagen";
 import { urlProducto, urlProductoAbsoluta, alClickLink } from "../../utils/rutas";
 import "./ProductoDetalle.scss";
 
@@ -11,6 +11,76 @@ const BASE = import.meta.env.BASE_URL;
 const TITULO_TIENDA = "KenyPets";
 
 const plata = (n) => `$${Number(n).toLocaleString("es-AR")}`;
+
+// Foto grande con miniaturas. En el celular se pasa deslizando el dedo.
+const Galeria = ({ fotos, nombre, children }) => {
+  const [actual, setActual] = useState(0);
+  const toque = useRef(null);
+  const total = fotos.length;
+
+  const ir = (i) => setActual((i + total) % total);
+
+  const alTocar = (e) => {
+    toque.current = e.touches[0].clientX;
+  };
+  const alSoltar = (e) => {
+    if (toque.current == null || total < 2) return;
+    const dx = e.changedTouches[0].clientX - toque.current;
+    toque.current = null;
+    if (Math.abs(dx) > 40) ir(actual + (dx < 0 ? 1 : -1));
+  };
+
+  return (
+    <div className="galeria">
+      <div className="detalle__foto" onTouchStart={alTocar} onTouchEnd={alSoltar}>
+        {children}
+        <img
+          src={urlImagen(fotos[actual], 1000)}
+          alt={total > 1 ? `${nombre} (foto ${actual + 1} de ${total})` : nombre}
+        />
+        {total > 1 && (
+          <>
+            <button
+              type="button"
+              className="galeria__flecha galeria__flecha--izq"
+              onClick={() => ir(actual - 1)}
+              aria-label="Foto anterior"
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              className="galeria__flecha galeria__flecha--der"
+              onClick={() => ir(actual + 1)}
+              aria-label="Foto siguiente"
+            >
+              ›
+            </button>
+            <span className="galeria__contador">
+              {actual + 1} / {total}
+            </span>
+          </>
+        )}
+      </div>
+
+      {total > 1 && (
+        <div className="galeria__miniaturas">
+          {fotos.map((foto, i) => (
+            <button
+              type="button"
+              key={foto + i}
+              className={`galeria__mini ${i === actual ? "activa" : ""}`}
+              onClick={() => setActual(i)}
+              aria-label={`Ver foto ${i + 1}`}
+            >
+              <img src={urlImagen(foto, 160)} alt="" loading="lazy" />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const ProductoDetalle = ({ id }) => {
   const { agregar, setAbierto } = useCart();
@@ -79,6 +149,7 @@ const ProductoDetalle = ({ id }) => {
 
   const sinStock = producto.stock <= 0;
   const favorito = esFavorito(producto.id);
+  const fotos = fotosDe(producto).length ? fotosDe(producto) : [null];
 
   const alAgregar = () => {
     agregar(producto, 1);
@@ -122,13 +193,12 @@ const ProductoDetalle = ({ id }) => {
       </a>
 
       <div className="detalle__grid">
-        <div className="detalle__foto">
+        <Galeria key={producto.id} fotos={fotos} nombre={producto.nombre}>
           {producto.badge && !sinStock && (
             <span className="detalle__badge">{producto.badge}</span>
           )}
           {sinStock && <span className="detalle__badge detalle__badge--agotado">Agotado</span>}
-          <img src={urlImagen(producto.imagen, 1000)} alt={producto.nombre} />
-        </div>
+        </Galeria>
 
         <div className="detalle__info">
           <span className="detalle__categoria">{producto.categoria}</span>
