@@ -19,6 +19,26 @@ const PRODUCTO_VACIO = {
 
 const plata = (n) => `$${Number(n).toLocaleString("es-AR")}`;
 
+// Nombres de los campos tal como se ven en el formulario
+const CAMPOS = {
+  nombre: "Nombre",
+  categoria: "Categoria",
+  descripcion: "Descripcion",
+  precio: "Precio",
+  stock: "Stock",
+  imagen: "Foto",
+  badge: "Badge",
+  activo: "Visible en la tienda",
+};
+
+// Si la API dice "Datos invalidos", agrega que campos revisar.
+const mensajeError = (data, status) => {
+  const base = data.error || `Error ${status}`;
+  if (!Array.isArray(data.detalles) || data.detalles.length === 0) return base;
+  const campos = [...new Set(data.detalles.map((d) => CAMPOS[d.campo] || d.campo))];
+  return `${base} Revisa: ${campos.join(", ")}.`;
+};
+
 const fecha = (iso) =>
   new Date(iso).toLocaleDateString("es-AR", {
     day: "2-digit",
@@ -195,7 +215,7 @@ const PanelProductos = ({ token, onSesionVencida }) => {
         throw new Error("Tu sesion vencio. Volve a entrar.");
       }
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
+      if (!res.ok) throw new Error(mensajeError(data, res.status));
       return data;
     },
     [token, onSesionVencida]
@@ -537,7 +557,7 @@ const PanelPedidos = ({ token, onSesionVencida }) => {
         throw new Error("Tu sesion vencio. Volve a entrar.");
       }
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
+      if (!res.ok) throw new Error(mensajeError(data, res.status));
       return data;
     },
     [token, onSesionVencida]
@@ -680,7 +700,7 @@ const PanelClientes = ({ token, onSesionVencida }) => {
         throw new Error("Tu sesion vencio. Volve a entrar.");
       }
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
+      if (!res.ok) throw new Error(mensajeError(data, res.status));
       setClientes(data);
       setError(null);
     } catch (err) {
@@ -710,7 +730,7 @@ const PanelClientes = ({ token, onSesionVencida }) => {
         return;
       }
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || `Error ${res.status}`);
+      if (!res.ok) throw new Error(mensajeError(data, res.status));
       cargar();
     } catch (err) {
       setError(err.message);
