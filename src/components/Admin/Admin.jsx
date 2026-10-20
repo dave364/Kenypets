@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { urlImagen, fotosDe } from "../../utils/imagen";
+import { achicarFoto } from "../../utils/achicarFoto";
 import "./Admin.scss";
 
 const API_URL = import.meta.env.VITE_API_URL || "https://kenypets-api.onrender.com";
@@ -53,7 +54,7 @@ const fecha = (iso) =>
 const Admin = () => {
   const [token, setToken] = useState(null);
   const [usuario, setUsuario] = useState(null);
-  const [seccion, setSeccion] = useState("productos");
+  const [seccion, setSeccion] = useState("resumen");
 
   // --- LOGIN ---
   const [email, setEmail] = useState("");
@@ -158,6 +159,12 @@ const Admin = () => {
 
       <nav className="admin__tabs">
         <button
+          className={`admin__tab ${seccion === "resumen" ? "active" : ""}`}
+          onClick={() => setSeccion("resumen")}
+        >
+          Resumen
+        </button>
+        <button
           className={`admin__tab ${seccion === "productos" ? "active" : ""}`}
           onClick={() => setSeccion("productos")}
         >
@@ -177,6 +184,9 @@ const Admin = () => {
         </button>
       </nav>
 
+      {seccion === "resumen" && (
+        <PanelResumen token={token} onSesionVencida={salir} />
+      )}
       {seccion === "productos" && (
         <PanelProductos token={token} onSesionVencida={salir} />
       )}
@@ -482,9 +492,13 @@ const ModalProducto = ({
   // La API firma la subida y el navegador manda la foto directo a
   // Cloudinary. Lo que vuelve es la URL definitiva de la foto.
   const subirUna = async (archivo) => {
+    const liviana = await achicarFoto(archivo);
+    if (liviana.size > FOTO_MAX_MB * 1024 * 1024) {
+      throw new Error(`pesa mas de ${FOTO_MAX_MB} MB y no se pudo achicar.`);
+    }
     const firma = await pedirFirma();
     const form = new FormData();
-    form.append("file", archivo);
+    form.append("file", liviana);
     form.append("api_key", firma.apiKey);
     form.append("timestamp", firma.timestamp);
     form.append("folder", firma.folder);
@@ -516,10 +530,6 @@ const ModalProducto = ({
     const validos = elegidos.slice(0, lugar).filter((a) => {
       if (!a.type.startsWith("image/")) {
         problemas.push(`"${a.name}" no es una imagen.`);
-        return false;
-      }
-      if (a.size > FOTO_MAX_MB * 1024 * 1024) {
-        problemas.push(`"${a.name}" pesa mas de ${FOTO_MAX_MB} MB.`);
         return false;
       }
       return true;
@@ -682,7 +692,7 @@ const ModalProducto = ({
           </div>
           <small className="admin__foto-ayuda">
             La primera es la principal (la de la tarjeta). Podés elegir varias a
-            la vez. JPG, PNG o WEBP, hasta {FOTO_MAX_MB} MB cada una.
+            la vez. Se achican solas antes de subir, así suben rápido.
           </small>
           <input
             ref={inputFoto}
@@ -872,6 +882,231 @@ const PanelPedidos = ({ token, onSesionVencida }) => {
 /* ============================================================
    CLIENTES
    ============================================================ */
+
+/* ============================================================
+   RESUMEN DE VENTAS
+   ============================================================ */
+
+const nombreMes = (mes) => {
+  const [a, m] = mes.split("-").map(Number);
+  const texto = new Date(a, m - 1, 1).toLocaleDateString("es-AR", {
+    month: "long",
+    year: "numeric",
+  });
+  return texto.charAt(0).toUpperCase() + texto.slice(1);
+};
+
+const moverMes = (mes, delta) => {
+  const [a, m] = mes.split("-").map(Number);
+  const d = new Date(a, m - 1 + delta, 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+};
+
+// Comparacion con el mes anterior: "+25% vs septiembre"
+const comparacion = (actual, anterior, mesAnterior) => {
+  const mes = nombreMes(mesAnterior).split(" ")[0].toLowerCase();
+  if (!anterior) return actual ? `Sin ventas en ${mes}` : null;
+  const pct = Math.round(((actual - anterior) / anterior) * 100);
+  if (pct === 0) return `Igual que ${mes}`;
+  return `${pct > 0 ? "▲ +" : "▼ "}${pct}% vs ${mes}`;
+};
+
+const ESTADOS_RESUMEN = [
+  ["pendiente", "Pendientes"],
+  ["confirmado", "Confirmados"],
+  ["entregado", "Entregados"],
+  ["cancelado", "Cancelados"],
+];
+
+// Barras de ventas por dia del mes. Una sola serie: un solo color, sin
+// leyenda; el monto de cada dia aparece al pasar el mouse o tocar la barra.
+const GraficoDias = ({ mes, porDia }) => {
+  const [a, m] = mes.split("-").map(Number);
+  const diasDelMes = new Date(a, m, 0).getDate();
+  const porFecha = Object.fromEntries(porDia.map((d) => [d.dia, d]));
+  const dias = Array.from({ length: diasDelMes }, (_, i) => {
+    const fecha = `${mes}-${String(i + 1).padStart(2, "0")}`;
+    return { n: i + 1, total: porFecha[fecha]?.total || 0, pedidos: porFecha[fecha]?.pedidos || 0 };
+  });
+  const max = Math.max(...dias.map((d) => d.total), 1);
+  const [marcado, setMarcado] = useState(null);
+  const elegido = marcado != null ? dias[marcado] : null;
+
+  return (
+    <div className="resumen__grafico">
+      <p className="resumen__grafico-dato" aria-live="polite">
+        {elegido
+          ? `${elegido.n}/${m}: ${plata(elegido.total)} (${elegido.pedidos} ${
+              elegido.pedidos === 1 ? "pedido" : "pedidos"
+            })`
+          : "Tocá o pasá el mouse por una barra para ver el día"}
+      </p>
+      <div className="resumen__barras" onMouseLeave={() => setMarcado(null)}>
+        {dias.map((d, i) => (
+          <button
+            type="button"
+            key={d.n}
+            className={`resumen__barra ${marcado === i ? "activa" : ""}`}
+            onMouseEnter={() => setMarcado(i)}
+            onFocus={() => setMarcado(i)}
+            onClick={() => setMarcado(i)}
+            aria-label={`Dia ${d.n}: ${plata(d.total)}`}
+          >
+            <span style={{ height: d.total ? `${Math.max((d.total / max) * 100, 3)}%` : 0 }} />
+          </button>
+        ))}
+      </div>
+      <div className="resumen__eje">
+        <span>1</span>
+        <span>{Math.ceil(diasDelMes / 2)}</span>
+        <span>{diasDelMes}</span>
+      </div>
+    </div>
+  );
+};
+
+const PanelResumen = ({ token, onSesionVencida }) => {
+  const [mes, setMes] = useState(null); // null = el mes actual (lo decide la API)
+  const [datos, setDatos] = useState(null);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let vigente = true;
+    setCargando(true);
+    fetch(`${API_URL}/api/resumen${mes ? `?mes=${mes}` : ""}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(async (res) => {
+        if (res.status === 401) {
+          onSesionVencida();
+          throw new Error("Tu sesion vencio. Volve a entrar.");
+        }
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(mensajeError(data, res.status));
+        if (vigente) {
+          setDatos(data);
+          setError(null);
+        }
+      })
+      .catch((err) => vigente && setError(err.message))
+      .finally(() => vigente && setCargando(false));
+    return () => {
+      vigente = false;
+    };
+  }, [mes, token, onSesionVencida]);
+
+  if (!datos && cargando) return <p className="admin__estado">Cargando resumen...</p>;
+  if (!datos) return <p className="admin__estado admin__error">{error}</p>;
+
+  const v = datos.ventas;
+  const ant = datos.mes_anterior;
+  const comp = comparacion(v.total, ant.total, ant.mes);
+
+  return (
+    <div className={`admin__contenido resumen ${cargando ? "resumen--cargando" : ""}`}>
+      {error && <p className="admin__error">{error}</p>}
+
+      <div className="resumen__mes">
+        <button
+          className="admin__btn admin__btn--mini"
+          onClick={() => setMes(moverMes(datos.mes, -1))}
+          aria-label="Mes anterior"
+        >
+          ‹
+        </button>
+        <h2>{nombreMes(datos.mes)}</h2>
+        <button
+          className="admin__btn admin__btn--mini"
+          onClick={() => setMes(moverMes(datos.mes, 1))}
+          disabled={datos.es_mes_actual}
+          aria-label="Mes siguiente"
+        >
+          ›
+        </button>
+      </div>
+
+      <div className="resumen__tarjetas">
+        <div className="resumen__tarjeta resumen__tarjeta--principal">
+          <span>Vendido</span>
+          <strong>{plata(v.total)}</strong>
+          {comp && (
+            <small
+              className={
+                ant.total && v.total > ant.total
+                  ? "resumen__sube"
+                  : ant.total && v.total < ant.total
+                  ? "resumen__baja"
+                  : ""
+              }
+            >
+              {comp}
+            </small>
+          )}
+        </div>
+        <div className="resumen__tarjeta">
+          <span>Ventas</span>
+          <strong>{v.pedidos}</strong>
+          <small>{v.pedidos === 1 ? "pedido" : "pedidos"}</small>
+        </div>
+        <div className="resumen__tarjeta">
+          <span>Ticket promedio</span>
+          <strong>{plata(v.ticket_promedio)}</strong>
+          <small>por pedido</small>
+        </div>
+        <div className="resumen__tarjeta">
+          <span>Productos</span>
+          <strong>{v.unidades}</strong>
+          <small>unidades vendidas</small>
+        </div>
+      </div>
+
+      <div className="resumen__estados">
+        {ESTADOS_RESUMEN.map(([clave, nombre]) => (
+          <div key={clave} className="resumen__estado">
+            <span className={`admin__estado-pill admin__estado-pill--${clave}`}>{nombre}</span>
+            <strong>{datos.por_estado[clave].cantidad}</strong>
+            <small>{plata(datos.por_estado[clave].total)}</small>
+          </div>
+        ))}
+      </div>
+
+      <section className="resumen__bloque">
+        <h3>Ventas por día</h3>
+        {v.pedidos ? (
+          <GraficoDias mes={datos.mes} porDia={datos.por_dia} />
+        ) : (
+          <p className="resumen__vacio">Todavía no hay ventas este mes.</p>
+        )}
+      </section>
+
+      <section className="resumen__bloque">
+        <h3>Más vendidos</h3>
+        {datos.mas_vendidos.length ? (
+          <ol className="resumen__top">
+            {datos.mas_vendidos.map((p) => (
+              <li key={p.producto_id ?? p.nombre}>
+                <span className="resumen__top-nombre">{p.nombre}</span>
+                <span className="resumen__top-unidades">
+                  {p.unidades} {p.unidades === 1 ? "unidad" : "unidades"}
+                </span>
+                <span className="resumen__top-monto">{plata(p.monto)}</span>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p className="resumen__vacio">Cuando confirmes pedidos, acá aparecen los productos que más salen.</p>
+        )}
+      </section>
+
+      <p className="resumen__nota">
+        Cuentan como venta los pedidos <strong>confirmados</strong> y{" "}
+        <strong>entregados</strong>.
+        {v.descuentos > 0 && <> Descuentos de bienvenida otorgados: {plata(v.descuentos)}.</>}
+      </p>
+    </div>
+  );
+};
 
 const PanelClientes = ({ token, onSesionVencida }) => {
   const [clientes, setClientes] = useState([]);

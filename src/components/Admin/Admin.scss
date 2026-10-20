@@ -89,6 +89,8 @@
 .admin__tabs {
   display: flex;
   gap: 0.5rem;
+  overflow-x: auto;
+  scrollbar-width: none;
   padding: 1.5rem 2rem 0;
   max-width: 1100px;
   margin: 0 auto;
@@ -675,4 +677,237 @@
 
 .admin__cliente-nada {
   opacity: 0.4;
+}
+
+
+/* =============================================
+   RESUMEN DE VENTAS
+   ============================================= */
+.resumen--cargando { opacity: 0.6; }
+
+.resumen__mes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+
+  h2 {
+    margin: 0;
+    font-family: var(--brand-font);
+    font-weight: 400;
+    font-size: 1.5rem;
+    color: var(--color-purple);
+  }
+
+  .admin__btn { font-size: 1.1rem; padding: 0.2rem 0.9rem; }
+}
+
+.resumen__tarjetas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.resumen__tarjeta {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 4px 20px rgba(82, 43, 91, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+
+  span {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--color-purple);
+  }
+
+  strong {
+    font-size: 1.4rem;
+    color: var(--color-dark);
+    overflow-wrap: anywhere;
+  }
+
+  small {
+    font-size: 0.75rem;
+    color: var(--color-purple);
+    opacity: 0.8;
+  }
+}
+
+.resumen__tarjeta--principal {
+  grid-column: 1 / -1;
+
+  strong { font-size: 2rem; }
+}
+
+.resumen__sube { color: #1b6b3a !important; opacity: 1 !important; font-weight: 700; }
+.resumen__baja { color: #a1281c !important; opacity: 1 !important; font-weight: 700; }
+
+.resumen__estados {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.resumen__estado {
+  background: #fff;
+  border-radius: 12px;
+  padding: 0.6rem 0.75rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  row-gap: 0.2rem;
+
+  .admin__estado-pill { justify-self: start; }
+  strong { font-size: 1.1rem; text-align: right; }
+  small {
+    grid-column: 1 / -1;
+    font-size: 0.72rem;
+    color: var(--color-purple);
+    opacity: 0.8;
+  }
+}
+
+.resumen__bloque {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1rem 1rem 1.1rem;
+  box-shadow: 0 4px 20px rgba(82, 43, 91, 0.08);
+  margin-bottom: 1rem;
+
+  h3 {
+    margin: 0 0 0.75rem;
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--color-purple);
+  }
+}
+
+.resumen__vacio {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-purple);
+  opacity: 0.8;
+}
+
+/* Grafico de barras por dia */
+.resumen__grafico-dato {
+  margin: 0 0 0.6rem;
+  min-height: 1.2em;
+  font-size: 0.8rem;
+  color: var(--color-dark);
+}
+
+.resumen__barras {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px; // separacion entre barras
+  height: 140px;
+  border-bottom: 1px solid #e8dcd9; // linea base, discreta
+}
+
+.resumen__barra {
+  flex: 1;
+  height: 100%;
+  min-width: 0;
+  padding: 0;
+  border: none;
+  background: transparent; // toda la columna es zona de toque
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+
+  span {
+    display: block;
+    width: 100%;
+    background: var(--color-purple);
+    border-radius: 4px 4px 0 0; // punta redondeada, base recta
+    opacity: 0.85;
+    transition: opacity 0.15s ease;
+  }
+
+  &:hover span,
+  &.activa span,
+  &:focus-visible span { opacity: 1; background: var(--color-dark); }
+
+  &:focus-visible { outline: 2px solid var(--brand-secondary); outline-offset: 1px; }
+}
+
+.resumen__eje {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.3rem;
+  font-size: 0.7rem;
+  color: var(--color-purple);
+  opacity: 0.7;
+}
+
+/* Mas vendidos */
+.resumen__top {
+  list-style: none;
+  counter-reset: puesto;
+  margin: 0;
+  padding: 0;
+
+  li {
+    counter-increment: puesto;
+    display: grid;
+    grid-template-columns: 1.5rem 1fr auto;
+    grid-template-areas:
+      "num nombre monto"
+      "num unidades monto";
+    align-items: center;
+    column-gap: 0.6rem;
+    padding: 0.6rem 0;
+    border-top: 1px solid #f0e6e4;
+
+    &:first-child { border-top: none; padding-top: 0; }
+
+    &::before {
+      content: counter(puesto);
+      grid-area: num;
+      font-weight: 800;
+      color: var(--brand-secondary);
+    }
+  }
+}
+
+.resumen__top-nombre { grid-area: nombre; font-weight: 700; font-size: 0.9rem; }
+.resumen__top-unidades { grid-area: unidades; font-size: 0.75rem; color: var(--color-purple); }
+.resumen__top-monto { grid-area: monto; font-weight: 700; font-size: 0.9rem; }
+
+.resumen__nota {
+  font-size: 0.75rem;
+  color: var(--color-purple);
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+@media (min-width: 760px) {
+  .resumen__tarjetas { grid-template-columns: 2fr 1fr 1fr 1fr; }
+  .resumen__tarjeta--principal { grid-column: auto; }
+  .resumen__estados { grid-template-columns: repeat(4, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .admin__tabs { gap: 0; }
+  .admin__tab { padding: 0.6rem 0.7rem; font-size: 0.88rem; flex-shrink: 0; }
+
+  // En el celular, las tres tarjetas chicas van en una fila
+  .resumen__tarjeta:not(.resumen__tarjeta--principal) {
+    padding: 0.8rem 0.7rem;
+
+    span { font-size: 0.62rem; letter-spacing: 0.5px; }
+    strong { font-size: 1.1rem; }
+    small { font-size: 0.68rem; }
+  }
 }

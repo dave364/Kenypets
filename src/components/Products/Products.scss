@@ -38,6 +38,64 @@
 }
 
 /* --- FILTROS --- */
+/* --- BUSCADOR --- */
+.products__buscador {
+  position: relative;
+  max-width: 520px;
+  margin: 0 auto 1.25rem;
+
+  input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.8rem 2.75rem 0.8rem 2.6rem;
+    border-radius: 999px;
+    border: 2px solid var(--color-beige);
+    background: #fff;
+    font-family: sans-serif;
+    font-size: 1rem; // 16px: evita que el iPhone haga zoom al tocar
+    color: var(--color-dark);
+    -webkit-appearance: none;
+    appearance: none;
+
+    &:focus {
+      outline: none;
+      border-color: var(--color-purple);
+    }
+
+    // Saca la cruz propia del navegador: usamos la nuestra
+    &::-webkit-search-cancel-button { display: none; }
+  }
+}
+
+.products__buscador-icono {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.95rem;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.products__buscador-limpiar {
+  position: absolute;
+  right: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-light);
+  color: var(--color-purple);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.products__sin-resultados p {
+  color: var(--color-dark);
+}
+
 .products__filters {
   display: flex;
   justify-content: center;

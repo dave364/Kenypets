@@ -12,6 +12,9 @@ const WHATSAPP_NUMBER = "5491122531821";
 const API_URL = import.meta.env.VITE_API_URL || "https://kenypets-api.onrender.com";
 
 
+const sinAcentos = (t = "") =>
+  t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+
 const Products = () => {
   const { agregar, setAbierto } = useCart();
   const { esFavorito, alternar, cantidad } = useFavoritos();
@@ -19,6 +22,7 @@ const Products = () => {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   const [activeFilter, setActiveFilter] = useState("Todos");
+  const [busqueda, setBusqueda] = useState("");
   // Productos con la descripcion desplegada ("Ver mas")
   const [abiertas, setAbiertas] = useState(() => new Set());
 
@@ -66,12 +70,25 @@ const Products = () => {
     ...(cantidad > 0 ? ["Favoritos"] : []),
   ];
 
-  const filtrados =
+  const porCategoria =
     activeFilter === "Todos"
       ? productos
       : activeFilter === "Favoritos"
       ? productos.filter((p) => esFavorito(p.id))
       : productos.filter((p) => p.categoria === activeFilter);
+
+  // Busca cada palabra en nombre, categoria, badge y descripcion, sin
+  // importar acentos ni mayusculas ("pelota alimento" encuentra
+  // "Pelota Porta Alimentos").
+  const palabras = sinAcentos(busqueda).split(/\s+/).filter(Boolean);
+  const filtrados = palabras.length
+    ? porCategoria.filter((p) => {
+        const texto = sinAcentos(
+          [p.nombre, p.categoria, p.badge, p.descripcion].filter(Boolean).join(" ")
+        );
+        return palabras.every((w) => texto.includes(w));
+      })
+    : porCategoria;
 
   const iconoCategoria = (cat) => {
     if (cat === "Todos") return "🐾 ";
@@ -123,6 +140,29 @@ const Products = () => {
 
       {!cargando && !error && (
         <>
+          {/* BUSCADOR */}
+          <div className="products__buscador">
+            <span className="products__buscador-icono" aria-hidden="true">🔍</span>
+            <input
+              type="search"
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+              placeholder="Buscar productos..."
+              aria-label="Buscar productos"
+              enterKeyHint="search"
+            />
+            {busqueda && (
+              <button
+                type="button"
+                className="products__buscador-limpiar"
+                onClick={() => setBusqueda("")}
+                aria-label="Borrar busqueda"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+
           {/* FILTROS */}
           <div className="products__filters">
             {categorias.map((cat) => (
@@ -136,6 +176,27 @@ const Products = () => {
               </button>
             ))}
           </div>
+
+          {filtrados.length === 0 && (
+            <div className="products__estado products__sin-resultados">
+              <p>
+                {busqueda
+                  ? `No encontramos productos para "${busqueda.trim()}"${
+                      activeFilter !== "Todos" ? ` en ${activeFilter}` : ""
+                    }.`
+                  : "No hay productos en esta categoría todavía."}
+              </p>
+              <button
+                className="products__filter-btn"
+                onClick={() => {
+                  setBusqueda("");
+                  setActiveFilter("Todos");
+                }}
+              >
+                Ver todos los productos
+              </button>
+            </div>
+          )}
 
           {/* GRID */}
           <div className="products__grid">
