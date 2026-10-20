@@ -192,6 +192,14 @@ const Admin = () => {
    PRODUCTOS
    ============================================================ */
 
+// Lista sin vacios ni repetidos (sin importar mayusculas), en orden de aparicion
+const unificarLista = (valores) => {
+  const vistos = new Set();
+  return valores
+    .map((v) => (v || "").trim())
+    .filter((v) => v && !vistos.has(v.toLowerCase()) && vistos.add(v.toLowerCase()));
+};
+
 const PanelProductos = ({ token, onSesionVencida }) => {
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -354,6 +362,7 @@ const PanelProductos = ({ token, onSesionVencida }) => {
           onGuardar={guardar}
           pedirFirma={() => pedir("/api/imagenes/firma", { method: "POST" })}
           categorias={[...new Set(productos.map((p) => p.categoria).filter(Boolean))].sort()}
+          badges={unificarLista([...BADGES_BASE, ...productos.map((p) => p.badge)])}
         />
       )}
     </div>
@@ -366,35 +375,102 @@ const FOTO_MAX_MB = 8;
 // Tiene que coincidir con el limite de la API
 const DESCRIPCION_MAX = 2000;
 
-// Valor especial del selector para escribir una categoria nueva
-const NUEVA_CATEGORIA = "__nueva__";
+// Valor especial del selector para escribir una opcion nueva
+const OPCION_NUEVA = "__nueva__";
 
-const ModalProducto = ({ producto, onCancelar, onGuardar, pedirFirma, categorias = [] }) => {
+// Badges que siempre se ofrecen, aunque ningun producto los use todavia
+const BADGES_BASE = ["Nuevo", "Mas vendido"];
+
+// Si lo escrito ya existe con otras mayusculas o espacios ("accesorios "),
+// devuelve la version existente para no duplicarla.
+const unificar = (texto, opciones) => {
+  const limpio = (texto || "").trim();
+  return opciones.find((o) => o.toLowerCase() === limpio.toLowerCase()) || limpio;
+};
+
+// Selector con las opciones que ya existen y "+ Nueva..." para escribir
+// una distinta. Se usa para la categoria y para el badge.
+const CampoConLista = ({
+  etiqueta,
+  valor,
+  opciones,
+  onCambiar,
+  textoElegir,
+  textoNueva,
+  placeholderNueva,
+  textoVacio, // si viene, el campo es opcional y esta es la opcion "ninguno"
+}) => {
+  const [escribiendo, setEscribiendo] = useState(
+    (!textoVacio && opciones.length === 0) ||
+      (!!valor && !opciones.includes(valor))
+  );
+
+  const elegir = (e) => {
+    if (e.target.value === OPCION_NUEVA) {
+      setEscribiendo(true);
+      onCambiar("");
+    } else {
+      onCambiar(e.target.value);
+    }
+  };
+
+  const volverALista = () => {
+    setEscribiendo(false);
+    onCambiar("");
+  };
+
+  return (
+    <label>
+      {etiqueta}
+      {escribiendo ? (
+        <>
+          <input
+            value={valor || ""}
+            onChange={(e) => onCambiar(e.target.value)}
+            placeholder={placeholderNueva}
+            autoFocus
+          />
+          {(opciones.length > 0 || textoVacio) && (
+            <button type="button" className="admin__link" onClick={volverALista}>
+              Elegir de la lista
+            </button>
+          )}
+        </>
+      ) : (
+        <select value={valor || ""} onChange={elegir}>
+          {textoVacio ? (
+            <option value="">{textoVacio}</option>
+          ) : (
+            <option value="" disabled>
+              {textoElegir}
+            </option>
+          )}
+          {opciones.map((o) => (
+            <option key={o} value={o}>
+              {o}
+            </option>
+          ))}
+          <option value={OPCION_NUEVA}>{textoNueva}</option>
+        </select>
+      )}
+    </label>
+  );
+};
+
+const ModalProducto = ({
+  producto,
+  onCancelar,
+  onGuardar,
+  pedirFirma,
+  categorias = [],
+  badges = [],
+}) => {
   const [datos, setDatos] = useState(producto);
   const [guardando, setGuardando] = useState(false);
   const [subiendo, setSubiendo] = useState(false);
   const [error, setError] = useState(null);
   const inputFoto = useRef(null);
-  // Si no hay categorias todavia (o el producto tiene una que no esta en
-  // la lista), arranca directo en modo "nueva".
-  const [categoriaNueva, setCategoriaNueva] = useState(
-    categorias.length === 0 ||
-      (!!producto.categoria && !categorias.includes(producto.categoria))
-  );
-
-  const elegirCategoria = (e) => {
-    if (e.target.value === NUEVA_CATEGORIA) {
-      setCategoriaNueva(true);
-      setDatos((d) => ({ ...d, categoria: "" }));
-    } else {
-      setDatos((d) => ({ ...d, categoria: e.target.value }));
-    }
-  };
-
-  const volverALista = () => {
-    setCategoriaNueva(false);
-    setDatos((d) => ({ ...d, categoria: "" }));
-  };
+  const cambiar = (campo) => (valor) => setDatos((d) => ({ ...d, [campo]: valor }));
 
   // La API firma la subida y el navegador manda la foto directo a
   // Cloudinary. Lo que vuelve es la URL definitiva de la foto.
@@ -448,13 +524,11 @@ const ModalProducto = ({ producto, onCancelar, onGuardar, pedirFirma, categorias
     setGuardando(true);
     setError(null);
     try {
-      // Si escribio una categoria que ya existe con otras mayusculas o
-      // espacios ("accesorios "), usa la existente para no duplicarla.
-      const escrita = (datos.categoria || "").trim();
-      const existente = categorias.find(
-        (c) => c.toLowerCase() === escrita.toLowerCase()
-      );
-      await onGuardar({ ...datos, categoria: existente || escrita });
+      await onGuardar({
+        ...datos,
+        categoria: unificar(datos.categoria, categorias),
+        badge: unificar(datos.badge, badges) || null,
+      });
     } catch (err) {
       setError(err.message);
       setGuardando(false);
@@ -472,44 +546,24 @@ const ModalProducto = ({ producto, onCancelar, onGuardar, pedirFirma, categorias
         </label>
 
         <div className="admin__fila-doble">
-          <label>
-            Categoria
-            {categoriaNueva ? (
-              <>
-                <input
-                  value={datos.categoria}
-                  onChange={set("categoria")}
-                  placeholder="Nombre de la categoria nueva"
-                  autoFocus
-                />
-                {categorias.length > 0 && (
-                  <button
-                    type="button"
-                    className="admin__link"
-                    onClick={volverALista}
-                  >
-                    Elegir una existente
-                  </button>
-                )}
-              </>
-            ) : (
-              <select value={datos.categoria} onChange={elegirCategoria}>
-                <option value="" disabled>
-                  Elegi una categoria
-                </option>
-                {categorias.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-                <option value={NUEVA_CATEGORIA}>+ Nueva categoria...</option>
-              </select>
-            )}
-          </label>
-          <label>
-            Badge (opcional)
-            <input value={datos.badge || ""} onChange={set("badge")} />
-          </label>
+          <CampoConLista
+            etiqueta="Categoria"
+            valor={datos.categoria}
+            opciones={categorias}
+            onCambiar={cambiar("categoria")}
+            textoElegir="Elegi una categoria"
+            textoNueva="+ Nueva categoria..."
+            placeholderNueva="Nombre de la categoria nueva"
+          />
+          <CampoConLista
+            etiqueta="Badge (opcional)"
+            valor={datos.badge}
+            opciones={badges}
+            onCambiar={cambiar("badge")}
+            textoVacio="Sin badge"
+            textoNueva="+ Nuevo badge..."
+            placeholderNueva="Ej: Oferta"
+          />
         </div>
 
         <label>
