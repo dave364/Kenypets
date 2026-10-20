@@ -29,7 +29,10 @@ function fotoParaCompartir(imagen, origen) {
   if (/^https?:\/\//.test(imagen)) {
     if (imagen.includes("res.cloudinary.com") && imagen.includes("/upload/")) {
       return {
-        url: imagen.replace("/upload/", "/upload/c_pad,b_white,w_1200,h_630,f_jpg,q_auto/"),
+        url: imagen
+          .replace("/upload/", "/upload/c_pad,b_white,w_1200,h_630,f_jpg,q_auto/")
+          // que la direccion tambien termine en .jpg (algunos servicios miran eso)
+          .replace(/\.(webp|avif|heic|heif|png|gif)$/i, ".jpg"),
         ancho: 1200,
         alto: 630,
       };
