@@ -10,6 +10,7 @@ import Cart from './components/Cart/Cart';
 import AuthModal from './components/Auth/AuthModal';
 import FavoritosModal from './components/Favoritos/FavoritosModal';
 import ProductoDetalle from './components/ProductoDetalle/ProductoDetalle';
+import Mantenimiento from './components/Mantenimiento/Mantenimiento';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { FavoritosProvider } from './context/FavoritosContext';
@@ -70,8 +71,9 @@ function App() {
     };
   }, []);
 
-  if (ruta.vista === 'admin') return <Admin />;
-  if (ruta.vista === 'reset') return <Reset token={ruta.token} />;
+  // El cartel de mantenimiento se muestra solo si la API no responde
+  if (ruta.vista === 'admin') return <><Admin /><Mantenimiento /></>;
+  if (ruta.vista === 'reset') return <><Reset token={ruta.token} /><Mantenimiento /></>;
 
   return (
     <AuthProvider>
@@ -91,6 +93,7 @@ function App() {
           <Cart />
           <AuthModal />
           <FavoritosModal />
+          <Mantenimiento />
         </CartProvider>
       </FavoritosProvider>
     </AuthProvider>

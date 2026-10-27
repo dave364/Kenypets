@@ -1,0 +1,107 @@
+/* =============================================
+   CARTEL DE MANTENIMIENTO
+   ============================================= */
+
+.mantenimiento {
+  position: fixed;
+  inset: 0;
+  z-index: 3000; // por encima del navbar, el carrito y los modales
+  background: rgba(251, 228, 216, 0.97); // --color-light casi opaco
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  overflow-y: auto;
+  font-family: sans-serif;
+}
+
+.mantenimiento__tarjeta {
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 12px 40px rgba(82, 43, 91, 0.18);
+  padding: 2rem 1.5rem;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  color: var(--color-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+
+  h1 {
+    margin: 0.25rem 0 0;
+    font-family: var(--brand-font);
+    font-weight: 400;
+    font-size: clamp(1.6rem, 7vw, 2rem);
+    line-height: 1.2;
+    color: var(--color-purple);
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
+
+.mantenimiento__logo {
+  width: 96px;
+  height: auto;
+}
+
+.mantenimiento__sub {
+  color: var(--color-purple);
+  font-size: 0.9rem !important;
+}
+
+.mantenimiento__botones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: 100%;
+  margin-top: 0.75rem;
+}
+
+.mantenimiento__btn {
+  display: block;
+  padding: 0.85rem 1rem;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.mantenimiento__btn--wsp {
+  background: #25d366;
+  color: #fff;
+
+  &:hover { background: #1ebe5a; }
+}
+
+.mantenimiento__btn--borde {
+  border-color: var(--color-purple);
+  color: var(--color-purple);
+
+  &:hover { background: var(--color-light); }
+}
+
+.mantenimiento__reintentar {
+  margin-top: 0.5rem;
+  border: none;
+  background: transparent;
+  color: var(--color-purple);
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:disabled { opacity: 0.6; cursor: wait; }
+}
+
+.mantenimiento__nota {
+  font-size: 0.72rem;
+  color: var(--color-purple);
+  opacity: 0.75;
+}
