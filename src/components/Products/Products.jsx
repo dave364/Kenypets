@@ -95,6 +95,10 @@ const Products = () => {
     if (cat === "Accesorios") return "🎀 ";
     if (cat === "Juguetes") return "🧸 ";
     if (cat === "Favoritos") return "❤️ ";
+    if (cat === "Higiene y Cuidado") return "🧴 ";
+    if (cat === "Ropa") return "🧥 ";
+    if (cat === "Gatos") return "🐱 ";
+    if (cat === "Snacks") return "🦴 ";
     return "";
   };
 
