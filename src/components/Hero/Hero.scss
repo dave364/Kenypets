@@ -275,3 +275,76 @@
   }
 }
 
+
+/* Celulares: todo mas compacto para que el perro y el gato
+   entren en la primera pantalla sin cortarse */
+@media (max-width: 600px) {
+  .hero__content {
+    padding: 1.5rem 1.25rem 4rem;
+  }
+
+  .hero__text h1 {
+    margin: 0.7rem 0 0.5rem;
+  }
+
+  .hero__text p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0 auto 1.1rem;
+  }
+
+  .hero__botones {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 0.6rem;
+
+    .btn {
+      width: auto;
+      flex: 1 1 0;
+      max-width: 170px;
+      padding: 0.7rem 0.9rem;
+      font-size: 0.92rem;
+      white-space: nowrap;
+    }
+  }
+
+  .hero__datos {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.35rem 1rem;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+  }
+
+  .hero__img img {
+    width: 270px;
+    margin-top: 0.8rem;
+  }
+}
+
+/* Celulares angostos (360px y similares) */
+@media (max-width: 380px) {
+  .hero__content {
+    padding-top: 1.2rem;
+  }
+
+  .hero__text h1 {
+    font-size: 2.15rem;
+  }
+
+  .hero__text p {
+    font-size: 0.9rem;
+  }
+
+  .hero__datos {
+    gap: 0.3rem 0.7rem;
+    font-size: 0.74rem;
+  }
+
+  .hero__img img {
+    width: 235px;
+    margin-top: 0.5rem;
+  }
+}
