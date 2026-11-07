@@ -27,6 +27,7 @@
     color: var(--color-dark);
     margin: 0.4rem 0 0.8rem;
     font-family: var(--brand-font);
+    font-weight: 800;
   }
 
   p {
@@ -221,8 +222,10 @@
 }
 
 .product-card__name {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-family: var(--brand-font);
+  /* En tamano chico la gruesa se empasta: va la fina */
+  font-weight: 400;
   color: var(--color-dark);
   margin: 0;
 

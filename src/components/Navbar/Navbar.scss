@@ -51,14 +51,27 @@
   gap: 1.5rem;
 }
 
-.navbar__links a {
+.navbar__links a,
+.navbar__links .navbar__link-btn {
   text-decoration: none;
   color: var(--text-dark);
-  font-weight: 600;
+  font-family: var(--brand-font);
+  font-weight: 400;
+  white-space: nowrap;
 }
 
 .navbar__links a:hover {
   color: var(--brand-secondary);
+}
+
+/* Pantallas medianas (notebooks): el logo va centrado y en position
+   absolute, asi que achicamos el menu para que no se meta abajo del logo.
+   Por debajo de 1200px pasa al menu hamburguesa. */
+@media (max-width: 1320px) {
+  .navbar__links {
+    gap: 1.1rem;
+    font-size: 0.92rem;
+  }
 }
 
 /* Hamburguesa */
@@ -85,7 +98,7 @@
 /* ============================= */
 /* MOBILE NAVBAR */
 /* ============================= */
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
 
 /* Cuando el menú está abierto */
 .navbar--menu-open {
@@ -190,7 +203,8 @@
     padding: 1.2rem 1.5rem;
     text-decoration: none;
     font-size: 1rem;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    font-family: var(--brand-font);
     color: var(--text-dark);
 
     display: flex;

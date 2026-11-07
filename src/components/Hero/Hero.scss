@@ -26,8 +26,9 @@
 }
 
 .hero__text small {
-  letter-spacing: 2px;
-  font-weight: 600;
+  font-family: var(--brand-font);
+  letter-spacing: 1.5px;
+  font-weight: 400;
   opacity: 0.85;
 }
 
@@ -47,7 +48,9 @@
   padding: 0.85rem 2rem;
   background: var(--cta-bg);
   border-radius: 40px;
-  font-weight: 700;
+  font-family: var(--brand-font);
+  font-weight: 400;
+  font-size: 1.05rem;
   color: var(--cta-text);
   transition: transform 0.2s, background 0.3s;
 }
@@ -94,13 +97,13 @@
   color: var(--cta-bg);
   padding: 0.8rem 2rem;
   border-radius: 40px;
-  font-weight: 700;
+  font-weight: 400;
   transition: transform 0.2s;
   text-decoration: none;
   /* Sin sesion el elemento es un <button>, que no hereda la tipografia
      ni el tamano de la pagina: sin esto se veria con la fuente por
      defecto del navegador en vez de la de la marca. */
-  font-family: inherit;
+  font-family: var(--brand-font);
   font-size: inherit;
   line-height: inherit;
   border: none;

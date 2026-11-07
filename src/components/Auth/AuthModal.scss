@@ -28,6 +28,7 @@
 
   h2 {
     font-family: var(--brand-font);
+    font-weight: 800;
     color: var(--color-purple);
     font-size: 1.7rem;
     margin: 0 0 1rem;
@@ -194,8 +195,8 @@
   border: 2px solid var(--color-purple);
   background: var(--color-purple);
   color: var(--color-light);
-  font-family: sans-serif;
-  font-weight: 700;
+  font-family: var(--brand-font);
+  font-weight: 400;
   font-size: 0.8rem;
   cursor: pointer;
   white-space: nowrap;
@@ -294,15 +295,15 @@
    asi que el espacio a los costados es minimo.
    Los accesos a la cuenta se mudan al menu lateral.
    ============================================= */
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .navbar__cuenta { display: none; }
 
   .navbar__sidebar-content .navbar__sesion {
     width: 100%;
     padding: 1.2rem 1.5rem;
-    font-family: inherit;
+    font-family: var(--brand-font);
     font-size: 1rem;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     text-align: left;
     color: var(--text-dark);
     background: transparent;
@@ -322,7 +323,7 @@
   /* El registro es la accion que queremos empujar, asi que va marcado */
   .navbar__sesion--destacado {
     color: var(--color-purple);
-    font-weight: 700;
+    font-weight: 800;
   }
 
   .navbar__sidebar-cuenta {

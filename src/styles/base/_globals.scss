@@ -1,6 +1,12 @@
 body {
   margin: 0;
+  font-family: var(--text-font);
+}
+
+/* Titulos con la letra del logo, en gruesa */
+h1, h2, h3 {
   font-family: var(--brand-font);
+  font-weight: 800;
 }
 
 *,

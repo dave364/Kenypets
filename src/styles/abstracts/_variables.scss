@@ -19,6 +19,10 @@
   --text-dark: var(--color-darkest);
   --cta-accent: var(--color-pink);
 
-   --brand-font: 'Pacifico', cursive;
+  /* Tipografia: la misma letra del logo (Sniglet).
+     Gruesa (800) para titulos, fina (400) para menu y botones,
+     y la letra comun para los textos largos. */
+  --brand-font: 'Sniglet', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  --text-font: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
 }
 
