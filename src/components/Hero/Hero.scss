@@ -7,7 +7,9 @@
 }
 
 .hero__content {
-  min-height: calc(100vh - 110px);
+  /* Ocupa la pantalla, pero en monitores muy altos no se estira mas de
+     820px: si no, quedaba un hueco grande antes del cartel del 20% */
+  min-height: min(calc(100vh - 110px), 820px);
   display: flex;
   align-items: center;
   justify-content: space-between;

@@ -38,7 +38,7 @@ const Hero = () => {
         </div>
 
         <ul className="hero__datos">
-          <li><span aria-hidden="true">🎁</span> 20% OFF en tu primera compra</li>
+          <li><span aria-hidden="true">🛍️</span> Más de 70 productos</li>
           <li><span aria-hidden="true">💬</span> Atención por WhatsApp</li>
           <li><span aria-hidden="true">⏳</span> Te reservamos el pedido 3 días</li>
         </ul>
@@ -61,7 +61,7 @@ const Hero = () => {
       <div className="promo__text">
         <span className="paw">&#128062;</span>
         <div>
-          <h3>Registrate en Kenypets y obtene un 20% de DESCUENTO en tu primer pedido!</h3>
+          <h3>Registrate en Kenypets y obtené un 20% de DESCUENTO en tu primer pedido!</h3>
           <p>Calidad, cuidado y felicidad para tu mascota.</p>
         </div>
       </div>
@@ -70,7 +70,7 @@ const Hero = () => {
           tiene sentido ofrecerle registrarse otra vez. */}
       {!logueado ? (
         <button className="promo__btn" onClick={() => abrirModal("registro")}>
-          WOOF WOOF
+          Quiero mi 20% OFF
         </button>
       ) : (
         <a href="#products" className="promo__btn">VER PRODUCTOS</a>
