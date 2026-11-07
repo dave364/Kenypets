@@ -21,50 +21,145 @@
   color: #FBE4D8;
 }
 
+.hero__content {
+  position: relative;
+  overflow: hidden;
+}
+
 .hero__text {
-  width: 48%;
+  position: relative;
+  z-index: 1;
+  width: 50%;
+  max-width: 620px;
 }
 
 .hero__text small {
+  display: inline-block;
   font-family: var(--brand-font);
+  font-size: 0.85rem;
   letter-spacing: 1.5px;
-  font-weight: 400;
-  opacity: 0.85;
+  text-transform: uppercase;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: rgba(251, 228, 216, 0.15);
+  border: 1px solid rgba(251, 228, 216, 0.35);
 }
 
 .hero__text h1 {
-  font-size: 3.5rem;
-  line-height: 1.1;
-  margin: 1rem 0;
+  font-size: clamp(3rem, 4.6vw, 4.6rem);
+  line-height: 1.05;
+  margin: 1.1rem 0 1rem;
 }
 
 .hero__text p {
-  margin-bottom: 2rem;
+  font-size: 1.15rem;
   line-height: 1.6;
+  margin: 0 0 2rem;
+  max-width: 480px;
+  opacity: 0.92;
+}
+
+/* --- Botones --- */
+.hero__botones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.9rem 1.9rem;
+  border-radius: 999px;
+  font-family: var(--brand-font);
+  font-size: 1.05rem;
+  text-decoration: none;
+  transition: transform 0.2s, background 0.3s, color 0.3s;
+
+  &:hover { transform: translateY(-2px); }
 }
 
 .btn--primary {
-  display: inline-block;
-  padding: 0.85rem 2rem;
-  background: var(--cta-bg);
-  border-radius: 40px;
-  font-family: var(--brand-font);
-  font-weight: 400;
-  font-size: 1.05rem;
-  color: var(--cta-text);
-  transition: transform 0.2s, background 0.3s;
+  background: var(--color-light);
+  color: var(--color-dark);
+  font-weight: 800;
+  box-shadow: 0 8px 20px rgba(25, 0, 25, 0.25);
+
+  &:hover { background: #fff; }
 }
 
-.btn--primary:hover {
-  transform: translateY(-2px);
-  background: var(--cta-pk);
+.btn--wsp {
+  border: 2px solid rgba(251, 228, 216, 0.7);
+  color: var(--color-light);
+  font-weight: 400;
+
+  &:hover {
+    background: #25d366;
+    border-color: #25d366;
+    color: #fff;
+  }
+}
+
+/* --- Datos de confianza --- */
+.hero__datos {
+  list-style: none;
+  padding: 0;
+  margin: 2.2rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 1.4rem;
+  font-size: 0.92rem;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    opacity: 0.95;
+  }
+}
+
+/* --- Imagen con circulo detras --- */
+.hero__img {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.hero__circulo {
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 52%;
+  width: 82%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(251, 228, 216, 0.28) 0%, rgba(251, 228, 216, 0.08) 60%, transparent 72%);
 }
 
 .hero__img img {
-  width: clamp(420px, 45vw, 820px);
+  width: clamp(420px, 42vw, 760px);
   height: auto;
   aspect-ratio: 840 / 756;
-  margin-right: 50px;
+  filter: drop-shadow(0 20px 30px rgba(25, 0, 25, 0.3));
+}
+
+/* --- Huellitas de fondo --- */
+.hero__huella {
+  position: absolute;
+  z-index: 0;
+  font-size: 3rem;
+  opacity: 0.08;
+  filter: grayscale(1) brightness(3);
+  pointer-events: none;
+  user-select: none;
+
+  &--1 { top: 12%; left: 4%; transform: rotate(-20deg); }
+  &--2 { bottom: 14%; left: 42%; font-size: 4rem; transform: rotate(15deg); }
+  &--3 { top: 18%; right: 6%; font-size: 2.4rem; transform: rotate(30deg); }
 }
 
 /* PROMO */
@@ -120,40 +215,56 @@
     flex-direction: column;
     text-align: center;
     clip-path: none;
-    /* El padding lateral de 8rem del escritorio dejaba menos de 150px
-       utiles en un telefono: el titulo se partia en cinco renglones.
-       Y el min-height de pantalla completa estiraba todo de gusto. */
-    padding: 3rem 1.5rem 3.5rem;
+    padding: 2.5rem 1.25rem 4.5rem;
     min-height: auto;
   }
 
   .hero__text {
     width: 100%;
+    max-width: none;
   }
 
   .hero__text small {
     font-size: 0.7rem;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
   }
 
-  /* Crece con la pantalla pero sin pasarse: en 390px queda cerca de
-     35px, que entra en dos renglones en vez de cinco. */
   .hero__text h1 {
-    font-size: clamp(2rem, 9vw, 3rem);
-    margin: 0.7rem 0 0.6rem;
+    font-size: clamp(2.2rem, 10vw, 3.2rem);
+    margin: 0.9rem 0 0.7rem;
   }
 
   .hero__text p {
-    font-size: 0.95rem;
-    margin-bottom: 1.6rem;
+    font-size: 1rem;
+    margin: 0 auto 1.5rem;
+  }
+
+  .hero__botones {
+    flex-direction: column;
+    align-items: center;
+
+    .btn {
+      width: 100%;
+      max-width: 300px;
+    }
+  }
+
+  .hero__datos {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 1.6rem;
+    font-size: 0.85rem;
   }
 
   .hero__img img {
     width: 280px;
-    max-width: 80vw;
-    margin-top: 2rem;
-    margin-right: 0;
+    max-width: 78vw;
+    margin-top: 1.5rem;
   }
+
+  .hero__huella { font-size: 2rem; }
+  .hero__huella--2 { display: none; }
 
   .promo {
     flex-direction: column;
