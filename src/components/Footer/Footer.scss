@@ -1,0 +1,169 @@
+/* =============================================
+   FOOTER
+   ============================================= */
+
+.footer {
+  background: var(--color-dark);
+  color: var(--color-light);
+  font-family: sans-serif;
+  padding: 3.5rem 2rem 1.5rem;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+.footer__contenido {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.3fr;
+  gap: 2.5rem;
+}
+
+.footer__marca {
+  p {
+    margin: 1rem 0 0;
+    max-width: 280px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    opacity: 0.8;
+  }
+}
+
+.footer__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--color-light);
+    object-fit: contain;
+    padding: 4px;
+  }
+
+  span {
+    font-family: var(--brand-font);
+    font-size: 1.6rem;
+  }
+}
+
+.footer__columna {
+  h2 {
+    margin: 0 0 0.9rem;
+    font-size: 0.75rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--color-beige);
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    font-size: 0.95rem;
+    opacity: 0.85;
+    transition: opacity 0.2s ease;
+
+    @media (hover: hover) and (pointer: fine) {
+      &:hover { opacity: 1; text-decoration: underline; text-underline-offset: 3px; }
+    }
+  }
+}
+
+.footer__compra p {
+  margin: 0 0 0.9rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  opacity: 0.8;
+}
+
+/* La ley pide que se vea y se identifique bien: va como botón, pero
+   integrado al pie en vez de ocupar una sección entera */
+.footer__arrepentimiento {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 1.25rem;
+  border-radius: 999px;
+  border: 2px solid var(--color-beige);
+  color: var(--color-light);
+  font-weight: 700;
+  font-size: 0.9rem;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover { background: var(--color-beige); color: var(--color-dark); }
+  }
+
+  &:active { transform: scale(0.97); }
+}
+
+.footer__base {
+  max-width: 1200px;
+  margin: 2.75rem auto 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(251, 228, 216, 0.15);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+
+  p {
+    margin: 0;
+    opacity: 0.65;
+  }
+}
+
+.footer__pixelmate {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+
+  strong { font-weight: 700; }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover { opacity: 1; }
+  }
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+  .footer__contenido {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer__marca,
+  .footer__compra {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    padding: 2.75rem 1.25rem 1rem;
+  }
+
+  .footer__contenido { gap: 2rem 1.25rem; }
+
+  .footer__base {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+}

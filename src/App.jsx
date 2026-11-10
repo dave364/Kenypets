@@ -10,6 +10,7 @@ import Cart from './components/Cart/Cart';
 import AuthModal from './components/Auth/AuthModal';
 import FavoritosModal from './components/Favoritos/FavoritosModal';
 import ProductoDetalle from './components/ProductoDetalle/ProductoDetalle';
+import Footer from './components/Footer/Footer';
 import Mantenimiento from './components/Mantenimiento/Mantenimiento';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
@@ -90,6 +91,7 @@ function App() {
               <Politicas />
             </>
           )}
+          <Footer />
           <Cart />
           <AuthModal />
           <FavoritosModal />

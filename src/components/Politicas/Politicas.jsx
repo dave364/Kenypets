@@ -1,18 +1,6 @@
 import React from "react";
 import "./Politicas.scss";
 
-const WHATSAPP_NUMBER = "5491122531821";
-
-// El boton de arrepentimiento es obligatorio para vender online en
-// Argentina (Resolucion 424/2020). No puede pedir registro previo,
-// asi que es un link directo a WhatsApp, visible para cualquiera.
-const linkArrepentimiento = () => {
-  const texto = encodeURIComponent(
-    "Hola Kenypets, quiero arrepentirme de una compra. Mi número de pedido es:"
-  );
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${texto}`;
-};
-
 const Politicas = () => (
   <section className="politicas" id="politic">
     <div className="politicas__header">
@@ -61,20 +49,9 @@ const Politicas = () => (
       </article>
     </div>
 
-    <div className="politicas__arrepentimiento">
-      <p>
-        ¿Querés cancelar una compra? Es tu derecho y no hace falta que expliques
-        nada.
-      </p>
-      <a
-        className="politicas__btn"
-        href={linkArrepentimiento()}
-        target="_blank"
-        rel="noreferrer"
-      >
-        Botón de arrepentimiento
-      </a>
-    </div>
+    <p className="politicas__nota">
+      ¿Querés cancelar una compra? Usá el <strong>Botón de arrepentimiento</strong> al pie de la página.
+    </p>
   </section>
 );
 

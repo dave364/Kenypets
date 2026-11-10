@@ -67,39 +67,14 @@
   }
 }
 
-/* El boton de arrepentimiento tiene que verse, no esconderse */
-.politicas__arrepentimiento {
+/* Aviso corto: el botón de arrepentimiento vive en el pie de la página */
+.politicas__nota {
   max-width: 1100px;
-  margin: 2rem auto 0;
-  padding: 1.5rem;
-  background: var(--color-beige);
-  border-radius: 18px;
+  margin: 1.75rem auto 0;
   text-align: center;
   font-family: sans-serif;
-
-  p {
-    margin: 0 0 1rem;
-    font-size: 0.9rem;
-    line-height: 1.55;
-    color: var(--color-dark);
-  }
-}
-
-.politicas__btn {
-  display: inline-block;
-  padding: 0.85rem 1.75rem;
-  border-radius: 999px;
-  background: var(--color-purple);
-  color: var(--color-light);
-  font-weight: 700;
-  font-size: 0.95rem;
-  text-decoration: none;
-  transition: background 0.2s ease, transform 0.2s ease;
-
-  &:hover {
-    background: var(--color-dark);
-    transform: translateY(-2px);
-  }
+  font-size: 0.9rem;
+  color: var(--color-dark);
 }
 
 @media (max-width: 600px) {
