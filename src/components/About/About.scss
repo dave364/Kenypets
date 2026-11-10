@@ -153,6 +153,7 @@
 
 /* Botón Instagram */
 .about__ig-btn {
+  min-height: 44px;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -282,8 +283,9 @@
     padding: 3rem 1.25rem;
   }
 
+  /* Una columna en el celular: en dos, el texto quedaba en renglones de 2-3 palabras */
   .about__values-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 
   .about__polaroid {
@@ -361,7 +363,8 @@
   &:hover { transform: translateY(-2px); opacity: 0.92; }
 }
 
-.about__contacto-btn--wsp { background: #25d366; }
+/* Verde WhatsApp más oscuro: con el #25d366 el texto blanco no se leía bien (contraste 2:1) */
+.about__contacto-btn--wsp { background: #0f7a3f; }
 
 .about__contacto-btn--ig {
   background: linear-gradient(45deg, #f09433, #dc2743, #bc1888);

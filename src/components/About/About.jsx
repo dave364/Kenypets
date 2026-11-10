@@ -118,8 +118,8 @@ const About = () => (
       <h2>Estamos a un mensaje</h2>
       <p>
         Escribinos para consultar stock, coordinar un pedido o pedir una
-        recomendacion para tu companiero. Te respondemos por donde te quede
-        mas comodo.
+        recomendación para tu compañero. Te respondemos por donde te quede
+        más cómodo.
       </p>
 
       <div className="about__contacto-botones">

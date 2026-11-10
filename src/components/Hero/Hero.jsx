@@ -61,7 +61,7 @@ const Hero = () => {
       <div className="promo__text">
         <span className="paw">&#128062;</span>
         <div>
-          <h3>Registrate en Kenypets y obtené un 20% de DESCUENTO en tu primer pedido!</h3>
+          <h3>¡Registrate en Kenypets y obtené un 20% de DESCUENTO en tu primer pedido!</h3>
           <p>Calidad, cuidado y felicidad para tu mascota.</p>
         </div>
       </div>
