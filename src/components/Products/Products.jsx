@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useCart } from "../../context/CartContext";
 import { useFavoritos } from "../../context/FavoritosContext";
 import { urlImagen } from "../../utils/imagen";
@@ -12,6 +12,33 @@ const WHATSAPP_NUMBER = "5491122531821";
 const API_URL = import.meta.env.VITE_API_URL || "https://kenypets-api.onrender.com";
 
 
+// Productos por página: 12 se reparte justo en 2, 3 o 4 columnas.
+const POR_PAGINA = 12;
+
+// Recordamos filtro, búsqueda y página mientras la pestaña está abierta: si
+// alguien entra a un producto y vuelve, sigue donde estaba.
+const CLAVE_VISTA = "kenypets:catalogo";
+const leerVista = () => {
+  try {
+    return JSON.parse(sessionStorage.getItem(CLAVE_VISTA)) || {};
+  } catch {
+    return {};
+  }
+};
+
+// Números a mostrar en el paginador: siempre la primera y la última, y las
+// vecinas de la actual. Los huecos van como "…" (1 … 4 5 6 … 7).
+const numerosDePagina = (actual, total) => {
+  const set = new Set([1, total, actual - 1, actual, actual + 1]);
+  const lista = [...set].filter((n) => n >= 1 && n <= total).sort((a, b) => a - b);
+  const conHuecos = [];
+  lista.forEach((n, i) => {
+    if (i > 0 && n - lista[i - 1] > 1) conHuecos.push(`hueco-${n}`);
+    conHuecos.push(n);
+  });
+  return conHuecos;
+};
+
 const sinAcentos = (t = "") =>
   t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
 
@@ -21,8 +48,11 @@ const Products = () => {
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
-  const [activeFilter, setActiveFilter] = useState("Todos");
-  const [busqueda, setBusqueda] = useState("");
+  const vistaGuardada = useRef(leerVista()).current;
+  const [activeFilter, setActiveFilter] = useState(vistaGuardada.filtro || "Todos");
+  const [busqueda, setBusqueda] = useState(vistaGuardada.busqueda || "");
+  const [pagina, setPagina] = useState(vistaGuardada.pagina || 1);
+  const gridRef = useRef(null);
   // Productos con la descripcion desplegada ("Ver mas")
   const [abiertas, setAbiertas] = useState(() => new Set());
 
@@ -90,6 +120,40 @@ const Products = () => {
       })
     : porCategoria;
 
+  // Paginación: si cambia el filtro o la búsqueda, la página se ajusta sola
+  // (nunca queda en una página que ya no existe).
+  const totalPaginas = Math.max(1, Math.ceil(filtrados.length / POR_PAGINA));
+  const paginaActual = Math.min(pagina, totalPaginas);
+  const desde = (paginaActual - 1) * POR_PAGINA;
+  const visibles = filtrados.slice(desde, desde + POR_PAGINA);
+
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(
+        CLAVE_VISTA,
+        JSON.stringify({ filtro: activeFilter, busqueda, pagina: paginaActual })
+      );
+    } catch {
+      // Sin sessionStorage (modo privado): simplemente no se recuerda
+    }
+  }, [activeFilter, busqueda, paginaActual]);
+
+  const irAPagina = (n) => {
+    setPagina(n);
+    // Al cambiar de página, volvemos al principio del catálogo
+    gridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const cambiarFiltro = (cat) => {
+    setActiveFilter(cat);
+    setPagina(1);
+  };
+
+  const cambiarBusqueda = (texto) => {
+    setBusqueda(texto);
+    setPagina(1);
+  };
+
   const iconoCategoria = (cat) => {
     if (cat === "Todos") return "🐾 ";
     if (cat === "Accesorios") return "🎀 ";
@@ -150,7 +214,7 @@ const Products = () => {
             <input
               type="search"
               value={busqueda}
-              onChange={(e) => setBusqueda(e.target.value)}
+              onChange={(e) => cambiarBusqueda(e.target.value)}
               placeholder="Buscar productos..."
               aria-label="Buscar productos"
               enterKeyHint="search"
@@ -159,8 +223,8 @@ const Products = () => {
               <button
                 type="button"
                 className="products__buscador-limpiar"
-                onClick={() => setBusqueda("")}
-                aria-label="Borrar busqueda"
+                onClick={() => cambiarBusqueda("")}
+                aria-label="Borrar búsqueda"
               >
                 ✕
               </button>
@@ -173,7 +237,7 @@ const Products = () => {
               <button
                 key={cat}
                 className={`products__filter-btn ${activeFilter === cat ? "active" : ""}`}
-                onClick={() => setActiveFilter(cat)}
+                onClick={() => cambiarFiltro(cat)}
               >
                 {iconoCategoria(cat)}
                 {cat}
@@ -193,8 +257,8 @@ const Products = () => {
               <button
                 className="products__filter-btn"
                 onClick={() => {
-                  setBusqueda("");
-                  setActiveFilter("Todos");
+                  cambiarBusqueda("");
+                  cambiarFiltro("Todos");
                 }}
               >
                 Ver todos los productos
@@ -203,8 +267,8 @@ const Products = () => {
           )}
 
           {/* GRID */}
-          <div className="products__grid">
-            {filtrados.map((producto) => {
+          <div className="products__grid" ref={gridRef}>
+            {visibles.map((producto) => {
               const sinStock = producto.stock <= 0;
               const desc = producto.descripcion || "";
               const descLarga = desc.length > 110 || desc.includes("\n");
@@ -310,6 +374,51 @@ const Products = () => {
               );
             })}
           </div>
+
+          {/* PAGINADOR */}
+          {totalPaginas > 1 && (
+            <nav className="products__paginador" aria-label="Páginas del catálogo">
+              <p className="products__paginador-info">
+                Mostrando {desde + 1}–{desde + visibles.length} de {filtrados.length} productos
+              </p>
+              <div className="products__paginador-botones">
+                <button
+                  type="button"
+                  className="products__pagina products__pagina--flecha"
+                  onClick={() => irAPagina(paginaActual - 1)}
+                  disabled={paginaActual === 1}
+                  aria-label="Página anterior"
+                >
+                  ‹ <span className="products__pagina-texto">Anterior</span>
+                </button>
+                {numerosDePagina(paginaActual, totalPaginas).map((n) =>
+                  typeof n === "string" ? (
+                    <span key={n} className="products__pagina-hueco" aria-hidden="true">…</span>
+                  ) : (
+                    <button
+                      key={n}
+                      type="button"
+                      className={`products__pagina ${n === paginaActual ? "activa" : ""}`}
+                      onClick={() => irAPagina(n)}
+                      aria-label={`Página ${n}`}
+                      aria-current={n === paginaActual ? "page" : undefined}
+                    >
+                      {n}
+                    </button>
+                  )
+                )}
+                <button
+                  type="button"
+                  className="products__pagina products__pagina--flecha"
+                  onClick={() => irAPagina(paginaActual + 1)}
+                  disabled={paginaActual === totalPaginas}
+                  aria-label="Página siguiente"
+                >
+                  <span className="products__pagina-texto">Siguiente</span> ›
+                </button>
+              </div>
+            </nav>
+          )}
         </>
       )}
     </section>
