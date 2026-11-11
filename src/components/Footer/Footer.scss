@@ -147,7 +147,9 @@
   opacity: 0.6;
 }
 
-.footer__firma {
+/* Va anidado en .footer para ganarle en especificidad a `.footer a`,
+   que si no pisa el color con `inherit`. */
+.footer .footer__firma {
   display: block;
   font-family: var(--brand-font);
   font-weight: 800;
