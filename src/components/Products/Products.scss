@@ -3,7 +3,8 @@
    ============================================= */
 
 .products {
-  padding: 5rem 2rem;
+  padding-block: 5rem;
+  padding-inline: max(2rem, calc((100% - var(--ancho-max)) / 2));
   background-color: var(--color-light);
   margin-top: 3rem;
 }
@@ -141,7 +142,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1.75rem;
-  max-width: 1200px;
+  max-width: var(--ancho-max);
   margin: 0 auto;
 }
 

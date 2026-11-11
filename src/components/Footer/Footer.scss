@@ -6,7 +6,8 @@
   background: var(--color-dark);
   color: var(--color-light);
   font-family: sans-serif;
-  padding: 3.5rem 2rem 1.5rem;
+  padding-block: 3.5rem 1.5rem;
+  padding-inline: max(2rem, calc((100% - var(--ancho-max)) / 2));
 
   a {
     color: inherit;

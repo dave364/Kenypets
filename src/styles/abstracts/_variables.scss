@@ -19,6 +19,11 @@
   --text-dark: var(--color-darkest);
   --cta-accent: var(--color-pink);
 
+  /* Ancho maximo del contenido. El fondo de cada seccion sigue ocupando
+     toda la pantalla, pero el contenido no se estira mas alla de esto en
+     monitores grandes. Debajo de este ancho no cambia nada. */
+  --ancho-max: 1500px;
+
   /* Tipografia: la misma letra del logo (Sniglet).
      Gruesa (800) para titulos, fina (400) para menu y botones,
      y la letra comun para los textos largos. */

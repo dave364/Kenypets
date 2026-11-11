@@ -12,7 +12,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  /* El fondo claro ocupa toda la pantalla, pero el menu queda alineado
+     con el resto del contenido en monitores grandes. */
+  padding-block: 1rem;
+  padding-inline: max(2rem, calc((100% - var(--ancho-max)) / 2));
   background-color: var(--color-light);
 
   position: fixed;
@@ -48,7 +51,10 @@
 
 .navbar__links {
   display: flex;
-  gap: 1.5rem;
+  /* Compacto: al limitar el contenido a --ancho-max el menu tiene menos
+     lugar, y asi no se acerca al logo centrado. */
+  gap: 1.1rem;
+  font-size: 0.92rem;
 }
 
 .navbar__links a,
@@ -64,15 +70,9 @@
   color: var(--brand-secondary);
 }
 
-/* Pantallas medianas (notebooks): el logo va centrado y en position
-   absolute, asi que achicamos el menu para que no se meta abajo del logo.
+/* El menu compacto ahora es el de siempre (ver .navbar__links), asi que
+   ya no hace falta un breakpoint aparte para notebooks.
    Por debajo de 1200px pasa al menu hamburguesa. */
-@media (max-width: 1320px) {
-  .navbar__links {
-    gap: 1.1rem;
-    font-size: 0.92rem;
-  }
-}
 
 /* Hamburguesa */
 .navbar__toggle {

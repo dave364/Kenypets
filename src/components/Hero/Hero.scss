@@ -13,7 +13,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 4rem 8rem 6rem;
+  /* El degradado ocupa toda la pantalla; el texto y la foto quedan
+     alineados con el resto del contenido en monitores grandes. */
+  padding-block: 4rem 6rem;
+  padding-inline: max(8rem, calc((100% - var(--ancho-max)) / 2));
   background: linear-gradient(
     135deg,
     var(--brand-primary) 0 40%,
@@ -167,7 +170,7 @@
 /* PROMO */
 .promo {
   position: relative;
-  max-width: 85%;
+  max-width: min(85%, var(--ancho-max));
   margin: -3rem auto 0;
   background: var(--cta-bg);
   color: var(--cta-text);
