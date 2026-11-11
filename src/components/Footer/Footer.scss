@@ -1,13 +1,16 @@
 /* =============================================
    FOOTER
+   Los links van en una tira fina y el nombre cierra el sitio
+   como una firma, recortado por el borde de abajo.
    ============================================= */
 
 .footer {
-  background: var(--color-dark);
+  background: var(--color-darkest);
   color: var(--color-light);
   font-family: sans-serif;
-  padding-block: 3.5rem 1.5rem;
+  padding-block: 2.5rem 0;
   padding-inline: max(2rem, calc((100% - var(--ancho-max)) / 2));
+  overflow: hidden;
 
   a {
     color: inherit;
@@ -15,82 +18,72 @@
   }
 }
 
-.footer__contenido {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr 1.3fr;
-  gap: 2.5rem;
-}
-
-.footer__marca {
-  p {
-    margin: 1rem 0 0;
-    max-width: 280px;
-    font-size: 0.9rem;
-    line-height: 1.6;
-    opacity: 0.8;
-  }
-}
-
-.footer__logo {
-  display: inline-flex;
+/* --- TIRA DE LINKS --- */
+.footer__tira {
+  display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(251, 228, 216, 0.14);
 
-  img {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: var(--color-light);
-    object-fit: contain;
-    padding: 4px;
+  nav {
+    display: flex;
+    gap: 1.4rem;
+    flex-wrap: wrap;
   }
 
-  span {
-    font-family: var(--brand-font);
-    font-size: 1.6rem;
-  }
-}
-
-.footer__columna {
-  h2 {
-    margin: 0 0 0.9rem;
-    font-size: 0.75rem;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--color-beige);
-  }
-
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  li a {
+  a {
     display: inline-flex;
     align-items: center;
-    min-height: 40px;
-    font-size: 0.95rem;
+    min-height: 44px;
+    font-size: 0.9rem;
     opacity: 0.85;
     transition: opacity 0.2s ease;
 
     @media (hover: hover) and (pointer: fine) {
-      &:hover { opacity: 1; text-decoration: underline; text-underline-offset: 3px; }
+      &:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
     }
   }
 }
 
-.footer__compra p {
-  margin: 0 0 0.9rem;
-  font-size: 0.88rem;
-  line-height: 1.55;
-  opacity: 0.8;
+.footer__redes {
+  margin-left: auto;
+  display: flex;
+  gap: 1.1rem;
+  flex-wrap: wrap;
+
+  a { gap: 0.4rem; }
 }
 
-/* La ley pide que se vea y se identifique bien: va como botón, pero
-   integrado al pie en vez de ocupar una sección entera */
+/* --- BARRA DEL DERECHO DE ARREPENTIMIENTO --- */
+.footer__barra {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  padding: 1.35rem 0;
+
+  p {
+    margin: 0;
+    font-size: 0.89rem;
+    line-height: 1.55;
+    opacity: 0.82;
+    max-width: 52ch;
+  }
+
+  strong {
+    display: block;
+    font-family: var(--brand-font);
+    font-weight: 800;
+    font-size: 1rem;
+    opacity: 1;
+    margin-bottom: 0.15rem;
+  }
+}
+
+/* La ley pide que se vea y se identifique bien. */
 .footer__arrepentimiento {
   display: inline-flex;
   align-items: center;
@@ -98,23 +91,21 @@
   padding: 0 1.25rem;
   border-radius: 999px;
   border: 2px solid var(--color-beige);
-  color: var(--color-light);
+  color: var(--color-beige);
   font-weight: 700;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
+  flex: none;
   transition: background 0.2s ease, color 0.2s ease;
 
   @media (hover: hover) and (pointer: fine) {
-    &:hover { background: var(--color-beige); color: var(--color-dark); }
+    &:hover { background: var(--color-beige); color: var(--color-darkest); }
   }
 
   &:active { transform: scale(0.97); }
 }
 
-.footer__base {
-  max-width: 1200px;
-  margin: 2.75rem auto 0;
-  padding-top: 1.25rem;
-  border-top: 1px solid rgba(251, 228, 216, 0.15);
+/* --- COPYRIGHT Y FIRMA DE PIXELMATE --- */
+.footer__pie {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -143,28 +134,57 @@
   }
 }
 
-/* --- RESPONSIVE --- */
-@media (max-width: 900px) {
-  .footer__contenido {
-    grid-template-columns: 1fr 1fr;
-  }
+/* --- CIERRE: LEMA Y NOMBRE GRANDE --- */
+.footer__cierre {
+  text-align: center;
+}
 
-  .footer__marca,
-  .footer__compra {
-    grid-column: 1 / -1;
+.footer__lema {
+  margin: 1.5rem auto 0;
+  max-width: 46ch;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  opacity: 0.6;
+}
+
+.footer__firma {
+  display: block;
+  font-family: var(--brand-font);
+  font-weight: 800;
+  /* Se recorta contra el borde de abajo: el margen negativo esconde
+     la parte de la letra que queda por debajo de la linea de base. */
+  font-size: clamp(3.5rem, 15vw, 11rem);
+  line-height: 0.78;
+  letter-spacing: -0.03em;
+  color: var(--color-purple);
+  margin: 0.5rem 0 -0.16em;
+  user-select: none;
+  transition: color 0.25s ease;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover { color: var(--color-pink); }
   }
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 760px) {
+  .footer__redes { margin-left: 0; }
 }
 
 @media (max-width: 480px) {
   .footer {
-    padding: 2.75rem 1.25rem 1rem;
+    padding-inline: 1.25rem;
   }
 
-  .footer__contenido { gap: 2rem 1.25rem; }
-
-  .footer__base {
+  .footer__pie {
     flex-direction: column;
     align-items: flex-start;
     gap: 0;
   }
+
+  .footer__lema { margin-top: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer * { transition: none; }
 }
