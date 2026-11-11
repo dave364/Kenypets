@@ -153,13 +153,13 @@
   display: block;
   font-family: var(--brand-font);
   font-weight: 800;
-  /* Se recorta contra el borde de abajo: el margen negativo esconde
-     la parte de la letra que queda por debajo de la linea de base. */
+  /* Apoyado contra el borde de abajo: se cortan solo las colas de la
+     "y" y la "p", lo justo para que se lea como firma y no como titulo. */
   font-size: clamp(3.5rem, 15vw, 11rem);
-  line-height: 0.78;
+  line-height: 0.92;
   letter-spacing: -0.03em;
   color: var(--color-purple);
-  margin: 0.5rem 0 -0.16em;
+  margin: 0.5rem 0 -0.06em;
   user-select: none;
   transition: color 0.25s ease;
 
