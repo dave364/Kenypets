@@ -12,10 +12,16 @@ const WHATSAPP_NUMBER = "5491122531821";
 const API_URL = import.meta.env.VITE_API_URL || "https://kenypets-api.onrender.com";
 
 
-// Productos por página. En vez de un número fijo, pedimos las filas enteras
-// que hagan falta para acercarnos a este objetivo: así la última fila nunca
-// queda a medias, entren 2 productos por fila o 5.
-const OBJETIVO_POR_PAGINA = 15;
+// Productos por página. En vez de un número fijo pedimos filas enteras, así
+// la última nunca queda a medias entren 2 productos por fila o 5.
+//
+// Apuntamos a 12 productos, pero nunca menos de 3 filas. Eso deja 15 en
+// monitores grandes (5 x 3) y 12 en el resto, con un scroll parejo: entre
+// 1,5 y 2,4 pantallas. Sin el mínimo de filas, el celular terminaba con 16
+// productos y 3,2 pantallas de scroll, porque ahí la tarjeta es alta y
+// entran apenas 2 por pantalla.
+const OBJETIVO_POR_PAGINA = 12;
+const FILAS_MINIMAS = 3;
 
 // Cuántas columnas armó el grid ahora mismo, leídas del CSS ya aplicado.
 // No repetimos los breakpoints acá: si mañana cambia el SCSS, esto lo sigue.
@@ -149,7 +155,10 @@ const Products = () => {
     const medir = () => {
       const columnas = contarColumnas(grid);
       if (!columnas) return;
-      const filas = Math.max(2, Math.round(OBJETIVO_POR_PAGINA / columnas));
+      const filas = Math.max(
+        FILAS_MINIMAS,
+        Math.round(OBJETIVO_POR_PAGINA / columnas)
+      );
       setPorPagina(columnas * filas);
     };
 
