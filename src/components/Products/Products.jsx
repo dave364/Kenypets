@@ -12,8 +12,18 @@ const WHATSAPP_NUMBER = "5491122531821";
 const API_URL = import.meta.env.VITE_API_URL || "https://kenypets-api.onrender.com";
 
 
-// Productos por página: 12 se reparte justo en 2, 3 o 4 columnas.
-const POR_PAGINA = 12;
+// Productos por página. En vez de un número fijo, pedimos las filas enteras
+// que hagan falta para acercarnos a este objetivo: así la última fila nunca
+// queda a medias, entren 2 productos por fila o 5.
+const OBJETIVO_POR_PAGINA = 15;
+
+// Cuántas columnas armó el grid ahora mismo, leídas del CSS ya aplicado.
+// No repetimos los breakpoints acá: si mañana cambia el SCSS, esto lo sigue.
+const contarColumnas = (grid) => {
+  const columnas = getComputedStyle(grid).gridTemplateColumns;
+  if (!columnas || columnas === "none") return 0;
+  return columnas.split(" ").filter(Boolean).length;
+};
 
 // Recordamos filtro, búsqueda y página mientras la pestaña está abierta: si
 // alguien entra a un producto y vuelve, sigue donde estaba.
@@ -53,6 +63,7 @@ const Products = () => {
   const [busqueda, setBusqueda] = useState(vistaGuardada.busqueda || "");
   const [pagina, setPagina] = useState(vistaGuardada.pagina || 1);
   const gridRef = useRef(null);
+  const [porPagina, setPorPagina] = useState(OBJETIVO_POR_PAGINA);
   // Productos con la descripcion desplegada ("Ver mas")
   const [abiertas, setAbiertas] = useState(() => new Set());
 
@@ -122,10 +133,31 @@ const Products = () => {
 
   // Paginación: si cambia el filtro o la búsqueda, la página se ajusta sola
   // (nunca queda en una página que ya no existe).
-  const totalPaginas = Math.max(1, Math.ceil(filtrados.length / POR_PAGINA));
+  const totalPaginas = Math.max(1, Math.ceil(filtrados.length / porPagina));
   const paginaActual = Math.min(pagina, totalPaginas);
-  const desde = (paginaActual - 1) * POR_PAGINA;
-  const visibles = filtrados.slice(desde, desde + POR_PAGINA);
+  const desde = (paginaActual - 1) * porPagina;
+  const visibles = filtrados.slice(desde, desde + porPagina);
+
+  // Ajusta los productos por página a las columnas que entran en pantalla,
+  // para que no quede una fila incompleta. Se recalcula al redimensionar
+  // la ventana o al rotar el celular.
+  useEffect(() => {
+    if (cargando || error) return;
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    const medir = () => {
+      const columnas = contarColumnas(grid);
+      if (!columnas) return;
+      const filas = Math.max(2, Math.round(OBJETIVO_POR_PAGINA / columnas));
+      setPorPagina(columnas * filas);
+    };
+
+    medir();
+    const observador = new ResizeObserver(medir);
+    observador.observe(grid);
+    return () => observador.disconnect();
+  }, [cargando, error]);
 
   useEffect(() => {
     try {
