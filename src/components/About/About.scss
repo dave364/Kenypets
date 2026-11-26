@@ -1,3 +1,5 @@
+@use "../../styles/abstracts/mixins" as *;
+
 /* =============================================
    ABOUT SECTION
    ============================================= */
@@ -65,9 +67,11 @@
     }
   }
 
-  &:hover {
+  @include puntero-fino {
+    &:hover {
     transform: scale(1.05) rotate(0deg) !important;
     z-index: 2;
+    }
   }
 
   &--left {
@@ -168,9 +172,11 @@
   text-decoration: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
 
-  &:hover {
+  @include puntero-fino {
+    &:hover {
     opacity: 0.88;
     transform: translateY(-2px);
+    }
   }
 }
 
@@ -249,10 +255,12 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1.5px solid transparent;
 
-  &:hover {
+  @include puntero-fino {
+    &:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 28px rgba(82, 43, 91, 0.12);
     border-color: var(--color-beige);
+    }
   }
 }
 
@@ -360,7 +368,9 @@
   color: #fff;
   transition: transform 0.2s ease, opacity 0.2s ease;
 
-  &:hover { transform: translateY(-2px); opacity: 0.92; }
+  @include puntero-fino {
+    &:hover { transform: translateY(-2px); opacity: 0.92; }
+  }
 }
 
 /* Verde WhatsApp más oscuro: con el #25d366 el texto blanco no se leía bien (contraste 2:1) */

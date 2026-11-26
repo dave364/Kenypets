@@ -1,3 +1,5 @@
+@use "../../styles/abstracts/mixins" as *;
+
 /* =============================================
    CARTEL DE MANTENIMIENTO
    ============================================= */
@@ -77,14 +79,18 @@
   background: #25d366;
   color: #fff;
 
-  &:hover { background: #1ebe5a; }
+  @include puntero-fino {
+    &:hover { background: #1ebe5a; }
+  }
 }
 
 .mantenimiento__btn--borde {
   border-color: var(--color-purple);
   color: var(--color-purple);
 
-  &:hover { background: var(--color-light); }
+  @include puntero-fino {
+    &:hover { background: var(--color-light); }
+  }
 }
 
 .mantenimiento__reintentar {

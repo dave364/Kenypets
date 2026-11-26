@@ -1,3 +1,5 @@
+@use "../../styles/abstracts/mixins" as *;
+
 /* =============================================
    PRODUCTS SECTION
    ============================================= */
@@ -119,11 +121,13 @@
   transition: all 0.25s ease;
   letter-spacing: 0.5px;
 
-  &:hover {
+  @include puntero-fino {
+    &:hover {
     background: var(--color-beige);
     border-color: var(--brand-secondary);
     color: var(--color-dark);
     transform: translateY(-2px);
+    }
   }
 
   &.active {
@@ -159,10 +163,12 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1.5px solid transparent;
 
-  &:hover {
+  @include puntero-fino {
+    &:hover {
     transform: translateY(-6px);
     box-shadow: 0 12px 30px rgba(82, 43, 91, 0.15);
     border-color: var(--color-beige);
+    }
   }
 }
 
@@ -197,9 +203,11 @@
          transition: transform 0.3s ease;
 }
 
-  .product-card:hover .product-card__image {
-         transform: scale(1.05);
-}
+  @include puntero-fino {
+    .product-card:hover .product-card__image {
+    transform: scale(1.05);
+    }
+  }
 
   .product-card__emoji {
          font-size: 3rem;
@@ -237,7 +245,9 @@
     color: inherit;
     text-decoration: none;
 
-    &:hover { text-decoration: underline; }
+    @include puntero-fino {
+      &:hover { text-decoration: underline; }
+    }
   }
 }
 
@@ -311,9 +321,11 @@ a.product-card__image-wrap {
   transition: background 0.2s ease, transform 0.2s ease;
   white-space: nowrap;
 
-  &:hover {
+  @include puntero-fino {
+    &:hover {
     background: #1ebe5a;
     transform: scale(1.05);
+    }
   }
 
   svg {
@@ -386,7 +398,9 @@ a.product-card__image-wrap {
     border-radius: 16px;
 
     /* En pantallas táctiles el "levantar" queda trabado después del toque */
-    &:hover { transform: none; }
+    @include puntero-fino {
+      &:hover { transform: none; }
+    }
   }
 
   .product-card__image-wrap { border-radius: 0.6rem; }
@@ -476,14 +490,18 @@ a.product-card__image-wrap {
   cursor: pointer;
   transition: background 0.2s ease, transform 0.2s ease;
 
-  &:hover { background: #1ebe5a; transform: scale(1.06); }
+  @include puntero-fino {
+    &:hover { background: #1ebe5a; transform: scale(1.06); }
+  }
 }
 
 /* El boton de agregar reemplaza al de WhatsApp como accion principal */
 .product-card__btn {
   background: var(--color-purple);
 
-  &:hover:not(:disabled) { background: var(--color-dark); }
+  @include puntero-fino {
+    &:hover:not(:disabled) { background: var(--color-dark); }
+  }
 }
 
 
@@ -507,7 +525,9 @@ a.product-card__image-wrap {
   box-shadow: 0 2px 8px rgba(82, 43, 91, 0.18);
   transition: transform 0.18s ease, background 0.18s ease;
 
-  &:hover { transform: scale(1.12); background: #fff; }
+  @include puntero-fino {
+    &:hover { transform: scale(1.12); background: #fff; }
+  }
   &:active { transform: scale(0.94); }
 }
 

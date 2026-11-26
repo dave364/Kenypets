@@ -1,3 +1,5 @@
+@use "../../styles/abstracts/mixins" as *;
+
 /* =============================================
    PAGINA DE UN PRODUCTO (/p/9-nombre)
    ============================================= */
@@ -35,7 +37,9 @@
   color: var(--color-purple);
   text-decoration: none;
 
-  &:hover { text-decoration: underline; }
+  @include puntero-fino {
+    &:hover { text-decoration: underline; }
+  }
 }
 
 .detalle__grid {
@@ -239,14 +243,18 @@
   background: var(--color-purple);
   color: var(--color-light);
 
-  &:hover { background: var(--color-dark); }
+  @include puntero-fino {
+    &:hover { background: var(--color-dark); }
+  }
 }
 
 .detalle__btn--wsp {
   background: #25d366;
   color: #fff;
 
-  &:hover { background: #1ebe5a; }
+  @include puntero-fino {
+    &:hover { background: #1ebe5a; }
+  }
 }
 
 .detalle__btn--borde {
@@ -254,7 +262,9 @@
   border-color: var(--color-purple);
   color: var(--color-purple);
 
-  &:hover { background: var(--color-beige); }
+  @include puntero-fino {
+    &:hover { background: var(--color-beige); }
+  }
 }
 
 .detalle__btn-icono {
@@ -313,5 +323,7 @@
 
   // Las flechas solo se ven al pasar el mouse por la foto
   .galeria__flecha { opacity: 0; transition: opacity 0.2s ease; }
-  .detalle__foto:hover .galeria__flecha { opacity: 1; }
+  @include puntero-fino {
+    .detalle__foto:hover .galeria__flecha { opacity: 1; }
+  }
 }

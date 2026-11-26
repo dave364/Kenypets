@@ -1,3 +1,5 @@
+@use "../../styles/abstracts/mixins" as *;
+
 /* ============================= */
 /* NAVBAR VARIABLES */
 /* ============================= */
@@ -66,8 +68,10 @@
   white-space: nowrap;
 }
 
-.navbar__links a:hover {
+@include puntero-fino {
+  .navbar__links a:hover {
   color: var(--brand-secondary);
+  }
 }
 
 /* El menu compacto ahora es el de siempre (ver .navbar__links), asi que
@@ -162,8 +166,10 @@
   pointer-events: auto;
 }
 
-  .navbar__close:hover {
+  @include puntero-fino {
+    .navbar__close:hover {
     transform: rotate(90deg);
+    }
   }
 
   /* ============================= */
@@ -221,9 +227,11 @@
     border-top: 1px solid rgba(0,0,0,0.15);
   }
 
-  .navbar__sidebar-content a:hover {
+  @include puntero-fino {
+    .navbar__sidebar-content a:hover {
     color: var(--brand-secondary);
     background: rgba(0,0,0,0.03);
+    }
   }
 
 

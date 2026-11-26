@@ -1,0 +1,28 @@
+/* =============================================
+   MIXINS
+   ============================================= */
+
+/* Envuelve estilos que solo tienen sentido con un mouse de verdad.
+
+   En una pantalla táctil no existe el "pasar por encima", así que el
+   navegador lo simula: al tocar algo le aplica :hover y se lo deja puesto
+   hasta que tocás otra cosa. Por eso un botón queda iluminado o levantado
+   después de apretarlo, como si siguiera marcado.
+
+   (hover: hover) = el dispositivo puede hacer hover de verdad.
+   (pointer: fine) = apunta con precisión, o sea un mouse y no un dedo.
+
+   Uso:
+     .boton {
+       @include puntero-fino {
+         &:hover { background: ...; }
+       }
+     }
+
+   Para el feedback al tocar en el celular se usa :active, que sí
+   funciona en pantallas táctiles y se suelta solo. */
+@mixin puntero-fino {
+  @media (hover: hover) and (pointer: fine) {
+    @content;
+  }
+}

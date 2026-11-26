@@ -1,3 +1,5 @@
+@use "../../styles/abstracts/mixins" as *;
+
 /* =============================================
    VENTANA DE FAVORITOS
    ============================================= */
@@ -145,7 +147,9 @@
   background: var(--color-purple);
   color: var(--color-light);
 
-  &:hover { background: var(--color-dark); border-color: var(--color-dark); }
+  @include puntero-fino {
+    &:hover { background: var(--color-dark); border-color: var(--color-dark); }
+  }
 }
 
 .fav-btn--whatsapp {
@@ -153,14 +157,18 @@
   border-color: #25d366;
   color: #fff;
 
-  &:hover { background: #1ebe5a; border-color: #1ebe5a; }
+  @include puntero-fino {
+    &:hover { background: #1ebe5a; border-color: #1ebe5a; }
+  }
 }
 
 .fav-btn--quitar {
   border-color: #c0392b;
   color: #c0392b;
 
-  &:hover { background: #fdecea; }
+  @include puntero-fino {
+    &:hover { background: #fdecea; }
+  }
 }
 
 /* --- ESCRITORIO: ventana centrada --- */

@@ -1,3 +1,5 @@
+@use "../../styles/abstracts/mixins" as *;
+
 
 
 .hero {
@@ -87,7 +89,9 @@
   text-decoration: none;
   transition: transform 0.2s, background 0.3s, color 0.3s;
 
-  &:hover { transform: translateY(-2px); }
+  @include puntero-fino {
+    &:hover { transform: translateY(-2px); }
+  }
 }
 
 .btn--primary {
@@ -96,7 +100,9 @@
   font-weight: 800;
   box-shadow: 0 8px 20px rgba(25, 0, 25, 0.25);
 
-  &:hover { background: #fff; }
+  @include puntero-fino {
+    &:hover { background: #fff; }
+  }
 }
 
 .btn--wsp {
@@ -104,10 +110,12 @@
   color: var(--color-light);
   font-weight: 400;
 
-  &:hover {
+  @include puntero-fino {
+    &:hover {
     background: #25d366;
     border-color: #25d366;
     color: #fff;
+    }
   }
 }
 
@@ -214,8 +222,10 @@
   cursor: pointer;
 }
 
-.promo__btn:hover {
+@include puntero-fino {
+  .promo__btn:hover {
   transform: scale(1.05);
+  }
 }
 
 /* RESPONSIVE */

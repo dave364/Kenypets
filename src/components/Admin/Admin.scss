@@ -1,3 +1,5 @@
+@use "../../styles/abstracts/mixins" as *;
+
 /* =============================================
    PANEL DE ADMINISTRACION
    ============================================= */
@@ -56,7 +58,9 @@
   color: var(--color-purple);
   text-decoration: none;
 
-  &:hover { text-decoration: underline; }
+  @include puntero-fino {
+    &:hover { text-decoration: underline; }
+  }
 }
 
 /* --- HEADER --- */
@@ -157,7 +161,9 @@
   text-decoration: none;
   display: inline-block;
 
-  &:hover:not(:disabled) { background: var(--color-beige); }
+  @include puntero-fino {
+    &:hover:not(:disabled) { background: var(--color-beige); }
+  }
   &:disabled { opacity: 0.45; cursor: not-allowed; }
 }
 
@@ -165,9 +171,11 @@
   background: var(--color-purple);
   color: var(--color-light);
 
-  &:hover:not(:disabled) {
+  @include puntero-fino {
+    &:hover:not(:disabled) {
     background: var(--color-dark);
     border-color: var(--color-dark);
+    }
   }
 }
 
@@ -178,7 +186,9 @@
 
 .admin__header .admin__btn--ghost {
   color: var(--color-light);
-  &:hover { background: rgba(255, 255, 255, 0.15); }
+  @include puntero-fino {
+    &:hover { background: rgba(255, 255, 255, 0.15); }
+  }
 }
 
 .admin__btn--mini {
@@ -196,7 +206,9 @@
   border-color: #c0392b;
   color: #c0392b;
 
-  &:hover:not(:disabled) { background: #fdecea; }
+  @include puntero-fino {
+    &:hover:not(:disabled) { background: #fdecea; }
+  }
 }
 
 /* --- TABLA --- */
@@ -559,7 +571,9 @@
   gap: 1rem;
   flex-wrap: wrap;
 
-  &:hover { background: #fdf8f6; }
+  @include puntero-fino {
+    &:hover { background: #fdf8f6; }
+  }
 }
 
 .admin__pedido-fecha {
@@ -659,7 +673,9 @@
   text-decoration: none;
   white-space: nowrap;
 
-  &:hover { text-decoration: underline; }
+  @include puntero-fino {
+    &:hover { text-decoration: underline; }
+  }
 }
 
 .admin__cliente-pend {
@@ -839,9 +855,11 @@
     transition: opacity 0.15s ease;
   }
 
-  &:hover span,
-  &.activa span,
-  &:focus-visible span { opacity: 1; background: var(--color-dark); }
+  @include puntero-fino {
+    &:hover span,
+    &.activa span,
+    &:focus-visible span { opacity: 1; background: var(--color-dark); }
+  }
 
   &:focus-visible { outline: 2px solid var(--brand-secondary); outline-offset: 1px; }
 }
