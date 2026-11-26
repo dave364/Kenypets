@@ -174,7 +174,10 @@
     top: var(--navbar-height);
     right: -100%;
     width: 100%;
+    /* dvh sigue a la barra del navegador mientras aparece y desaparece,
+       así el menú no queda cortado abajo. */
     height: calc(100vh - var(--navbar-height));
+    height: calc(100dvh - var(--navbar-height));
     background: var(--color-light);
     display: flex;
     justify-content: flex-start;

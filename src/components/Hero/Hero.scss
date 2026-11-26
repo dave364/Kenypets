@@ -9,7 +9,11 @@
 .hero__content {
   /* Ocupa la pantalla, pero en monitores muy altos no se estira mas de
      820px: si no, quedaba un hueco grande antes del cartel del 20% */
+  /* svh = la pantalla con la barra del navegador visible. Es la medida
+     estable: con 100vh el hero se pasaba de largo al cargar, porque vh
+     mide la pantalla sin la barra. */
   min-height: min(calc(100vh - 110px), 820px);
+  min-height: min(calc(100svh - 110px), 820px);
   display: flex;
   align-items: center;
   justify-content: space-between;

@@ -103,6 +103,9 @@
 .cart-panel__cuerpo {
   padding: 1rem 1.25rem;
   overflow-y: auto;
+  /* Al llegar al final de la lista, el scroll se queda acá en vez de
+     empezar a mover la página de atrás. */
+  overscroll-behavior: contain;
   flex: 1;
 }
 
@@ -347,6 +350,7 @@
   .cart-panel {
     width: 420px;
     max-height: 100vh;
+    max-height: 100dvh;
     height: 100%;
     border-radius: 0;
     animation: cart-entrar 0.25s ease;

@@ -17,4 +17,46 @@ h1, h2, h3 {
 
 html {
   scroll-behavior: smooth;
+
+  /* Sin esto, al tocar cualquier botón el celular pinta un recuadro gris
+     encima. Es lo que más delata que es una web y no una app. */
+  -webkit-tap-highlight-color: transparent;
+
+  /* Que iOS no agrande la letra solo al girar el teléfono. */
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Evita que al llegar al final de un panel con scroll (el carrito, el menú)
+   se arrastre la página de atrás, y saca el "tirar para recargar". */
+html,
+body {
+  overscroll-behavior: none;
+}
+
+/* `manipulation` saca los ~300 ms que el navegador espera para ver si venía
+   un doble toque para hacer zoom: el botón responde apenas lo tocás.
+   `user-select` evita que al dejar el dedo apoyado se seleccione el texto
+   del botón, como pasaría con un párrafo. */
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+button,
+[role="button"] {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* En pantallas táctiles, iOS hace zoom al tocar un campo con letra menor a
+   16px y después no vuelve. Solo en táctiles: en la compu el panel de
+   administración mantiene sus campos compactos. */
+@media (pointer: coarse) {
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
 }

@@ -7,7 +7,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Sniglet:wght@400;800&display=swap" rel="stylesheet">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- viewport-fit=cover deja que la página llegue hasta los bordes en los
+         celulares con muesca. Sin esto, los env(safe-area-inset-*) que usa el
+         carrito y los modales valen 0 y no hacen nada.
+         interactive-widget: al abrir el teclado se achica el contenido, así
+         los botones no quedan tapados. -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content"
+    />
     <title>KenyPets</title>
 
     <!-- Vista previa al compartir el link (WhatsApp, Instagram, Facebook) -->
@@ -23,7 +31,10 @@
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Logo de KenyPets con un perro y un gato" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#522B5B" />
+    <!-- Tiene que ser el color de lo que está más arriba en la página (el
+         menú), no el color de la marca: si no, queda una franja morada
+         pegada a un menú crema. -->
+    <meta name="theme-color" content="#FBE4D8" />
   </head>
   <body>
     <div id="root"></div>
