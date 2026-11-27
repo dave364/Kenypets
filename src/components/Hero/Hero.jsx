@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuth } from "../../context/AuthContext";
-import dogImg from "../../assets/Image/dog-hero.webp";
-import dogImgSmall from "../../assets/Image/dog-hero-560w.webp";
+import kenobi from "../../assets/Image/kenobi-hero.webp";
+import kenobiSmall from "../../assets/Image/kenobi-hero-560w.webp";
 import { Huella, Bolsa, Chat, Reloj } from "../Iconos/Iconos";
 
 const WHATSAPP_NUMBER = "5491122531821";
@@ -45,14 +45,22 @@ const Hero = () => {
       </div>
       <div className="hero__img">
         <span className="hero__circulo" aria-hidden="true" />
-        <img
-          src={dogImg}
-          srcSet={dogImgSmall + " 560w, " + dogImg + " 840w"}
-          sizes="(max-width: 900px) 280px, 420px"
-          width="840"
-          height="756"
-          alt="Perro y gato felices"
-        />
+        {/* Kenobi es el gato por el que la marca se llama Kenypets.
+            La foto va en un circulo y no recortada: el recorte
+            automatico le come los bigotes, que es lo mejor que tiene. */}
+        <figure className="retrato">
+          <img
+            src={kenobi}
+            srcSet={kenobiSmall + " 560w, " + kenobi + " 1000w"}
+            sizes="(max-width: 900px) 260px, 500px"
+            width="1000"
+            height="1000"
+            alt="Kenobi, el gato de Kenypets, sentado sobre una manta de huellitas"
+          />
+          <figcaption className="retrato__nombre">
+            <Huella tam={15} /> Kenobi
+          </figcaption>
+        </figure>
       </div>
     </div>
 
