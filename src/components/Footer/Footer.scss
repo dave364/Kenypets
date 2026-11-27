@@ -1,3 +1,5 @@
+@use "../../styles/abstracts/mixins" as *;
+
 /* =============================================
    FOOTER
    Los links van en una tira fina y el nombre cierra el sitio
@@ -101,7 +103,7 @@
     &:hover { background: var(--color-beige); color: var(--color-darkest); }
   }
 
-  &:active { transform: scale(0.97); }
+  @include presionable;
 }
 
 /* --- COPYRIGHT Y FIRMA DE PIXELMATE --- */

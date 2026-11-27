@@ -92,7 +92,8 @@
   width: 25px;
   background: var(--brand-primary);
   border-radius: 2px;
-  transition: all 0.3s ease;
+  /* Las rayitas se mueven y se desvanecen para formar la X. */
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .navbar__sidebar {

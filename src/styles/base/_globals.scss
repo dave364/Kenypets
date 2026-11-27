@@ -50,6 +50,49 @@ button,
   -webkit-touch-callout: none;
 }
 
+/* Feedback al apretar.
+
+   En el celular no hay hover, así que esto es lo único que le dice a la
+   persona "te escuché". Sin esto, tocás "Agregar" y la pantalla no hace
+   nada hasta que el carrito responde.
+
+   Usa la propiedad `scale` suelta y no `transform: scale()` a propósito:
+   `scale` se suma al `transform` que el elemento ya tenga, así no pisa las
+   fotos giradas de Quiénes somos ni las tarjetas que se levantan al pasar
+   el mouse. */
+button,
+a[class*="btn"],
+[role="button"],
+.product-card {
+  transition: scale 160ms var(--salida);
+}
+
+button:active:not(:disabled),
+a[class*="btn"]:active,
+[role="button"]:active:not([aria-disabled="true"]),
+.product-card:active {
+  scale: var(--presion);
+}
+
+/* Si la persona pidió menos animaciones, le damos el aviso sin movimiento:
+   el botón se aclara en vez de achicarse. */
+@media (prefers-reduced-motion: reduce) {
+  button,
+  a[class*="btn"],
+  [role="button"],
+  .product-card {
+    transition: opacity 120ms var(--salida);
+  }
+
+  button:active:not(:disabled),
+  a[class*="btn"]:active,
+  [role="button"]:active:not([aria-disabled="true"]),
+  .product-card:active {
+    scale: 1;
+    opacity: 0.7;
+  }
+}
+
 /* En pantallas táctiles, iOS hace zoom al tocar un campo con letra menor a
    16px y después no vuelve. Solo en táctiles: en la compu el panel de
    administración mantiene sus campos compactos. */

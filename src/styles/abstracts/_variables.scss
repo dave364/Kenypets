@@ -24,6 +24,19 @@
      monitores grandes. Debajo de este ancho no cambia nada. */
   --ancho-max: 1500px;
 
+  /* Curvas de animacion. Las de CSS (`ease`, `ease-out`) arrancan y frenan
+     muy blando y se sienten flojas; estas arrancan rapido y frenan suave,
+     que es como se mueven las cosas en la realidad.
+     --salida: para lo que aparece, desaparece o responde a un toque.
+     --entrada-salida: para lo que se mueve de un lugar a otro. */
+  --salida: cubic-bezier(0.23, 1, 0.32, 1);
+  --entrada-salida: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* Cuanto se achica algo mientras lo tenes apretado. Los botones grandes
+     se achican poco; los iconos chicos necesitan mas para que se note. */
+  --presion: 0.97;
+  --presion-icono: 0.92;
+
   /* Tipografia: la misma letra del logo (Sniglet).
      Gruesa (800) para titulos, fina (400) para menu y botones,
      y la letra comun para los textos largos. */

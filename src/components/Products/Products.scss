@@ -118,7 +118,8 @@
   font-weight: 600;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+    transform 0.25s ease, scale 160ms var(--salida);
   letter-spacing: 0.5px;
 
   @include puntero-fino {
@@ -528,7 +529,10 @@ a.product-card__image-wrap {
   @include puntero-fino {
     &:hover { transform: scale(1.12); background: #fff; }
   }
-  &:active { transform: scale(0.94); }
+  /* Icono chico: necesita achicarse mas que un boton para que se note.
+     El :not(:disabled) esta para igualar la especificidad de la regla
+     general de _globals.scss; si no, gana ella y pisa esta escala. */
+  &:active:not(:disabled) { scale: var(--presion-icono); }
 }
 
 /* Un latido corto al marcarlo, para que el gesto se sienta acusado */
@@ -594,7 +598,6 @@ a.product-card__image-wrap {
     }
   }
 
-  &:active:not(:disabled) { transform: scale(0.96); }
 
   &.activa {
     background: var(--color-purple);
