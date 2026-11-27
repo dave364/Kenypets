@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { normalizarTelefono, telefonoParece, digitosLocales } from "../../utils/telefono";
 import "./AuthModal.scss";
+import { Cerrar, Huella, Ojo } from "../Iconos/Iconos";
 
 const API_URL = import.meta.env.VITE_API_URL || "https://kenypets-api.onrender.com";
 
@@ -94,14 +95,14 @@ const AuthModal = () => {
     <div className="auth-overlay" onClick={cerrarModal}>
       <div className="auth-modal" onClick={(e) => e.stopPropagation()}>
         <button className="auth-modal__cerrar" onClick={cerrarModal}>
-          ✕
+          <Cerrar tam={16} />
         </button>
 
         <h2>{esRecuperar ? "Recuperar tu cuenta" : esRegistro ? "Crear cuenta" : "Iniciar sesión"}</h2>
 
         {esRegistro && (
           <p className="auth-modal__promo">
-            🐾 Al registrarte obtenés <strong>20% de descuento</strong> en tu
+            <Huella tam={15} /> Al registrarte obtenés <strong>20% de descuento</strong> en tu
             primer pedido.
           </p>
         )}
@@ -196,7 +197,7 @@ const AuthModal = () => {
               onClick={() => setVerPassword((v) => !v)}
               aria-label={verPassword ? "Ocultar contraseña" : "Ver contraseña"}
             >
-              {verPassword ? "🙈" : "👁"}
+              <Ojo tam={17} tachado={verPassword} />
             </button>
           </div>
           {esRegistro && <small>Mínimo 8 caracteres.</small>}

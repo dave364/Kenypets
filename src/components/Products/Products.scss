@@ -76,8 +76,10 @@
   left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 0.95rem;
-  opacity: 0.6;
+  display: grid;
+  place-items: center;
+  color: var(--color-purple);
+  opacity: 0.55;
   pointer-events: none;
 }
 
@@ -109,7 +111,11 @@
 }
 
 .products__filter-btn {
-  padding: 0.55rem 1.4rem;
+  /* El icono y el texto, en linea y separados. */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 1.2rem 0.55rem 1rem;
   border-radius: 999px;
   border: 2px solid var(--color-purple);
   background: transparent;

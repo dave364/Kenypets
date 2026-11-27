@@ -1,24 +1,25 @@
 import React from "react";
+import { Corazon, Mono, Pin, Chat, Gato, Huella } from "../Iconos/Iconos";
 import "./About.scss";
 
 const values = [
   {
-    emoji: "💜",
+    icono: Corazon,
     title: "Creada con amor",
     desc: "Cada producto lo elegimos pensando en mimar a tu mascota como se merece.",
   },
   {
-    emoji: "🎀",
+    icono: Mono,
     title: "Kits personalizados",
     desc: "Armamos kits únicos pensados especialmente para tu compañero peludo.",
   },
   {
-    emoji: "📍",
+    icono: Pin,
     title: "Punto de encuentro",
     desc: "Somos ese lugar donde los amantes de las mascotas se encuentran y conectan.",
   },
   {
-    emoji: "💬",
+    icono: Chat,
     title: "Atención por WhatsApp",
     desc: "Te asesoramos en cada compra. Estamos siempre disponibles para ayudarte.",
   },
@@ -54,7 +55,6 @@ const About = () => (
       </div>
 
       <div className="about__story-text">
-        <small>¿QUIÉNES SOMOS?</small>
         <h2>Un espacio de Mimos y Amor</h2>
         <p>
           Soy Yose, y junto con mi lindo (y demandante) gatito Kenobi,
@@ -63,7 +63,7 @@ const About = () => (
         <p>
           Nació de nuestro amor por esos compañeros peluditos que nos aman
           sin importar nada en el mundo. Para ellos, solo existimos
-          nosotros… y para nosotros, ellos lo son todo. 🐾
+          nosotros… y para nosotros, ellos lo son todo.
         </p>
 
         <a
@@ -88,7 +88,7 @@ const About = () => (
             <span className="about__stat-label">Con amor</span>
           </div>
           <div className="about__stat">
-            <span className="about__stat-num">🐱🐶</span>
+            <span className="about__stat-num about__stat-num--iconos"><Gato tam={26} /><Huella tam={26} /></span>
             <span className="about__stat-label">Para todos</span>
           </div>
         </div>
@@ -98,13 +98,12 @@ const About = () => (
     {/* POR QUÉ ELEGIRNOS */}
     <div className="about__values">
       <div className="about__values-header">
-        <small>POR QUÉ ELEGIRNOS</small>
         <h2>Lo que nos hace diferentes</h2>
       </div>
       <div className="about__values-grid">
         {values.map((v) => (
           <div className="about__value-card" key={v.title}>
-            <span className="about__value-emoji">{v.emoji}</span>
+            <span className="about__value-icono"><v.icono tam={26} /></span>
             <h3>{v.title}</h3>
             <p>{v.desc}</p>
           </div>
@@ -114,7 +113,6 @@ const About = () => (
 
     {/* CONTACTO */}
     <div className="about__contacto" id="contact">
-      <small>HABLEMOS</small>
       <h2>Estamos a un mensaje</h2>
       <p>
         Escribinos para consultar stock, coordinar un pedido o pedir una

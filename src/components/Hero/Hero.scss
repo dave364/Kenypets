@@ -129,6 +129,13 @@
   gap: 0.6rem 1.4rem;
   font-size: 0.92rem;
 
+  /* Icono y texto en la misma linea de base. */
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
   li {
     display: flex;
     align-items: center;
@@ -168,9 +175,10 @@
 .hero__huella {
   position: absolute;
   z-index: 0;
-  font-size: 3rem;
-  opacity: 0.08;
-  filter: grayscale(1) brightness(3);
+  /* El dibujo ya trae su tamaño; aca solo el color y la transparencia. */
+  color: var(--color-light);
+  opacity: 0.1;
+  line-height: 0;
   pointer-events: none;
   user-select: none;
 
@@ -201,7 +209,8 @@
 }
 
 .promo__text .paw {
-  font-size: 2rem;
+  display: grid;
+  place-items: center;
 }
 
 .promo__btn {

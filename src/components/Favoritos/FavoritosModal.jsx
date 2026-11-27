@@ -3,6 +3,7 @@ import { useFavoritos } from "../../context/FavoritosContext";
 import { useCart } from "../../context/CartContext";
 import { urlImagen } from "../../utils/imagen";
 import "./FavoritosModal.scss";
+import { Cerrar, Corazon } from "../Iconos/Iconos";
 
 const WHATSAPP_NUMBER = "5491122531821";
 
@@ -34,7 +35,7 @@ const FavoritosModal = () => {
         <header className="fav-panel__head">
           <h2>Mis favoritos</h2>
           <button className="fav-panel__cerrar" onClick={cerrarPanel}>
-            ✕
+            <Cerrar tam={16} />
           </button>
         </header>
 
@@ -45,7 +46,7 @@ const FavoritosModal = () => {
 
           {!cargando && productos.length === 0 && (
             <div className="fav-estado">
-              <div className="fav-estado__icono">🤍</div>
+              <div className="fav-estado__icono"><Corazon tam={40} /></div>
               <p>
                 Todavía no guardaste ninguno. Tocá el corazón de un producto
                 para tenerlo a mano.

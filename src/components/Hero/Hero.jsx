@@ -2,6 +2,7 @@ import React from "react";
 import { useAuth } from "../../context/AuthContext";
 import dogImg from "../../assets/Image/dog-hero.webp";
 import dogImgSmall from "../../assets/Image/dog-hero-560w.webp";
+import { Huella, Bolsa, Chat, Reloj } from "../Iconos/Iconos";
 
 const WHATSAPP_NUMBER = "5491122531821";
 
@@ -12,11 +13,10 @@ const Hero = () => {
   <section className="hero" id="home">
     <div className="hero__content">
       {/* Huellitas de fondo, solo decorativas */}
-      <span className="hero__huella hero__huella--1" aria-hidden="true">🐾</span>
-      <span className="hero__huella hero__huella--2" aria-hidden="true">🐾</span>
-      <span className="hero__huella hero__huella--3" aria-hidden="true">🐾</span>
+      <span className="hero__huella hero__huella--1" aria-hidden="true"><Huella tam={64} /></span>
+      <span className="hero__huella hero__huella--2" aria-hidden="true"><Huella tam={64} /></span>
+      <span className="hero__huella hero__huella--3" aria-hidden="true"><Huella tam={64} /></span>
       <div className="hero__text">
-        <small>🐾 Tienda online para perros y gatos</small>
         <h1>El lugar favorito de tu mascota</h1>
         <p>Juguetes, accesorios, ropa y snacks elegidos con amor, en un solo lugar.</p>
 
@@ -38,9 +38,9 @@ const Hero = () => {
         </div>
 
         <ul className="hero__datos">
-          <li><span aria-hidden="true">🛍️</span> Más de 70 productos</li>
-          <li><span aria-hidden="true">💬</span> Atención por WhatsApp</li>
-          <li><span aria-hidden="true">⏳</span> Te reservamos el pedido 3 días</li>
+          <li><Bolsa tam={17} /> Más de 70 productos</li>
+          <li><Chat tam={17} /> Atención por WhatsApp</li>
+          <li><Reloj tam={17} /> Te reservamos el pedido 3 días</li>
         </ul>
       </div>
       <div className="hero__img">
@@ -59,7 +59,7 @@ const Hero = () => {
     {/* PROMO BANNER */}
     <div className="promo">
       <div className="promo__text">
-        <span className="paw">&#128062;</span>
+        <span className="paw"><Huella tam={30} /></span>
         <div>
           <h3>¡Registrate en Kenypets y obtené un 20% de DESCUENTO en tu primer pedido!</h3>
           <p>Calidad, cuidado y felicidad para tu mascota.</p>

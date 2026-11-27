@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { urlImagen, fotosDe } from "../../utils/imagen";
 import { achicarFoto } from "../../utils/achicarFoto";
 import "./Admin.scss";
+import { Cerrar } from "../Iconos/Iconos";
 
 const API_URL = import.meta.env.VITE_API_URL || "https://kenypets-api.onrender.com";
 
@@ -664,7 +665,7 @@ const ModalProducto = ({
                     aria-label="Quitar foto"
                     title="Quitar foto"
                   >
-                    ✕
+                    <Cerrar tam={16} />
                   </button>
                   <button
                     type="button"

@@ -3,6 +3,7 @@ import { useCart } from "../../context/CartContext";
 import { useFavoritos } from "../../context/FavoritosContext";
 import { urlImagen } from "../../utils/imagen";
 import { urlProducto, urlProductoAbsoluta, alClickLink } from "../../utils/rutas";
+import { iconoDeCategoria, Corazon, Lupa, Cerrar } from "../Iconos/Iconos";
 import "./Products.scss";
 
 const WHATSAPP_NUMBER = "5491122531821";
@@ -195,17 +196,7 @@ const Products = () => {
     setPagina(1);
   };
 
-  const iconoCategoria = (cat) => {
-    if (cat === "Todos") return "🐾 ";
-    if (cat === "Accesorios") return "🎀 ";
-    if (cat === "Juguetes") return "🧸 ";
-    if (cat === "Favoritos") return "❤️ ";
-    if (cat === "Higiene y Cuidado") return "🧴 ";
-    if (cat === "Ropa") return "🧥 ";
-    if (cat === "Gatos") return "🐱 ";
-    if (cat === "Snacks") return "🦴 ";
-    return "";
-  };
+  const iconoCategoria = (cat) => iconoDeCategoria(cat, { tam: 17 });
 
   const handleAgregar = (producto) => {
     agregar(producto, 1);
@@ -224,9 +215,8 @@ const Products = () => {
   return (
     <section className="products" id="products">
       <div className="products__header">
-        <small>NUESTROS PRODUCTOS</small>
         <h2>Todo lo que tu mascota necesita</h2>
-        <p>Seleccionamos los mejores productos con amor y cuidado 🐾</p>
+        <p>Seleccionamos los mejores productos con amor y cuidado</p>
       </div>
 
       {cargando && (
@@ -251,7 +241,7 @@ const Products = () => {
         <>
           {/* BUSCADOR */}
           <div className="products__buscador">
-            <span className="products__buscador-icono" aria-hidden="true">🔍</span>
+            <span className="products__buscador-icono" aria-hidden="true"><Lupa tam={17} /></span>
             <input
               type="search"
               value={busqueda}
@@ -267,7 +257,7 @@ const Products = () => {
                 onClick={() => cambiarBusqueda("")}
                 aria-label="Borrar búsqueda"
               >
-                ✕
+                <Cerrar tam={16} />
               </button>
             )}
           </div>
@@ -336,7 +326,7 @@ const Products = () => {
                     }
                     title={esFavorito(producto.id) ? "Quitar de favoritos" : "Guardar en favoritos"}
                   >
-                    {esFavorito(producto.id) ? "❤️" : "🤍"}
+                    <Corazon tam={18} lleno={esFavorito(producto.id)} />
                   </button>
 
                   <a

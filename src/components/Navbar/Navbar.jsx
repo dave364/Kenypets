@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import logo from '../../assets/logo/logo.png';
 import { useAuth } from "../../context/AuthContext";
 import { useFavoritos } from "../../context/FavoritosContext";
+import { Cerrar, Huella } from "../Iconos/Iconos";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -94,7 +95,7 @@ const Navbar = () => {
               className="navbar__usuario-btn"
               onClick={() => setMenuCuenta((v) => !v)}
             >
-              <span aria-hidden="true">🐾</span>
+              <Huella tam={15} />
               <span className="navbar__usuario-nombre">{primerNombre}</span>
             </button>
 
@@ -136,7 +137,7 @@ const Navbar = () => {
       setMenuOpen(false);
     }}
   >
-    ✕
+    <Cerrar tam={18} />
   </button>
         <div
           className="navbar__sidebar-content"
@@ -175,7 +176,7 @@ const Navbar = () => {
                   abrirModal("registro");
                 }}
               >
-                Registrate <span aria-hidden="true">🐾</span>
+                Registrate <Huella tam={14} />
               </button>
               <button
                 className="navbar__sesion"

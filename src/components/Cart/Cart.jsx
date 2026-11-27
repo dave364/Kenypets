@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import { normalizarTelefono, telefonoParece } from "../../utils/telefono";
 import { urlImagen } from "../../utils/imagen";
 import "./Cart.scss";
+import { Cerrar, Huella, Listo } from "../Iconos/Iconos";
 
 const API_URL = import.meta.env.VITE_API_URL || "https://kenypets-api.onrender.com";
 const WHATSAPP_NUMBER = "5491122531821";
@@ -148,7 +149,7 @@ const Cart = () => {
                 {paso === "listo" && "¡Pedido registrado!"}
               </h2>
               <button className="cart-panel__cerrar" onClick={cerrar}>
-                ✕
+                <Cerrar tam={16} />
               </button>
             </header>
 
@@ -158,7 +159,7 @@ const Cart = () => {
                 <div className="cart-panel__cuerpo">
                   {items.length === 0 && (
                     <p className="cart-vacio">
-                      Todavía no agregaste nada. 🐾
+                      Todavía no agregaste nada.
                     </p>
                   )}
 
@@ -199,7 +200,7 @@ const Cart = () => {
                         onClick={() => quitar(i.id)}
                         aria-label={`Quitar ${i.nombre}`}
                       >
-                        ✕
+                        <Cerrar tam={14} />
                       </button>
                     </div>
                   ))}
@@ -224,7 +225,7 @@ const Cart = () => {
 
                     {logueado && tieneDescuento && (
                       <div className="cart-aviso cart-aviso--ok">
-                        <span aria-hidden="true">🎉</span>
+                        <Listo tam={17} />
                         <p>
                           Tenés <strong>20% de descuento</strong> disponible. Se
                           aplica al confirmar.
@@ -285,7 +286,7 @@ const Cart = () => {
 
                   {!logueado && (
                     <div className="cart-aviso">
-                      <span aria-hidden="true">🐾</span>
+                      <Huella tam={16} />
                       <p>
                         Creá tu cuenta y llevate un <strong>20% off</strong> en
                         este pedido.{" "}
@@ -298,7 +299,7 @@ const Cart = () => {
 
                   {logueado && tieneDescuento && (
                     <div className="cart-aviso cart-aviso--ok">
-                      <span aria-hidden="true">🎉</span>
+                      <Listo tam={17} />
                       <p>
                         Tenés <strong>20% de descuento</strong> disponible. Se
                         aplica al confirmar.
@@ -347,7 +348,7 @@ const Cart = () => {
             {/* --- PASO 3: LISTO --- */}
             {paso === "listo" && pedido && (
               <div className="cart-panel__cuerpo cart-listo">
-                <div className="cart-listo__icono">🎉</div>
+                <div className="cart-listo__icono"><Listo tam={46} /></div>
                 <p>
                   Tu pedido quedó registrado con el número{" "}
                   <strong>#{pedido.numero ?? pedido.id}</strong>.

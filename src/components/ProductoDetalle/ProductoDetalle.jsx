@@ -4,6 +4,7 @@ import { useFavoritos } from "../../context/FavoritosContext";
 import { urlImagen, fotosDe } from "../../utils/imagen";
 import { urlProducto, urlProductoAbsoluta, alClickLink } from "../../utils/rutas";
 import "./ProductoDetalle.scss";
+import { Corazon, Huella } from "../Iconos/Iconos";
 
 const WHATSAPP_NUMBER = "5491122531821";
 const API_URL = import.meta.env.VITE_API_URL || "https://kenypets-api.onrender.com";
@@ -134,7 +135,7 @@ const ProductoDetalle = ({ id }) => {
   if (estado !== "listo") {
     return (
       <main className="detalle detalle--estado">
-        <div className="detalle__aviso">🐾</div>
+        <div className="detalle__aviso"><Huella tam={20} /></div>
         <p>
           {estado === "no-existe"
             ? "Este producto ya no está disponible."
@@ -231,7 +232,7 @@ const ProductoDetalle = ({ id }) => {
                 aria-label={favorito ? "Quitar de favoritos" : "Guardar en favoritos"}
                 title={favorito ? "Quitar de favoritos" : "Guardar en favoritos"}
               >
-                {favorito ? "❤️" : "🤍"}
+                <Corazon tam={20} lleno={favorito} />
               </button>
               {!sinStock && (
                 <button className="detalle__btn detalle__btn--borde" onClick={consultar}>

@@ -1,16 +1,16 @@
 import React from "react";
+import { Volver, Escudo, Caja, Chat } from "../Iconos/Iconos";
 import "./Politicas.scss";
 
 const Politicas = () => (
   <section className="politicas" id="politic">
     <div className="politicas__header">
-      <small>COMPRA TRANQUILO</small>
       <h2>Políticas de devolución</h2>
     </div>
 
     <div className="politicas__grid">
       <article className="politicas__item">
-        <span aria-hidden="true">&#8617;</span>
+        <span className="politicas__icono"><Volver tam={24} /></span>
         <h3>¿Te arrepentiste?</h3>
         <p>
           Tenés <strong>10 días corridos</strong> desde que recibís el producto
@@ -20,7 +20,7 @@ const Politicas = () => (
       </article>
 
       <article className="politicas__item">
-        <span aria-hidden="true">&#128737;</span>
+        <span className="politicas__icono"><Escudo tam={24} /></span>
         <h3>Garantía</h3>
         <p>
           Todos los productos nuevos tienen <strong>6 meses de garantía</strong>{" "}
@@ -30,7 +30,7 @@ const Politicas = () => (
       </article>
 
       <article className="politicas__item">
-        <span aria-hidden="true">&#128230;</span>
+        <span className="politicas__icono"><Caja tam={24} /></span>
         <h3>¿En qué estado?</h3>
         <p>
           El producto tiene que volver sin uso y con su envoltorio original.
@@ -40,7 +40,7 @@ const Politicas = () => (
       </article>
 
       <article className="politicas__item">
-        <span aria-hidden="true">&#128172;</span>
+        <span className="politicas__icono"><Chat tam={24} /></span>
         <h3>¿Cómo se hace?</h3>
         <p>
           Escribinos por WhatsApp con tu número de pedido. Coordinamos el retiro

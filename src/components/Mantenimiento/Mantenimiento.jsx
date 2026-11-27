@@ -77,7 +77,7 @@ const Mantenimiento = () => {
         <img className="mantenimiento__logo" src={`${BASE}logo.png`} alt="Kenypets" />
         <h1 id="mant-titulo">Estamos en mantenimiento</h1>
         <p>
-          Estamos haciendo mejoras en la tienda y volvemos muy pronto 🐾
+          Estamos haciendo mejoras en la tienda y volvemos muy pronto
         </p>
         <p className="mantenimiento__sub">
           Mientras tanto, podés escribirnos y te ayudamos con tu pedido.
