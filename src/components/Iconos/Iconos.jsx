@@ -34,13 +34,14 @@ const Svg = ({ children, tam = 20, ...resto }) => (
 
 /* --- CATEGORIAS --- */
 
-// Huella: tres dedos y la almohadilla. La de la marca.
+// Huella: tres dedos y la almohadilla con el arco recortado abajo,
+// igual que la huella que ya tiene el logo adentro del gato.
 export const Huella = (p) => (
   <Svg {...p}>
     <ellipse cx="7.2" cy="9.4" rx="2.1" ry="2.6" fill="currentColor" stroke="none" />
-    <ellipse cx="12" cy="7.6" rx="2.1" ry="2.7" fill="currentColor" stroke="none" />
+    <ellipse cx="12" cy="7.2" rx="2.1" ry="2.7" fill="currentColor" stroke="none" />
     <ellipse cx="16.8" cy="9.4" rx="2.1" ry="2.6" fill="currentColor" stroke="none" />
-    <path d="M12 12.6c2.9 0 5 2 5 4.3 0 2-1.7 3.1-3.8 3.1-.9 0-1.1.4-1.2.4s-.3-.4-1.2-.4C8.7 20 7 18.9 7 16.9c0-2.3 2.1-4.3 5-4.3z" fill="currentColor" stroke="none" />
+    <path d="M12 12.4c2.9 0 5 2.2 5 4.9v3.1h-2.6v-2.2a2.4 2.4 0 0 0-4.8 0v2.2H7v-3.1c0-2.7 2.1-4.9 5-4.9z" fill="currentColor" stroke="none" />
   </Svg>
 );
 
