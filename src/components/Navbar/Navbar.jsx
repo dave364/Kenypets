@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import logo from '../../assets/logo/logo.png';
+import logo from '../../assets/logo/logo.webp';
 import { useAuth } from "../../context/AuthContext";
 import { useFavoritos } from "../../context/FavoritosContext";
 import { Cerrar, Huella } from "../Iconos/Iconos";

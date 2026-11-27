@@ -74,7 +74,7 @@ const Mantenimiento = () => {
   return (
     <div className="mantenimiento" role="alertdialog" aria-labelledby="mant-titulo">
       <div className="mantenimiento__tarjeta">
-        <img className="mantenimiento__logo" src={`${BASE}logo.png`} alt="Kenypets" />
+        <img className="mantenimiento__logo" src={`${BASE}logo.webp`} alt="Kenypets" />
         <h1 id="mant-titulo">Estamos en mantenimiento</h1>
         <p>
           Estamos haciendo mejoras en la tienda y volvemos muy pronto

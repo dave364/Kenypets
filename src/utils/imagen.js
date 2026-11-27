@@ -10,7 +10,7 @@ export const esUrl = (s) => /^https?:\/\//.test(s || "");
 // les pide una version achicada y en el formato mas liviano para el
 // navegador (webp/avif), asi la tienda carga rapido en el celular.
 export function urlImagen(imagen, ancho) {
-  if (!imagen) return `${BASE}logo.png`;
+  if (!imagen) return `${BASE}logo.webp`;
   if (esUrl(imagen)) {
     if (ancho && imagen.includes("res.cloudinary.com") && imagen.includes("/upload/")) {
       return imagen.replace("/upload/", `/upload/f_auto,q_auto,c_limit,w_${ancho}/`);
